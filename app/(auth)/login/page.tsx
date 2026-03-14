@@ -165,7 +165,7 @@ export default function LoginPage() {
                 <div className="space-y-4">
                   <div className="text-center mb-4">
                     <div className="text-4xl mb-2">📬</div>
-                    <p className="text-sm text-gray-600">We sent a 6-digit OTP to <strong>{email}</strong></p>
+                    <p className="text-sm text-gray-600">We sent an 8-digit OTP to <strong>{email}</strong></p>
                     <p className="text-xs text-gray-400 mt-1">Check spam/junk if not in inbox</p>
                   </div>
                   <div>
@@ -173,11 +173,11 @@ export default function LoginPage() {
                     <Input
                       id="otp"
                       type="text"
-                      placeholder="123456"
+                      placeholder="12345678"
                       value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 8))}
                       className="mt-1.5 text-center text-2xl tracking-widest font-mono"
-                      maxLength={6}
+                      maxLength={8}
                       onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
                     />
                   </div>
