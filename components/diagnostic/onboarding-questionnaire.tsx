@@ -144,10 +144,10 @@ export function OnboardingQuestionnaire({ userId, onComplete }: Props) {
                     { label: "Not attempted", value: "na" },
                   ]}
                   value={form.previous_marks[paper.id] ?? ""}
-                  onChange={(v) => setForm({
-                    ...form,
-                    previous_marks: { ...form.previous_marks, [paper.id]: v },
-                  })}
+                  onChange={(v) => setForm((prev) => ({
+                    ...prev,
+                    previous_marks: { ...prev.previous_marks, [paper.id]: v },
+                  }))}
                 />
               </div>
             ))}
@@ -173,10 +173,10 @@ export function OnboardingQuestionnaire({ userId, onComplete }: Props) {
                 {SELF_ASSESSMENT_LEVELS.map((level, idx) => (
                   <button
                     key={level}
-                    onClick={() => setForm({
-                      ...form,
-                      self_assessment: { ...form.self_assessment, [paper.id]: level },
-                    })}
+                    onClick={() => setForm((prev) => ({
+                      ...prev,
+                      self_assessment: { ...prev.self_assessment, [paper.id]: level },
+                    }))}
                     className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
                       form.self_assessment[paper.id] === level
                         ? idx <= 1 ? "border-red-400 bg-red-50 text-red-700"
