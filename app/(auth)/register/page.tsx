@@ -7,18 +7,22 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, User, Chrome, AlertTriangle } from "lucide-react";
+import { Mail, User, Chrome, AlertTriangle, Lock, Eye, EyeOff } from "lucide-react";
+
+type Mode = "otp" | "password";
 
 export default function RegisterPage() {
   const router = useRouter();
   const configured = isSupabaseConfigured();
   const supabase = configured ? createClient() : null;
+  const [mode, setMode] = useState<Mode>("otp");
   const [step, setStep] = useState<"form" | "otp">("form");
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [otp, setOtp] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  async function handleRegister() {
+  async function handleRegisterOTP() {
     if (!supabase) return toast.error("Supabase not configured — add credentials to .env.local");
     if (!form.name.trim()) return toast.error("Enter your full name");
     if (!form.email.trim()) return toast.error("Enter your email address");
@@ -31,9 +35,16 @@ export default function RegisterPage() {
       },
     });
     setLoading(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      if (error.message.toLowerCase().includes("email") && error.message.toLowerCase().includes("invalid")) {
+        toast.error("Email delivery failed. Try password signup instead.");
+      } else {
+        toast.error(error.message);
+      }
+      return;
+    }
     setStep("otp");
-    toast.success("OTP sent to your email!");
+    toast.success("OTP sent! Check your inbox (and spam folder).");
   }
 
   async function handleVerifyOTP() {
@@ -46,7 +57,26 @@ export default function RegisterPage() {
       type: "email",
     });
     setLoading(false);
-    if (error) { toast.error("Invalid OTP. Try again."); return; }
+    if (error) { toast.error("Invalid or expired OTP. Try again."); return; }
+    toast.success("Account created! Let us get you started.");
+    router.push("/diagnostic");
+    router.refresh();
+  }
+
+  async function handleRegisterPassword() {
+    if (!supabase) return toast.error("Supabase not configured");
+    if (!form.name.trim()) return toast.error("Enter your full name");
+    if (!form.email.trim()) return toast.error("Enter your email address");
+    if (!form.password || form.password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (form.password !== form.confirmPassword) return toast.error("Passwords do not match");
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: { data: { full_name: form.name } },
+    });
+    setLoading(false);
+    if (error) { toast.error(error.message); return; }
     toast.success("Account created! Let us get you started.");
     router.push("/diagnostic");
     router.refresh();
@@ -62,7 +92,10 @@ export default function RegisterPage() {
         queryParams: { access_type: "offline", prompt: "consent" },
       },
     });
-    if (error) { toast.error(error.message); setLoading(false); }
+    if (error) {
+      toast.error("Google login not configured yet. Use email signup instead.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -83,91 +116,179 @@ export default function RegisterPage() {
             <span>Supabase not configured. Add credentials to <code className="font-mono">.env.local</code> to enable auth.</span>
           </div>
         )}
+
+        {/* Mode Toggle */}
+        <div className="flex bg-gray-100 rounded-xl p-1 mb-4">
+          <button
+            onClick={() => { setMode("otp"); setStep("form"); }}
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${mode === "otp" ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-700"}`}
+          >
+            OTP / Magic Link
+          </button>
+          <button
+            onClick={() => setMode("password")}
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${mode === "password" ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-700"}`}
+          >
+            Set Password
+          </button>
+        </div>
+
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-          {step === "form" ? (
+          {mode === "otp" ? (
             <>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Full name</Label>
-                  <div className="relative mt-1.5">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              {step === "form" ? (
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Full name</Label>
+                    <div className="relative mt-1.5">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="name"
+                        placeholder="Priya Sharma"
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Email address</Label>
+                    <div className="relative mt-1.5">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        className="pl-10"
+                        onKeyDown={(e) => e.key === "Enter" && handleRegisterOTP()}
+                      />
+                    </div>
+                  </div>
+                  <Button className="w-full" onClick={handleRegisterOTP} disabled={loading}>
+                    {loading ? "Sending..." : "Create Account — It's Free"}
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="text-center mb-4">
+                    <div className="text-4xl mb-2">📬</div>
+                    <p className="text-sm text-gray-600">We sent a 6-digit OTP to <strong>{form.email}</strong></p>
+                    <p className="text-xs text-gray-400 mt-1">Check spam/junk if not in inbox</p>
+                  </div>
+                  <div>
+                    <Label htmlFor="otp">Enter OTP</Label>
                     <Input
-                      id="name"
-                      placeholder="Priya Sharma"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="pl-10"
+                      id="otp"
+                      type="text"
+                      placeholder="123456"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      className="mt-1.5 text-center text-2xl tracking-widest font-mono"
+                      maxLength={6}
+                      onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
                     />
                   </div>
+                  <Button className="w-full" onClick={handleVerifyOTP} disabled={loading}>
+                    {loading ? "Verifying..." : "Verify & Start Diagnostic"}
+                  </Button>
+                  <button
+                    onClick={() => { setStep("form"); setOtp(""); }}
+                    className="w-full text-sm text-gray-500 hover:text-gray-700"
+                  >
+                    ← Change email
+                  </button>
                 </div>
-                <div>
-                  <Label htmlFor="email">Email address</Label>
-                  <div className="relative mt-1.5">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="you@example.com"
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="pl-10"
-                      onKeyDown={(e) => e.key === "Enter" && handleRegister()}
-                    />
-                  </div>
-                </div>
-                <Button className="w-full" onClick={handleRegister} loading={loading}>
-                  Create Account — It&apos;s Free
-                </Button>
-              </div>
-
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-200" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-gray-500">Or continue with</span>
-                </div>
-              </div>
-
-              <Button variant="outline" className="w-full" onClick={handleGoogleRegister} loading={loading}>
-                <Chrome className="h-4 w-4" />
-                Continue with Google
-              </Button>
-
-              <p className="text-xs text-gray-500 text-center mt-4">
-                By registering, you agree to our Terms of Service and Privacy Policy
-              </p>
+              )}
             </>
           ) : (
             <div className="space-y-4">
-              <div className="text-center mb-4">
-                <div className="text-4xl mb-2">📬</div>
-                <p className="text-sm text-gray-600">We sent a 6-digit OTP to <strong>{form.email}</strong></p>
+              <div>
+                <Label htmlFor="name-pw">Full name</Label>
+                <div className="relative mt-1.5">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="name-pw"
+                    placeholder="Priya Sharma"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    className="pl-10"
+                  />
+                </div>
               </div>
               <div>
-                <Label htmlFor="otp">Enter OTP</Label>
-                <Input
-                  id="otp"
-                  type="text"
-                  placeholder="123456"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                  className="mt-1.5 text-center text-2xl tracking-widest font-mono"
-                  maxLength={6}
-                  onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
-                />
+                <Label htmlFor="email-pw">Email address</Label>
+                <div className="relative mt-1.5">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="email-pw"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    className="pl-10"
+                  />
+                </div>
               </div>
-              <Button className="w-full" onClick={handleVerifyOTP} loading={loading}>
-                Verify & Start Diagnostic
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Min 6 characters"
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    className="pl-10 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="confirm">Confirm password</Label>
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="confirm"
+                    type="password"
+                    placeholder="Repeat password"
+                    value={form.confirmPassword}
+                    onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                    className="pl-10"
+                    onKeyDown={(e) => e.key === "Enter" && handleRegisterPassword()}
+                  />
+                </div>
+              </div>
+              <Button className="w-full" onClick={handleRegisterPassword} disabled={loading}>
+                {loading ? "Creating..." : "Create Account — It's Free"}
               </Button>
-              <button
-                onClick={() => { setStep("form"); setOtp(""); }}
-                className="w-full text-sm text-gray-500 hover:text-gray-700"
-              >
-                ← Change email
-              </button>
+              <p className="text-xs text-gray-500 text-center">
+                By registering, you agree to our Terms of Service and Privacy Policy
+              </p>
             </div>
           )}
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <Button variant="outline" className="w-full" onClick={handleGoogleRegister} disabled={loading}>
+            <Chrome className="h-4 w-4" />
+            Continue with Google
+          </Button>
         </div>
 
         <p className="text-center text-sm text-gray-600 mt-6">
