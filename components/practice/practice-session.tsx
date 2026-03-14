@@ -111,8 +111,8 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
       await (supabase as any).rpc("update_topic_progress", {
         p_user_id: userId,
         p_topic_id: q.topic_id,
-        p_sub_topic_id: q.sub_topic_id,
         p_correct: isCorrect ? 1 : 0,
+        p_attempted: 1,
       });
     }
   }, [answers, qs, questionStartTime, sessionId, userId, bookmarks]);

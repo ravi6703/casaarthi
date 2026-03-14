@@ -225,7 +225,7 @@ export function DiagnosticTest({ userId, sessionId, onComplete }: Props) {
       topic_scores: topicScoresOut,
       sub_topic_scores: {},
       self_assessment: profile?.self_assessment ?? {},
-      calculated_at: new Date().toISOString(),
+      computed_at: new Date().toISOString(),
     }, { onConflict: "user_id" });
 
     // Mark diagnostic completed on profile

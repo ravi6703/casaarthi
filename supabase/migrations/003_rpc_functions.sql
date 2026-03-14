@@ -67,23 +67,23 @@ BEGIN
 
   IF v_streak IS NULL THEN
     -- First ever practice
-    INSERT INTO study_streaks (user_id, current_streak, longest_streak, last_study_date)
+    INSERT INTO study_streaks (user_id, current_streak, longest_streak, last_active_date)
     VALUES (p_user_id, 1, 1, v_today);
-  ELSIF v_streak.last_study_date = v_today THEN
+  ELSIF v_streak.last_active_date = v_today THEN
     -- Already practiced today — no change
     NULL;
-  ELSIF v_streak.last_study_date = v_yesterday THEN
+  ELSIF v_streak.last_active_date = v_yesterday THEN
     -- Continuing streak
     UPDATE study_streaks SET
       current_streak  = current_streak + 1,
       longest_streak  = GREATEST(longest_streak, current_streak + 1),
-      last_study_date = v_today
+      last_active_date = v_today
     WHERE user_id = p_user_id;
   ELSE
     -- Streak broken
     UPDATE study_streaks SET
       current_streak  = 1,
-      last_study_date = v_today
+      last_active_date = v_today
     WHERE user_id = p_user_id;
   END IF;
 END;
