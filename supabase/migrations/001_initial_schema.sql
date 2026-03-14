@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS readiness_scores (
   topic_scores    JSONB NOT NULL DEFAULT '{}',    -- {topic_id: {score: 65, color: "amber"}}
   sub_topic_scores JSONB NOT NULL DEFAULT '{}',
   self_assessment JSONB NOT NULL DEFAULT '{}',
-  calculated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  computed_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE(user_id)  -- upsert on user_id
 );
 
@@ -211,15 +211,15 @@ CREATE TABLE IF NOT EXISTS bookmarks (
 
 -- Topic progress (materialised, maintained by trigger / API)
 CREATE TABLE IF NOT EXISTS topic_progress (
-  user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  topic_id        UUID NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
-  sub_topic_id    UUID REFERENCES sub_topics(id) ON DELETE CASCADE,
-  total_attempted INT NOT NULL DEFAULT 0,
-  correct         INT NOT NULL DEFAULT 0,
-  accuracy_rate   NUMERIC(5,2) NOT NULL DEFAULT 0,
+  user_id           UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  topic_id          UUID NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
+  sub_topic_id      UUID REFERENCES sub_topics(id) ON DELETE CASCADE,
+  total_attempted   INT NOT NULL DEFAULT 0,
+  total_correct     INT NOT NULL DEFAULT 0,
+  accuracy_rate     NUMERIC(5,2) NOT NULL DEFAULT 0,
   last_practiced_at TIMESTAMPTZ,
-  updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (user_id, topic_id, COALESCE(sub_topic_id, '00000000-0000-0000-0000-000000000000'))
+  updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (user_id, topic_id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_topic_progress_user

@@ -147,7 +147,7 @@ export function MockBuilderClient({ papers, topics, existingMocks }: {
     const questionRows = selected.map((q, idx) => ({
       mock_test_id: mockId,
       question_id: q.id,
-      order_index: idx + 1,
+      question_order: idx + 1,
     }));
 
     const { error: insertError } = await (supabase.from("mock_test_questions") as any).insert(questionRows);

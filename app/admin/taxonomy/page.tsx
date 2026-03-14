@@ -17,8 +17,8 @@ export default async function TaxonomyPage() {
   const { data: papers } = await supabase.from("papers").select(`
     id, code, name,
     topics (
-      id, name, order_index,
-      sub_topics (id, name, order_index),
+      id, name, sort_order,
+      sub_topics (id, name, sort_order),
       questions (count)
     )
   `).order("id");
@@ -42,7 +42,7 @@ export default async function TaxonomyPage() {
             <CardContent className="p-0">
               <div className="divide-y divide-gray-100">
                 {(paper.topics ?? [])
-                  .sort((a: any, b: any) => a.order_index - b.order_index)
+                  .sort((a: any, b: any) => a.sort_order - b.sort_order)
                   .map((topic: any) => (
                     <div key={topic.id} className="px-4 py-3">
                       <div className="flex items-center justify-between mb-1">
@@ -52,7 +52,7 @@ export default async function TaxonomyPage() {
                       {topic.sub_topics && topic.sub_topics.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-1.5">
                           {topic.sub_topics
-                            .sort((a: any, b: any) => a.order_index - b.order_index)
+                            .sort((a: any, b: any) => a.sort_order - b.sort_order)
                             .map((st: any) => (
                               <span key={st.id} className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
                                 {st.name}
