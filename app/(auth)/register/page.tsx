@@ -70,13 +70,19 @@ export default function RegisterPage() {
     if (!form.password || form.password.length < 6) return toast.error("Password must be at least 6 characters");
     if (form.password !== form.confirmPassword) return toast.error("Passwords do not match");
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: { data: { full_name: form.name } },
     });
     setLoading(false);
     if (error) { toast.error(error.message); return; }
+    // If session is null, email confirmation is required
+    if (!data.session) {
+      toast.success("Account created! Check your email to confirm your account, then sign in.");
+      router.push("/login");
+      return;
+    }
     toast.success("Account created! Let us get you started.");
     router.push("/diagnostic");
     router.refresh();
