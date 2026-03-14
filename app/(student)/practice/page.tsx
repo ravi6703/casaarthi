@@ -1,0 +1,200 @@
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { BookOpen, Target, Clock, RefreshCw, Zap, Trophy } from "lucide-react";
+
+export const metadata = { title: "Practice" };
+
+const PAPERS = [
+  { id: 1, code: "P1", name: "Principles & Practice of Accounting", color: "blue",   emoji: "📊" },
+  { id: 2, code: "P2", name: "Business Laws & Correspondence",      color: "purple", emoji: "⚖️" },
+  { id: 3, code: "P3", name: "Business Mathematics & Statistics",   color: "green",  emoji: "🔢" },
+  { id: 4, code: "P4", name: "Business Economics & Commerce",       color: "orange", emoji: "📈" },
+];
+
+const PAPER_COLORS: Record<string, string> = {
+  blue:   "border-l-blue-500 hover:border-blue-400",
+  purple: "border-l-purple-500 hover:border-purple-400",
+  green:  "border-l-green-500 hover:border-green-400",
+  orange: "border-l-orange-500 hover:border-orange-400",
+};
+
+export default async function PracticePage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  // Fetch topic progress
+  const { data: progressData } = await supabase
+    .from("topic_progress")
+    .select("topic_id, total_attempted, accuracy_rate, last_practiced_at")
+    .eq("user_id", user.id);
+
+  // Fetch topics
+  const { data: topicsData } = await supabase
+    .from("topics")
+    .select("id, paper_id, name, slug, exam_weightage")
+    .order("paper_id")
+    .order("sort_order");
+
+  const progress = (progressData as any[]) ?? [];
+  const topics = (topicsData as any[]) ?? [];
+
+  const progressMap = Object.fromEntries(progress.map((p: any) => [p.topic_id, p]));
+
+  // Topics not practiced in 7+ days (for revision mode)
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const revisionTopics = topics.filter((t: any) => {
+    const p = progressMap[t.id];
+    return p && p.last_practiced_at && p.last_practiced_at < sevenDaysAgo;
+  });
+
+  // Weak topics (accuracy < 50%)
+  const weakTopics = topics.filter((t: any) => {
+    const p = progressMap[t.id];
+    return p && p.accuracy_rate < 50 && p.total_attempted > 0;
+  }).sort((a: any, b: any) => (progressMap[a.id]?.accuracy_rate ?? 0) - (progressMap[b.id]?.accuracy_rate ?? 0));
+
+  const SESSION_TYPES = [
+    { type: "topic",    label: "Topic Practice",     icon: <BookOpen className="h-5 w-5 text-blue-500" />,   desc: "Drill down on a specific topic" },
+    { type: "mixed",    label: "Mixed Practice",      icon: <Zap className="h-5 w-5 text-yellow-500" />,     desc: "Questions across all topics" },
+    { type: "weak_area",label: "Weak Area Focus",     icon: <Target className="h-5 w-5 text-red-500" />,     desc: "AI-selected from your weakest topics" },
+    { type: "revision", label: "Revision Mode",       icon: <RefreshCw className="h-5 w-5 text-green-500" />,desc: `${revisionTopics.length} topics due for revision` },
+    { type: "exam_sim", label: "Exam Simulation",     icon: <Clock className="h-5 w-5 text-purple-500" />,   desc: "Timed 100-question mock drill" },
+    { type: "challenge",label: "Challenge Mode",      icon: <Trophy className="h-5 w-5 text-orange-500" />, desc: "Hard-only questions for strong topics" },
+  ];
+
+  return (
+    <div className="space-y-8 animate-slide-up">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Practice</h1>
+        <p className="text-gray-500 mt-1">Choose a session type or drill into a specific topic</p>
+      </div>
+
+      {/* Session Types */}
+      <div>
+        <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Session Types</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {SESSION_TYPES.map((st) => (
+            <Link key={st.type} href={`/practice/session?type=${st.type}`}>
+              <Card className="hover:shadow-md transition-all cursor-pointer h-full group">
+                <CardContent className="p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5">{st.icon}</div>
+                    <div>
+                      <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">{st.label}</div>
+                      <div className="text-sm text-gray-500 mt-0.5">{st.desc}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Papers */}
+      <div>
+        <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Browse by Paper</h2>
+        <div className="grid md:grid-cols-2 gap-4">
+          {PAPERS.map((paper) => {
+            const paperTopics = topics.filter((t: any) => t.paper_id === paper.id);
+            const totalAttempted = paperTopics.filter((t: any) => progressMap[t.id]?.total_attempted > 0).length;
+            const avgAccuracy = paperTopics.length > 0
+              ? Math.round(paperTopics.reduce((s: number, t: any) => s + (progressMap[t.id]?.accuracy_rate ?? 0), 0) / paperTopics.length)
+              : 0;
+
+            return (
+              <Card key={paper.id} className={`border-l-4 ${PAPER_COLORS[paper.color]} transition-all hover:shadow-md`}>
+                <CardContent className="p-5">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{paper.emoji}</span>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant={`p${paper.id}` as "p1"|"p2"|"p3"|"p4"}>{paper.code}</Badge>
+                        </div>
+                        <div className="font-semibold text-gray-900 mt-1 text-sm">{paper.name}</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-gray-900">{avgAccuracy}%</div>
+                      <div className="text-xs text-gray-500">accuracy</div>
+                    </div>
+                  </div>
+
+                  <Progress
+                    value={(totalAttempted / paperTopics.length) * 100}
+                    className="h-1.5 mb-2"
+                  />
+                  <div className="text-xs text-gray-500 mb-4">{totalAttempted}/{paperTopics.length} topics started</div>
+
+                  {/* Topics quick select */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {paperTopics.slice(0, 5).map((topic: any) => {
+                      const p = progressMap[topic.id];
+                      const accuracy = p?.accuracy_rate ?? null;
+                      return (
+                        <Link key={topic.id} href={`/practice/session?type=topic&topicId=${topic.id}`}>
+                          <span className={`inline-block px-2 py-1 rounded-md text-xs font-medium cursor-pointer transition-colors ${
+                            accuracy === null ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            : accuracy >= 70  ? "bg-green-100 text-green-700 hover:bg-green-200"
+                            : accuracy >= 40  ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
+                            : "bg-red-100 text-red-700 hover:bg-red-200"
+                          }`}>
+                            {topic.name.length > 20 ? topic.name.slice(0, 20) + "…" : topic.name}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                    {paperTopics.length > 5 && (
+                      <Link href={`/practice/${paper.id}`}>
+                        <span className="inline-block px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer">
+                          +{paperTopics.length - 5} more →
+                        </span>
+                      </Link>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Weak topics alert */}
+      {weakTopics.length > 0 && (
+        <div>
+          <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">
+            Needs Urgent Attention ({weakTopics.length})
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {weakTopics.slice(0, 6).map((topic: any) => {
+              const p = progressMap[topic.id];
+              return (
+                <Link key={topic.id} href={`/practice/session?type=topic&topicId=${topic.id}`}>
+                  <Card className="border-red-200 hover:shadow-md transition-all cursor-pointer hover:border-red-300">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1 min-w-0 mr-2">
+                          <div className="text-sm font-medium text-gray-900 truncate">{topic.name}</div>
+                          <div className="text-xs text-gray-500 mt-0.5">P{topic.paper_id} · {p?.total_attempted ?? 0} attempted</div>
+                        </div>
+                        <div className="text-lg font-bold text-red-600">{Math.round(p?.accuracy_rate ?? 0)}%</div>
+                      </div>
+                      <Progress value={p?.accuracy_rate ?? 0} className="mt-2 h-1" indicatorClassName="bg-red-400" />
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
