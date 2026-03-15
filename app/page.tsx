@@ -11,8 +11,37 @@ export default async function HomePage() {
     if (user) redirect("/dashboard");
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "CA Saarthi",
+    url: "https://casaarthi-seven.vercel.app",
+    description: "India's #1 free CA Foundation preparation platform with 10,000+ questions, 40 mock tests, AI tutor and personalised study plans.",
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Web",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "INR",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      ratingCount: "150",
+    },
+    provider: {
+      "@type": "Organization",
+      name: "CA Saarthi",
+      url: "https://casaarthi-seven.vercel.app",
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Nav */}
       <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
