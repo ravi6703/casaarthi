@@ -13,6 +13,7 @@ import {
   Clock, CheckCircle2, XCircle, SkipForward, BarChart3, Sparkles,
 } from "lucide-react";
 import { SessionSummary } from "./session-summary";
+import { SubjectiveAnswer } from "./subjective-answer";
 
 interface Question {
   id: string;
@@ -29,6 +30,9 @@ interface Question {
   explanation: string;
   difficulty: string;
   question_type: string;
+  model_answer: string | null;
+  max_marks: number;
+  marking_rubric: Record<string, number> | null;
   topics: { name: string; paper_id: number };
 }
 
@@ -62,6 +66,11 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
   const [skipped, setSkipped] = useState<Set<string>>(new Set());
   const [aiExplanations, setAiExplanations] = useState<Record<string, string>>({});
   const [aiLoading, setAiLoading] = useState<string | null>(null);
+  const [subjectiveResults, setSubjectiveResults] = useState<Record<string, {
+    answerText: string; score: number; maxMarks: number; feedback: string;
+    rubricScores: Record<string, number>; keyPointsMissed: string[]; grade: string; timeSec: number;
+  }>>({});
+  const [evaluatingId, setEvaluatingId] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -191,10 +200,97 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
     }
   }
 
+  async function handleSubjectiveAnswer(questionId: string, answerText: string) {
+    const q = qs.find((q) => q.id === questionId);
+    if (!q) return null;
+    const timeSec = Math.floor((Date.now() - questionStartTime) / 1000);
+    setEvaluatingId(questionId);
+
+    try {
+      // Save raw answer first
+      if (sessionId) {
+        await (supabase.from("subjective_responses") as any).insert({
+          session_id: sessionId,
+          question_id: questionId,
+          user_id: userId,
+          answer_text: answerText,
+          word_count: answerText.split(/\s+/).length,
+          time_spent_sec: timeSec,
+        });
+      }
+
+      // Call AI evaluation
+      const res = await fetch("/api/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionText: q.question_text,
+          modelAnswer: q.model_answer,
+          markingRubric: q.marking_rubric,
+          studentAnswer: answerText,
+          maxMarks: q.max_marks || 5,
+          topicName: q.topics?.name,
+          paperName: PAPER_NAMES[q.topics?.paper_id ?? q.paper_id],
+        }),
+      });
+      const data = await res.json();
+
+      const result = {
+        answerText,
+        score: data.score ?? 0,
+        maxMarks: q.max_marks || 5,
+        feedback: data.feedback ?? "Evaluation completed.",
+        rubricScores: data.rubricScores ?? {},
+        keyPointsMissed: data.keyPointsMissed ?? [],
+        grade: data.grade ?? "Satisfactory",
+        timeSec,
+      };
+
+      setSubjectiveResults((prev) => ({ ...prev, [questionId]: result }));
+      setRevealed((prev) => new Set(prev).add(questionId));
+
+      // Update DB with AI results
+      if (sessionId) {
+        await (supabase.from("subjective_responses") as any)
+          .update({
+            ai_score: result.score,
+            ai_feedback: result.feedback,
+            ai_rubric_scores: result.rubricScores,
+            ai_model_used: "claude-haiku-4-5-20251001",
+            evaluated_at: new Date().toISOString(),
+          })
+          .eq("session_id", sessionId)
+          .eq("question_id", questionId);
+      }
+
+      // Update topic progress
+      if (sessionId) {
+        const isCorrect = result.score >= (q.max_marks || 5) * 0.5;
+        await (supabase as any).rpc("update_topic_progress", {
+          p_user_id: userId,
+          p_topic_id: q.topic_id,
+          p_correct: isCorrect ? 1 : 0,
+          p_attempted: 1,
+        });
+      }
+
+      return result;
+    } catch {
+      toast.error("Failed to evaluate answer. Please try again.");
+      return null;
+    } finally {
+      setEvaluatingId(null);
+    }
+  }
+
   async function handleFinish() {
     clearInterval(timerRef.current!);
     const correct = Object.values(answers).filter((a) => a.isCorrect).length;
     const wrong = Object.values(answers).filter((a) => !a.isCorrect).length;
+
+    // Calculate subjective scores
+    const subjScoreTotal = Object.values(subjectiveResults).reduce((s, r) => s + r.score, 0);
+    const subjMaxTotal = Object.values(subjectiveResults).reduce((s, r) => s + r.maxMarks, 0);
 
     if (sessionId) {
       await (supabase.from("practice_sessions") as any).update({
@@ -203,6 +299,8 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
         wrong,
         skipped: skipped.size,
         time_spent_sec: elapsed,
+        subjective_score: subjScoreTotal,
+        subjective_total: subjMaxTotal,
         completed_at: new Date().toISOString(),
       }).eq("id", sessionId);
 
@@ -221,6 +319,7 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
         totalTime={elapsed}
         sessionType={sessionType}
         topicName={topicName}
+        subjectiveResults={subjectiveResults}
       />
     );
   }
@@ -237,11 +336,11 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
   }
 
   const q = qs[current];
-  const isAnswered = !!answers[q.id];
+  const isAnswered = !!answers[q.id] || !!subjectiveResults[q.id];
   const answer = answers[q.id];
   const isBookmarked = bookmarks.has(q.id);
   const correct = Object.values(answers).filter((a) => a.isCorrect).length;
-  const total_answered = Object.keys(answers).length;
+  const total_answered = Object.keys(answers).length + Object.keys(subjectiveResults).length;
 
   return (
     <div className="max-w-3xl mx-auto space-y-4 animate-fade-in">
@@ -348,8 +447,20 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
             </div>
           )}
 
+          {/* Subjective Answer */}
+          {q.question_type === "subjective" && (
+            <SubjectiveAnswer
+              questionId={q.id}
+              maxMarks={q.max_marks || 5}
+              modelAnswer={q.model_answer ?? undefined}
+              onSubmit={(text) => handleSubjectiveAnswer(q.id, text)}
+              existingResult={subjectiveResults[q.id]}
+              isEvaluating={evaluatingId === q.id}
+            />
+          )}
+
           {/* Explanation */}
-          {isAnswered && (
+          {isAnswered && q.question_type === "mcq" && (
             <div className="mt-5 space-y-3 animate-slide-up">
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">

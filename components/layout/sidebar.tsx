@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, BookOpen, FileText, User, Trophy,
-  BookMarked, Settings, ChevronRight, BarChart2, CalendarDays,
+  BookMarked, Settings, ChevronRight, BarChart2, CalendarDays, Newspaper,
 } from "lucide-react";
 
 const NAV = [
@@ -17,6 +17,7 @@ const NAV = [
   { href: "/profile",     label: "My Profile",  icon: BookMarked },
   { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { href: "/resources",   label: "Resources",   icon: Settings },
+  { href: "/blog",        label: "Blog",        icon: Newspaper },
 ];
 
 export function Sidebar() {

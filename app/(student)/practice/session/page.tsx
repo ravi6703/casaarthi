@@ -22,7 +22,8 @@ export default async function PracticeSessionPage({ searchParams }: Props) {
   const baseQuery = supabase
     .from("questions")
     .select("*, topics(name, paper_id), sub_topics(name)")
-    .eq("status", "approved");
+    .eq("status", "approved")
+    .order("question_type");
 
   if (sessionType === "topic" && topicId) {
     const { data } = await baseQuery.eq("topic_id", topicId).limit(30);

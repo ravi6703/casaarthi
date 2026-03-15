@@ -21,6 +21,17 @@ interface Question {
   topics?: { name: string; paper_id: number };
 }
 
+interface SubjectiveResult {
+  answerText: string;
+  score: number;
+  maxMarks: number;
+  feedback: string;
+  rubricScores: Record<string, number>;
+  keyPointsMissed: string[];
+  grade: string;
+  timeSec: number;
+}
+
 interface Props {
   questions: Question[];
   answers: Record<string, { selected: string; isCorrect: boolean; timeSec: number }>;
@@ -28,17 +39,27 @@ interface Props {
   totalTime: number;
   sessionType: string;
   topicName?: string;
+  subjectiveResults?: Record<string, SubjectiveResult>;
 }
 
-export function SessionSummary({ questions, answers, skipped, totalTime, sessionType, topicName }: Props) {
+export function SessionSummary({ questions, answers, skipped, totalTime, sessionType, topicName, subjectiveResults = {} }: Props) {
   const correct = Object.values(answers).filter((a) => a.isCorrect).length;
   const wrong = Object.values(answers).filter((a) => !a.isCorrect).length;
   const answered = Object.keys(answers).length;
   const accuracy = calculateAccuracy(correct, answered);
   const wrongQuestions = questions.filter((q) => answers[q.id] && !answers[q.id].isCorrect);
 
-  const avgTime = answered > 0
-    ? Math.round(Object.values(answers).reduce((s, a) => s + a.timeSec, 0) / answered)
+  const subjResults = Object.values(subjectiveResults);
+  const subjScoreTotal = subjResults.reduce((s, r) => s + r.score, 0);
+  const subjMaxTotal = subjResults.reduce((s, r) => s + r.maxMarks, 0);
+  const hasSubjective = subjResults.length > 0;
+
+  const allAnsweredCount = answered + subjResults.length;
+  const avgTime = allAnsweredCount > 0
+    ? Math.round(
+        (Object.values(answers).reduce((s, a) => s + a.timeSec, 0) +
+         subjResults.reduce((s, r) => s + r.timeSec, 0)) / allAnsweredCount
+      )
     : 0;
 
   return (
@@ -72,6 +93,21 @@ export function SessionSummary({ questions, answers, skipped, totalTime, session
             <div className="text-xs text-gray-500 mt-1">Skipped</div>
           </div>
         </div>
+
+        {/* Subjective score summary */}
+        {hasSubjective && (
+          <div className="mt-4 inline-flex items-center gap-4 bg-purple-50 rounded-xl px-6 py-3 border border-purple-200">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-700">{subjScoreTotal.toFixed(1)}/{subjMaxTotal}</div>
+              <div className="text-xs text-purple-600 mt-0.5">Subjective Score</div>
+            </div>
+            <div className="w-px h-8 bg-purple-300" />
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-700">{subjResults.length}</div>
+              <div className="text-xs text-purple-600 mt-0.5">Answers Evaluated</div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Time stats */}
@@ -126,6 +162,42 @@ export function SessionSummary({ questions, answers, skipped, totalTime, session
                   <div className="bg-white rounded-lg border border-blue-100 p-3">
                     <p className="text-xs text-gray-700 leading-relaxed">{q.explanation}</p>
                   </div>
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Subjective answers review */}
+      {hasSubjective && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm flex items-center gap-2">
+              ✍️ Subjective Answers Review ({subjResults.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {questions.filter((q) => subjectiveResults[q.id]).map((q, i) => {
+              const r = subjectiveResults[q.id];
+              const pct = Math.round((r.score / r.maxMarks) * 100);
+              return (
+                <div key={q.id} className={`border rounded-xl p-4 ${
+                  pct >= 70 ? "border-green-200 bg-green-50/30" :
+                  pct >= 40 ? "border-yellow-200 bg-yellow-50/30" :
+                  "border-red-200 bg-red-50/30"
+                }`}>
+                  <div className="flex items-start justify-between mb-2">
+                    <span className="text-xs font-bold text-gray-400">Q{i + 1}</span>
+                    <Badge variant="secondary" className="text-xs">{r.score}/{r.maxMarks} marks · {r.grade}</Badge>
+                  </div>
+                  <p className="text-sm font-medium text-gray-900 mb-2">{q.question_text}</p>
+                  <p className="text-xs text-gray-600 leading-relaxed">{r.feedback}</p>
+                  {r.keyPointsMissed.length > 0 && (
+                    <div className="mt-2 text-xs text-orange-700">
+                      <strong>Missed:</strong> {r.keyPointsMissed.join(" · ")}
+                    </div>
+                  )}
                 </div>
               );
             })}
