@@ -23,10 +23,24 @@ export interface Database {
         Insert: Omit<Database["public"]["Tables"]["papers"]["Row"], "id">;
         Update: Partial<Database["public"]["Tables"]["papers"]["Row"]>;
       };
+      chapters: {
+        Row: {
+          id: string;
+          paper_id: number;
+          chapter_number: number;
+          name: string;
+          slug: string;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: Omit<Database["public"]["Tables"]["chapters"]["Row"], "id" | "created_at">;
+        Update: Partial<Database["public"]["Tables"]["chapters"]["Row"]>;
+      };
       topics: {
         Row: {
           id: string;
           paper_id: number;
+          chapter_id: string | null;
           name: string;
           slug: string;
           exam_weightage: number;

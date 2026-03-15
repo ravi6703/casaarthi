@@ -42,8 +42,16 @@ export default async function PracticePage() {
     .order("paper_id")
     .order("sort_order");
 
+  // Fetch chapters
+  const { data: chaptersData } = await supabase
+    .from("chapters")
+    .select("id, paper_id, chapter_number, name")
+    .order("paper_id")
+    .order("chapter_number");
+
   const progress = (progressData as any[]) ?? [];
   const topics = (topicsData as any[]) ?? [];
+  const chapters = (chaptersData as any[]) ?? [];
 
   // Get question counts per topic
   const { data: qCountData } = await supabase
@@ -114,7 +122,7 @@ export default async function PracticePage() {
         </div>
       </div>
 
-      {/* Papers */}
+      {/* Papers with Chapter counts */}
       <div>
         <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Browse by Paper</h2>
         <div className="grid md:grid-cols-2 gap-4">
@@ -124,60 +132,52 @@ export default async function PracticePage() {
             const avgAccuracy = paperTopics.length > 0
               ? Math.round(paperTopics.reduce((s: number, t: any) => s + (progressMap[t.id]?.accuracy_rate ?? 0), 0) / paperTopics.length)
               : 0;
+            const paperChapters = chapters.filter((c: any) => c.paper_id === paper.id);
 
             return (
-              <Card key={paper.id} className={`border-l-4 ${PAPER_COLORS[paper.color]} transition-all hover:shadow-md`}>
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{paper.emoji}</span>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant={`p${paper.id}` as "p1"|"p2"|"p3"|"p4"}>{paper.code}</Badge>
+              <Link key={paper.id} href={`/practice/${paper.id}`}>
+                <Card className={`border-l-4 ${PAPER_COLORS[paper.color]} transition-all hover:shadow-md cursor-pointer h-full`}>
+                  <CardContent className="p-5">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{paper.emoji}</span>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <Badge variant={`p${paper.id}` as "p1"|"p2"|"p3"|"p4"}>{paper.code}</Badge>
+                          </div>
+                          <div className="font-semibold text-gray-900 mt-1 text-sm">{paper.name}</div>
                         </div>
-                        <div className="font-semibold text-gray-900 mt-1 text-sm">{paper.name}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-gray-900">{avgAccuracy}%</div>
+                        <div className="text-xs text-gray-500">accuracy</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-900">{avgAccuracy}%</div>
-                      <div className="text-xs text-gray-500">accuracy</div>
+
+                    <Progress
+                      value={paperTopics.length > 0 ? (totalAttempted / paperTopics.length) * 100 : 0}
+                      className="h-1.5 mb-2"
+                    />
+                    <div className="text-xs text-gray-500 mb-3">
+                      {paperChapters.length} chapters · {paperTopics.length} topics · {totalAttempted} started
                     </div>
-                  </div>
 
-                  <Progress
-                    value={(totalAttempted / paperTopics.length) * 100}
-                    className="h-1.5 mb-2"
-                  />
-                  <div className="text-xs text-gray-500 mb-4">{totalAttempted}/{paperTopics.length} topics started</div>
-
-                  {/* Topics quick select */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {paperTopics.slice(0, 5).map((topic: any) => {
-                      const p = progressMap[topic.id];
-                      const accuracy = p?.accuracy_rate ?? null;
-                      return (
-                        <Link key={topic.id} href={`/practice/session?type=topic&topicId=${topic.id}`}>
-                          <span className={`inline-block px-2 py-1 rounded-md text-xs font-medium cursor-pointer transition-colors ${
-                            accuracy === null ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                            : accuracy >= 70  ? "bg-green-100 text-green-700 hover:bg-green-200"
-                            : accuracy >= 40  ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-                            : "bg-red-100 text-red-700 hover:bg-red-200"
-                          }`}>
-                            {topic.name.length > 20 ? topic.name.slice(0, 20) + "…" : topic.name}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                    {paperTopics.length > 5 && (
-                      <Link href={`/practice/${paper.id}`}>
-                        <span className="inline-block px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer">
-                          +{paperTopics.length - 5} more →
+                    {/* Chapter pills */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {paperChapters.slice(0, 4).map((ch: any) => (
+                        <span key={ch.id} className="inline-block px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600">
+                          Ch {ch.chapter_number}: {ch.name.length > 18 ? ch.name.slice(0, 18) + "…" : ch.name}
                         </span>
-                      </Link>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                      ))}
+                      {paperChapters.length > 4 && (
+                        <span className="inline-block px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700">
+                          +{paperChapters.length - 4} more →
+                        </span>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </div>
