@@ -20,16 +20,14 @@ export default async function MockTestsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const [mocksRes, attemptsRes, practiceRes, subRes] = await Promise.all([
+  const [mocksRes, attemptsRes, practiceRes] = await Promise.all([
     supabase.from("mock_tests").select("*").eq("is_active", true).order("paper_id").order("test_number"),
     supabase.from("mock_test_attempts").select("mock_test_id, total_score, percentage, status, started_at").eq("user_id", user.id).eq("status", "completed"),
     supabase.from("practice_sessions").select("paper_id", { count: "exact" }).eq("user_id", user.id).eq("status", "completed"),
-    supabase.from("subscriptions").select("tier, papers_unlocked").eq("user_id", user.id).single(),
   ]);
 
   const mocks = (mocksRes.data as any[]) ?? [];
   const attempts = (attemptsRes.data as any[]) ?? [];
-  const subscription = subRes.data as any;
 
   // Count practice sessions per paper
   const { count: totalPracticeSessions } = await supabase
@@ -56,26 +54,12 @@ export default async function MockTestsPage() {
     return false;
   }
 
-  const isFreeTier = subscription?.tier === "free" || !subscription;
-
   return (
     <div className="space-y-8 animate-slide-up">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Mock Test Series</h1>
         <p className="text-gray-500 mt-1">Full-length ICAI-pattern tests with detailed analytics</p>
       </div>
-
-      {isFreeTier && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center justify-between">
-          <div>
-            <p className="font-medium text-blue-900">Free tier: Mock Test 1 available for all papers</p>
-            <p className="text-sm text-blue-700 mt-0.5">Upgrade to unlock all 40 mock tests</p>
-          </div>
-          <Link href="/upgrade">
-            <Button size="sm">Upgrade →</Button>
-          </Link>
-        </div>
-      )}
 
       {PAPERS.map((paper) => {
         const paperMocks = mocks.filter((m: any) => m.paper_id === paper.id);
@@ -98,7 +82,7 @@ export default async function MockTestsPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
               {paperMocks.map((mock: any) => {
                 const attempt = attemptMap[mock.id];
-                const unlocked = isUnlocked(mock) && (!isFreeTier || mock.test_number === 1);
+                const unlocked = isUnlocked(mock);
                 const isPassed = (attempt?.percentage ?? 0) >= 40;
 
                 return (

@@ -10,6 +10,7 @@ import { formatTime } from "@/lib/utils";
 import { Clock, ChevronRight, SkipForward } from "lucide-react";
 
 const DIAGNOSTIC_DURATION = 45 * 60; // 45 minutes
+const APTITUDE_DURATION = 15 * 60;   // 15 minutes
 
 interface Question {
   id: string;
@@ -29,6 +30,7 @@ interface Question {
 interface Props {
   userId: string;
   sessionId: string;
+  isAptitudeMode?: boolean;
   onComplete: () => void;
 }
 
@@ -36,12 +38,12 @@ const PAPER_NAMES: Record<number, string> = {
   1: "Accounts", 2: "Laws", 3: "Maths", 4: "Economics"
 };
 
-export function DiagnosticTest({ userId, sessionId, onComplete }: Props) {
+export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onComplete }: Props) {
   const supabase = createClient();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [timeLeft, setTimeLeft] = useState(DIAGNOSTIC_DURATION);
+  const [timeLeft, setTimeLeft] = useState(isAptitudeMode ? APTITUDE_DURATION : DIAGNOSTIC_DURATION);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
@@ -86,19 +88,44 @@ export function DiagnosticTest({ userId, sessionId, onComplete }: Props) {
         setAnswers(existingMap);
       }
 
-      // Fetch 60 diagnostic questions (15 per paper: 5 easy, 7 medium, 3 hard)
       const allQuestions: Question[] = [];
-      for (const paperId of [1, 2, 3, 4]) {
-        for (const [diff, count] of [["easy", 5], ["medium", 7], ["hard", 3]] as [string, number][]) {
-          const { data } = await supabase
+
+      if (isAptitudeMode) {
+        // Aptitude mode: 15 easy questions mixed from all papers
+        const { data: easyData } = await supabase
+          .from("questions")
+          .select("*, topics(name)")
+          .eq("difficulty", "easy")
+          .eq("status", "approved")
+          .eq("is_diagnostic", true)
+          .limit(15);
+        if (easyData) allQuestions.push(...(easyData as Question[]));
+
+        // Fallback if not enough easy questions
+        if (allQuestions.length < 15) {
+          const existingIds = allQuestions.map((q) => q.id);
+          const { data: fallbackData } = await supabase
             .from("questions")
             .select("*, topics(name)")
-            .eq("paper_id", paperId)
-            .eq("difficulty", diff)
             .eq("status", "approved")
             .eq("is_diagnostic", true)
-            .limit(count);
-          if (data) allQuestions.push(...(data as Question[]));
+            .limit(15 - allQuestions.length);
+          if (fallbackData) allQuestions.push(...(fallbackData as Question[]));
+        }
+      } else {
+        // Full diagnostic: 60 questions (15 per paper: 5 easy, 7 medium, 3 hard)
+        for (const paperId of [1, 2, 3, 4]) {
+          for (const [diff, count] of [["easy", 5], ["medium", 7], ["hard", 3]] as [string, number][]) {
+            const { data } = await supabase
+              .from("questions")
+              .select("*, topics(name)")
+              .eq("paper_id", paperId)
+              .eq("difficulty", diff)
+              .eq("status", "approved")
+              .eq("is_diagnostic", true)
+              .limit(count);
+            if (data) allQuestions.push(...(data as Question[]));
+          }
         }
       }
 
@@ -282,7 +309,9 @@ export function DiagnosticTest({ userId, sessionId, onComplete }: Props) {
       {/* Test header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Diagnostic Assessment</h1>
+          <h1 className="text-xl font-bold text-gray-900">
+            {isAptitudeMode ? "Aptitude Assessment" : "Diagnostic Assessment"}
+          </h1>
           <p className="text-sm text-gray-500">{answered_count} of {questions.length} answered</p>
         </div>
         <div className={`flex items-center gap-2 font-mono text-lg font-bold ${timerColor}`}>
@@ -293,6 +322,12 @@ export function DiagnosticTest({ userId, sessionId, onComplete }: Props) {
 
       {/* Progress bar */}
       <Progress value={(current / questions.length) * 100} className="mb-4 h-2" />
+
+      {isAptitudeMode && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-sm text-blue-800">
+          This is a quick aptitude check to understand your baseline. Don&apos;t worry if you can&apos;t answer all questions — this helps us plan your study journey.
+        </div>
+      )}
 
       {/* Paper indicator */}
       <div className="flex gap-2 mb-4 flex-wrap">
@@ -375,7 +410,7 @@ export function DiagnosticTest({ userId, sessionId, onComplete }: Props) {
         <div className="flex items-center gap-3">
           {current === questions.length - 1 ? (
             <Button onClick={handleSubmit} loading={submitting} className="min-w-40">
-              Submit Diagnostic
+              {isAptitudeMode ? "Submit Assessment" : "Submit Diagnostic"}
             </Button>
           ) : (
             <Button onClick={handleNext}>

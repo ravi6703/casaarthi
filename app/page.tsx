@@ -95,37 +95,31 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Free Platform */}
       <section className="bg-gray-50 border-t border-gray-200 py-20">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">Simple, exam-cycle pricing</h2>
-          <p className="text-center text-gray-600 mb-12">One-time payment. 6 months validity. No monthly anxiety.</p>
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { name: "Free", price: "₹0", features: ["Diagnostic assessment", "50 questions/paper", "Mock Test 1 (all papers)", "Basic dashboard"], cta: "Start Free", popular: false },
-              { name: "Foundation", price: "₹499", sub: "per paper", features: ["All 10 mocks for 1 paper", "Unlimited practice questions", "Full analytics", "AI recommendations"], cta: "Buy Paper", popular: false },
-              { name: "Complete", price: "₹1,499", features: ["All 4 papers", "All 40 mock tests", "Full AI personalisation", "Leaderboard access", "Teaching resources"], cta: "Best Value →", popular: true },
-              { name: "Pro", price: "₹2,999", features: ["Everything in Complete", "2 mentor sessions", "Priority support", "Doubt resolution chat"], cta: "Go Pro", popular: false },
-            ].map((p) => (
-              <div key={p.name} className={`bg-white rounded-xl border p-6 relative ${p.popular ? "border-blue-500 shadow-lg shadow-blue-100" : "border-gray-200"}`}>
-                {p.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">Most Popular</div>
-                )}
-                <div className="text-lg font-bold text-gray-900 mb-1">{p.name}</div>
-                <div className="text-3xl font-bold text-gray-900 mb-0.5">{p.price}</div>
-                {p.sub ? <div className="text-xs text-gray-500 mb-4">{p.sub}</div> : <div className="mb-4" />}
-                <ul className="space-y-2 mb-6">
-                  {p.features.map((f) => (
-                    <li key={f} className="text-sm text-gray-600 flex items-start gap-2">
-                      <span className="text-green-500 mt-0.5">✓</span>{f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/register">
-                  <Button variant={p.popular ? "default" : "outline"} className="w-full">{p.cta}</Button>
-                </Link>
-              </div>
-            ))}
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">100% Free. No catches.</h2>
+          <p className="text-gray-600 mb-10">Everything you need to prepare for CA Foundation — completely free, forever.</p>
+          <div className="bg-white rounded-xl border-2 border-blue-500 shadow-lg shadow-blue-100 p-8 max-w-md mx-auto">
+            <div className="text-4xl font-bold text-blue-600 mb-2">₹0</div>
+            <div className="text-lg font-medium text-gray-900 mb-6">Full Access</div>
+            <ul className="space-y-3 text-left mb-8">
+              {[
+                "Diagnostic & Aptitude Assessment",
+                "10,000+ practice questions",
+                "All mock tests",
+                "Full analytics & dashboard",
+                "AI-driven study plans",
+                "Study resources & notes",
+              ].map((f) => (
+                <li key={f} className="text-sm text-gray-700 flex items-start gap-2">
+                  <span className="text-green-500 mt-0.5">✓</span>{f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/register">
+              <Button className="w-full" size="lg">Get Started Free →</Button>
+            </Link>
           </div>
         </div>
       </section>
