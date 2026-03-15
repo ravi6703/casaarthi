@@ -28,7 +28,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <Topbar userName={userName} streakCount={streak?.current_streak} />
+        <Topbar userName={userName} userEmail={user.email} streakCount={streak?.current_streak} />
         <main className="flex-1 p-4 md:p-6 max-w-7xl w-full mx-auto">
           {children}
         </main>

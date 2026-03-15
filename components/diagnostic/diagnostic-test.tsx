@@ -8,9 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { formatTime } from "@/lib/utils";
 import { Clock, ChevronRight, SkipForward } from "lucide-react";
-
-const DIAGNOSTIC_DURATION = 45 * 60; // 45 minutes
-const APTITUDE_DURATION = 15 * 60;   // 15 minutes
+import type { DiagnosticTier } from "./diagnostic-flow";
 
 interface Question {
   id: string;
@@ -30,7 +28,7 @@ interface Question {
 interface Props {
   userId: string;
   sessionId: string;
-  isAptitudeMode?: boolean;
+  diagnosticTier: DiagnosticTier;
   onComplete: () => void;
 }
 
@@ -38,12 +36,58 @@ const PAPER_NAMES: Record<number, string> = {
   1: "Accounts", 2: "Laws", 3: "Maths", 4: "Economics"
 };
 
-export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onComplete }: Props) {
+const TIER_CONFIG: Record<DiagnosticTier, {
+  duration: number;
+  questionsPerPaper: { easy: number; medium: number; hard: number };
+  totalCap: number;
+  title: string;
+  subtitle: string;
+}> = {
+  aptitude: {
+    duration: 15 * 60,
+    questionsPerPaper: { easy: 4, medium: 0, hard: 0 },
+    totalCap: 15,
+    title: "Aptitude Assessment",
+    subtitle: "Quick baseline check — don't worry if you can't answer everything",
+  },
+  foundation: {
+    duration: 25 * 60,
+    questionsPerPaper: { easy: 5, medium: 2, hard: 1 },
+    totalCap: 30,
+    title: "Foundation Assessment",
+    subtitle: "Testing your basics across all 4 papers",
+  },
+  intermediate: {
+    duration: 35 * 60,
+    questionsPerPaper: { easy: 3, medium: 5, hard: 3 },
+    totalCap: 45,
+    title: "Intermediate Diagnostic",
+    subtitle: "Comprehensive assessment of your preparation level",
+  },
+  advanced: {
+    duration: 45 * 60,
+    questionsPerPaper: { easy: 5, medium: 7, hard: 3 },
+    totalCap: 60,
+    title: "Full Diagnostic Assessment",
+    subtitle: "Deep profiling across all topics and difficulty levels",
+  },
+};
+
+const TIER_LABELS: Record<DiagnosticTier, string> = {
+  aptitude: "Aptitude",
+  foundation: "Foundation",
+  intermediate: "Intermediate",
+  advanced: "Advanced",
+};
+
+export function DiagnosticTest({ userId, sessionId, diagnosticTier, onComplete }: Props) {
   const supabase = createClient();
+  const config = TIER_CONFIG[diagnosticTier];
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [timeLeft, setTimeLeft] = useState(isAptitudeMode ? APTITUDE_DURATION : DIAGNOSTIC_DURATION);
+  const [timeLeft, setTimeLeft] = useState(config.duration);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
@@ -89,52 +133,37 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
       }
 
       const allQuestions: Question[] = [];
+      const { questionsPerPaper, totalCap } = config;
 
-      if (isAptitudeMode) {
-        // Aptitude mode: 15 easy questions mixed from all papers
-        const { data: easyData } = await supabase
-          .from("questions")
-          .select("*, topics(name)")
-          .eq("difficulty", "easy")
-          .eq("status", "approved")
-          .eq("is_diagnostic", true)
-          .limit(15);
-        if (easyData) allQuestions.push(...(easyData as Question[]));
-
-        // Fallback if not enough easy questions
-        if (allQuestions.length < 15) {
-          const existingIds = allQuestions.map((q) => q.id);
-          const { data: fallbackData } = await supabase
+      // For all tiers, loop through papers and fetch questions per difficulty
+      for (const paperId of [1, 2, 3, 4]) {
+        for (const [diff, count] of [
+          ["easy", questionsPerPaper.easy],
+          ["medium", questionsPerPaper.medium],
+          ["hard", questionsPerPaper.hard],
+        ] as [string, number][]) {
+          if (count === 0) continue;
+          const { data } = await supabase
             .from("questions")
             .select("*, topics(name)")
+            .eq("paper_id", paperId)
+            .eq("difficulty", diff)
             .eq("status", "approved")
             .eq("is_diagnostic", true)
-            .limit(15 - allQuestions.length);
-          if (fallbackData) allQuestions.push(...(fallbackData as Question[]));
-        }
-      } else {
-        // Full diagnostic: 60 questions (15 per paper: 5 easy, 7 medium, 3 hard)
-        for (const paperId of [1, 2, 3, 4]) {
-          for (const [diff, count] of [["easy", 5], ["medium", 7], ["hard", 3]] as [string, number][]) {
-            const { data } = await supabase
-              .from("questions")
-              .select("*, topics(name)")
-              .eq("paper_id", paperId)
-              .eq("difficulty", diff)
-              .eq("status", "approved")
-              .eq("is_diagnostic", true)
-              .limit(count);
-            if (data) allQuestions.push(...(data as Question[]));
-          }
+            .limit(count);
+          if (data) allQuestions.push(...(data as Question[]));
         }
       }
 
-      if (allQuestions.length === 0) {
+      // Cap total questions
+      const capped = allQuestions.slice(0, totalCap);
+
+      if (capped.length === 0) {
         toast.error("No diagnostic questions available yet. Please contact support.");
         return;
       }
 
-      setQuestions(allQuestions);
+      setQuestions(capped);
     } catch (err) {
       toast.error("Failed to load questions");
     } finally {
@@ -206,12 +235,15 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
 
     // Per-paper scores
     const paperScores: Record<string, number> = {};
+    const paperTotals: Record<string, number> = {};
     const topicScores: Record<string, { correct: number; total: number }> = {};
 
     for (const q of questions) {
       const paperKey = String(q.paper_id);
       if (!paperScores[paperKey]) paperScores[paperKey] = 0;
+      if (!paperTotals[paperKey]) paperTotals[paperKey] = 0;
 
+      paperTotals[paperKey]++;
       if (correctMap.has(q.id)) paperScores[paperKey]++;
 
       if (!topicScores[q.topic_id]) topicScores[q.topic_id] = { correct: 0, total: 0 };
@@ -219,14 +251,15 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
       if (correctMap.has(q.id)) topicScores[q.topic_id].correct++;
     }
 
-    // Normalize paper scores to 0-100
-    const QUESTIONS_PER_PAPER = 15;
+    // Normalize paper scores to 0-100 using actual questions per paper
     const paperScoresNorm: Record<string, number> = {};
     for (const [k, v] of Object.entries(paperScores)) {
-      paperScoresNorm[k] = Math.round((v / QUESTIONS_PER_PAPER) * 100);
+      const total = paperTotals[k] || 1;
+      paperScoresNorm[k] = Math.round((v / total) * 100);
     }
 
-    const overall = Math.round(Object.values(paperScoresNorm).reduce((a, b) => a + b, 0) / 4);
+    const paperCount = Object.keys(paperScoresNorm).length || 1;
+    const overall = Math.round(Object.values(paperScoresNorm).reduce((a, b) => a + b, 0) / paperCount);
 
     // Topic scores with colour
     const topicScoresOut: Record<string, { score: number; color: string }> = {};
@@ -281,6 +314,11 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
     }, { onConflict: "user_id" });
   }
 
+  // Compute per-paper question counts from actual loaded questions
+  function getQuestionsForPaper(paperId: number): Question[] {
+    return questions.filter((q) => q.paper_id === paperId);
+  }
+
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto text-center py-20">
@@ -300,9 +338,11 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
 
   const q = questions[current];
   const answered = answers[q.id];
-  const paperGroup = Math.floor(current / 15);
   const answered_count = Object.keys(answers).length;
   const timerColor = timeLeft <= 600 ? "text-red-600" : timeLeft <= 1800 ? "text-yellow-600" : "text-gray-700";
+
+  // Determine which paper group the current question belongs to
+  const currentPaperId = q.paper_id;
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -310,9 +350,10 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-bold text-gray-900">
-            {isAptitudeMode ? "Aptitude Assessment" : "Diagnostic Assessment"}
+            {config.title}
           </h1>
-          <p className="text-sm text-gray-500">{answered_count} of {questions.length} answered</p>
+          <p className="text-sm text-gray-500">{config.subtitle}</p>
+          <p className="text-sm text-gray-500 mt-0.5">{answered_count} of {questions.length} answered</p>
         </div>
         <div className={`flex items-center gap-2 font-mono text-lg font-bold ${timerColor}`}>
           <Clock className="h-5 w-5" />
@@ -323,27 +364,42 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
       {/* Progress bar */}
       <Progress value={(current / questions.length) * 100} className="mb-4 h-2" />
 
-      {isAptitudeMode && (
+      {/* Tier info banner — shown for aptitude and foundation tiers */}
+      {(diagnosticTier === "aptitude" || diagnosticTier === "foundation") && (
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-sm text-blue-800">
-          This is a quick aptitude check to understand your baseline. Don&apos;t worry if you can&apos;t answer all questions — this helps us plan your study journey.
+          <span className="font-semibold">{TIER_LABELS[diagnosticTier]} tier</span>
+          {" — "}
+          {diagnosticTier === "aptitude"
+            ? "This is a quick aptitude check to understand your baseline. Don't worry if you can't answer all questions — this helps us plan your study journey."
+            : "We're testing your basics across all 4 papers. Take your time — accuracy matters more than speed at this stage."}
+        </div>
+      )}
+
+      {/* Tier info banner for intermediate and advanced */}
+      {(diagnosticTier === "intermediate" || diagnosticTier === "advanced") && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-4 text-sm text-indigo-800">
+          <span className="font-semibold">{TIER_LABELS[diagnosticTier]} tier</span>
+          {" — "}
+          {diagnosticTier === "intermediate"
+            ? "This comprehensive test covers medium and hard questions to accurately gauge your preparation level."
+            : "Full diagnostic across all topics and difficulty levels. This will give us the most detailed picture of your strengths and gaps."}
         </div>
       )}
 
       {/* Paper indicator */}
       <div className="flex gap-2 mb-4 flex-wrap">
         {[1, 2, 3, 4].map((p) => {
-          const startIdx = (p - 1) * 15;
-          const endIdx = p * 15;
-          const paperAnswered = Object.keys(answers).filter((id) =>
-            questions.slice(startIdx, endIdx).some((q) => q.id === id)
-          ).length;
+          const paperQuestions = getQuestionsForPaper(p);
+          const paperTotal = paperQuestions.length;
+          if (paperTotal === 0) return null;
+          const paperAnswered = paperQuestions.filter((pq) => answers[pq.id]).length;
           return (
             <Badge
               key={p}
-              variant={paperGroup === p - 1 ? "default" : "secondary"}
+              variant={currentPaperId === p ? "default" : "secondary"}
               className="text-xs"
             >
-              P{p}: {paperAnswered}/15
+              P{p}: {paperAnswered}/{paperTotal}
             </Badge>
           );
         })}
@@ -410,7 +466,9 @@ export function DiagnosticTest({ userId, sessionId, isAptitudeMode = false, onCo
         <div className="flex items-center gap-3">
           {current === questions.length - 1 ? (
             <Button onClick={handleSubmit} loading={submitting} className="min-w-40">
-              {isAptitudeMode ? "Submit Assessment" : "Submit Diagnostic"}
+              {diagnosticTier === "aptitude" || diagnosticTier === "foundation"
+                ? "Submit Assessment"
+                : "Submit Diagnostic"}
             </Button>
           ) : (
             <Button onClick={handleNext}>

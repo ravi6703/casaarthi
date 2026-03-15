@@ -4,12 +4,42 @@ import { OnboardingQuestionnaire } from "./onboarding-questionnaire";
 import { DiagnosticTest } from "./diagnostic-test";
 import { ProfileReport } from "./profile-report";
 
+export type DiagnosticTier = "aptitude" | "foundation" | "intermediate" | "advanced";
+
 type Step = "questionnaire" | "test" | "report";
 
 interface Props {
   userId: string;
   existingProfile: Record<string, unknown> | null;
   existingSession: Record<string, unknown> | null;
+}
+
+export function determineTier(academicBackground: string, attemptNumber: string): DiagnosticTier {
+  const attempt = parseInt(attemptNumber) || 1;
+
+  // Any background with 2+ attempts → advanced
+  if (attempt >= 2) return "advanced";
+
+  // First attempt — decide by academic background
+  switch (academicBackground) {
+    case "completing_class_12":
+      return "aptitude";
+    case "class_12":
+      return "foundation";
+    case "graduation":
+    case "post_graduate":
+    case "working":
+      return "intermediate";
+    default:
+      return "foundation";
+  }
+}
+
+function inferTierFromProfile(profile: Record<string, unknown> | null): DiagnosticTier {
+  if (!profile) return "foundation";
+  const bg = (profile.academic_background as string) ?? "";
+  const attempt = String(profile.attempt_number ?? "1");
+  return determineTier(bg, attempt);
 }
 
 export function DiagnosticFlow({ userId, existingProfile, existingSession }: Props) {
@@ -23,8 +53,8 @@ export function DiagnosticFlow({ userId, existingProfile, existingSession }: Pro
   const [sessionId, setSessionId] = useState<string | null>(
     existingSession ? (existingSession.id as string) : null
   );
-  const [isAptitudeMode, setIsAptitudeMode] = useState<boolean>(
-    existingProfile?.academic_background === "completing_class_12"
+  const [diagnosticTier, setDiagnosticTier] = useState<DiagnosticTier>(
+    inferTierFromProfile(existingProfile)
   );
 
   return (
@@ -32,9 +62,9 @@ export function DiagnosticFlow({ userId, existingProfile, existingSession }: Pro
       {step === "questionnaire" && (
         <OnboardingQuestionnaire
           userId={userId}
-          onComplete={(sid, academicBackground) => {
+          onComplete={(sid, academicBackground, attemptNumber) => {
             setSessionId(sid);
-            setIsAptitudeMode(academicBackground === "completing_class_12");
+            setDiagnosticTier(determineTier(academicBackground, attemptNumber));
             setStep("test");
           }}
         />
@@ -43,7 +73,7 @@ export function DiagnosticFlow({ userId, existingProfile, existingSession }: Pro
         <DiagnosticTest
           userId={userId}
           sessionId={sessionId}
-          isAptitudeMode={isAptitudeMode}
+          diagnosticTier={diagnosticTier}
           onComplete={() => setStep("report")}
         />
       )}

@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { formatTime, calculateAccuracy } from "@/lib/utils";
 import {
   BookmarkPlus, BookmarkCheck, Flag, ChevronLeft, ChevronRight,
-  Clock, CheckCircle2, XCircle, SkipForward, BarChart3,
+  Clock, CheckCircle2, XCircle, SkipForward, BarChart3, Sparkles,
 } from "lucide-react";
 import { SessionSummary } from "./session-summary";
 
@@ -60,6 +60,8 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [elapsed, setElapsed] = useState(0);
   const [skipped, setSkipped] = useState<Set<string>>(new Set());
+  const [aiExplanations, setAiExplanations] = useState<Record<string, string>>({});
+  const [aiLoading, setAiLoading] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -155,6 +157,38 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
       status: "open",
     });
     toast.success("Question reported. Thank you!");
+  }
+
+  async function explainWithAI(questionId: string) {
+    if (aiExplanations[questionId] || aiLoading) return;
+    const q = qs.find((q) => q.id === questionId);
+    if (!q) return;
+    setAiLoading(questionId);
+    try {
+      const res = await fetch("/api/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionText: q.question_text,
+          options: { a: q.option_a, b: q.option_b, c: q.option_c, d: q.option_d },
+          correctOption: q.correct_option,
+          userSelected: answers[questionId]?.selected,
+          explanation: q.explanation,
+          topicName: q.topics?.name,
+          paperName: PAPER_NAMES[q.topics?.paper_id ?? q.paper_id],
+        }),
+      });
+      const data = await res.json();
+      if (data.explanation) {
+        setAiExplanations((prev) => ({ ...prev, [questionId]: data.explanation }));
+      } else {
+        toast.error(data.error || "Could not generate explanation");
+      }
+    } catch {
+      toast.error("Failed to connect to AI service");
+    } finally {
+      setAiLoading(null);
+    }
   }
 
   async function handleFinish() {
@@ -316,16 +350,41 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
 
           {/* Explanation */}
           {isAnswered && (
-            <div className="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-xl animate-slide-up">
-              <div className="flex items-center gap-2 mb-2">
-                {answer.isCorrect ? (
-                  <><CheckCircle2 className="h-4 w-4 text-green-600" /><span className="text-sm font-bold text-green-700">Correct!</span></>
-                ) : (
-                  <><XCircle className="h-4 w-4 text-red-600" /><span className="text-sm font-bold text-red-700">Incorrect</span>
-                  <span className="text-xs text-gray-500 ml-1">· Correct answer: {q.correct_option?.toUpperCase()}</span></>
-                )}
+            <div className="mt-5 space-y-3 animate-slide-up">
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div className="flex items-center gap-2 mb-2">
+                  {answer.isCorrect ? (
+                    <><CheckCircle2 className="h-4 w-4 text-green-600" /><span className="text-sm font-bold text-green-700">Correct!</span></>
+                  ) : (
+                    <><XCircle className="h-4 w-4 text-red-600" /><span className="text-sm font-bold text-red-700">Incorrect</span>
+                    <span className="text-xs text-gray-500 ml-1">· Correct answer: {q.correct_option?.toUpperCase()}</span></>
+                  )}
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">{q.explanation}</p>
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed">{q.explanation}</p>
+
+              {/* AI Explain Button */}
+              {!aiExplanations[q.id] && (
+                <button
+                  onClick={() => explainWithAI(q.id)}
+                  disabled={aiLoading === q.id}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-purple-200 bg-purple-50 text-purple-700 text-sm font-medium hover:bg-purple-100 transition-colors disabled:opacity-50"
+                >
+                  <Sparkles className={`h-4 w-4 ${aiLoading === q.id ? "animate-spin" : ""}`} />
+                  {aiLoading === q.id ? "Thinking..." : "Explain with AI"}
+                </button>
+              )}
+
+              {/* AI Explanation */}
+              {aiExplanations[q.id] && (
+                <div className="p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Sparkles className="h-4 w-4 text-purple-600" />
+                    <span className="text-sm font-bold text-purple-700">AI Explanation</span>
+                  </div>
+                  <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{aiExplanations[q.id]}</div>
+                </div>
+              )}
             </div>
           )}
         </CardContent>

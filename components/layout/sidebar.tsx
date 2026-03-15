@@ -4,11 +4,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, BookOpen, FileText, User, Trophy,
-  BookMarked, Settings, LogOut, ChevronRight,
+  BookMarked, Settings, ChevronRight,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
 const NAV = [
   { href: "/dashboard",   label: "Dashboard",   icon: LayoutDashboard },
@@ -22,15 +19,6 @@ const NAV = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-  const supabase = createClient();
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    toast.success("Signed out");
-    router.push("/login");
-    router.refresh();
-  }
 
   return (
     <aside className="w-64 min-h-screen bg-white border-r border-gray-200 flex flex-col">
@@ -65,15 +53,9 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Bottom actions */}
-      <div className="px-3 py-4 border-t border-gray-200 space-y-1">
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors w-full"
-        >
-          <LogOut className="h-4 w-4 text-gray-400" />
-          Sign Out
-        </button>
+      {/* Bottom spacer */}
+      <div className="px-3 py-4 border-t border-gray-200">
+        <div className="text-xs text-gray-400 text-center">CA Saarthi v1.0</div>
       </div>
     </aside>
   );

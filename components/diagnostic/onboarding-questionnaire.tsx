@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
-interface Props { userId: string; onComplete: (sessionId: string, academicBackground: string) => void; }
+interface Props { userId: string; onComplete: (sessionId: string, academicBackground: string, attemptNumber: string) => void; }
 
 const SELF_ASSESSMENT_LEVELS = ["Very Weak", "Weak", "Average", "Good", "Very Good"];
 const PAPERS = [
@@ -274,12 +274,8 @@ export function OnboardingQuestionnaire({ userId, onComplete }: Props) {
       if (sessionError) throw sessionError;
 
       const session = sessionData as any;
-      const isAptitude = form.academic_background === "completing_class_12";
-      toast.success(isAptitude
-        ? "Questionnaire complete! Starting your aptitude assessment..."
-        : "Questionnaire complete! Starting your diagnostic test..."
-      );
-      onComplete(session.id, form.academic_background);
+      toast.success("Questionnaire complete! Starting your diagnostic test...");
+      onComplete(session.id, form.academic_background, form.attempt_number);
     } catch (err: unknown) {
       toast.error((err as Error)?.message || "Something went wrong");
     } finally {

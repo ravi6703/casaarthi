@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { BookOpen, Target, Clock, RefreshCw, Zap, Trophy } from "lucide-react";
+import { QuickStartFilter } from "@/components/practice/quick-start-filter";
 
 export const metadata = { title: "Practice" };
 
@@ -74,6 +75,12 @@ export default async function PracticePage() {
         <h1 className="text-2xl font-bold text-gray-900">Practice</h1>
         <p className="text-gray-500 mt-1">Choose a session type or drill into a specific topic</p>
       </div>
+
+      {/* Quick Start Filter */}
+      <QuickStartFilter
+        papers={PAPERS.map((p) => ({ id: p.id, code: p.code, name: p.name, emoji: p.emoji }))}
+        topics={topics.map((t: any) => ({ id: t.id, paper_id: t.paper_id, name: t.name }))}
+      />
 
       {/* Session Types */}
       <div>

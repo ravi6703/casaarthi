@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { getHeatClass } from "@/lib/utils";
+import { PersonalInfoForm } from "@/components/profile/personal-info-form";
 
 export const metadata = { title: "My Profile" };
 
@@ -79,6 +80,12 @@ export default async function ProfilePage() {
           </Badge>
         )}
       </div>
+
+      {/* Personal Information */}
+      <PersonalInfoForm
+        userEmail={user.email ?? ""}
+        userMetadata={user.user_metadata ?? {}}
+      />
 
       {/* Overview cards */}
       <div className="grid sm:grid-cols-4 gap-4">
