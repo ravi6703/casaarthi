@@ -4,13 +4,14 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, BookOpen, FileText, User, Trophy,
-  BookMarked, Settings, ChevronRight,
+  BookMarked, Settings, ChevronRight, BarChart2,
 } from "lucide-react";
 
 const NAV = [
   { href: "/dashboard",   label: "Dashboard",   icon: LayoutDashboard },
   { href: "/diagnostic",  label: "Diagnostic",  icon: User },
   { href: "/practice",    label: "Practice",    icon: BookOpen },
+  { href: "/analytics",   label: "Analytics",   icon: BarChart2 },
   { href: "/mock-tests",  label: "Mock Tests",  icon: FileText },
   { href: "/profile",     label: "My Profile",  icon: BookMarked },
   { href: "/leaderboard", label: "Leaderboard", icon: Trophy },

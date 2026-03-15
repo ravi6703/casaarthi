@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import { BottomNav } from "@/components/layout/bottom-nav";
+import { AIChatbot } from "@/components/chat/ai-chatbot";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -29,10 +31,16 @@ export default async function StudentLayout({ children }: { children: React.Reac
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar userName={userName} userEmail={user.email} streakCount={streak?.current_streak} />
-        <main className="flex-1 p-4 md:p-6 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 max-w-7xl w-full mx-auto">
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom navigation */}
+      <BottomNav />
+
+      {/* AI Doubt Solver Chatbot */}
+      <AIChatbot />
     </div>
   );
 }

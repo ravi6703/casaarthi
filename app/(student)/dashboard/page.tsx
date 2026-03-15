@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, BookOpen, FileText, Target, TrendingUp, AlertCircle, Zap } from "lucide-react";
+import { ArrowRight, BookOpen, FileText, Target, TrendingUp, AlertCircle, Zap, BarChart3 } from "lucide-react";
 import { getReadinessBgColor, calculateAccuracy } from "@/lib/utils";
 
 export const metadata = { title: "Dashboard" };
@@ -185,9 +185,10 @@ export default async function DashboardPage() {
           )}
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { href: "/practice", icon: <BookOpen className="h-5 w-5 text-blue-500" />, label: "Practice", sub: "Topic drill-down" },
+              { href: "/analytics", icon: <BarChart3 className="h-5 w-5 text-indigo-500" />, label: "Analytics", sub: "Charts & insights" },
               { href: "/mock-tests", icon: <FileText className="h-5 w-5 text-purple-500" />, label: "Mock Test", sub: "Full exam simulation" },
               { href: "/profile", icon: <TrendingUp className="h-5 w-5 text-green-500" />, label: "My Profile", sub: "Heat map & progress" },
             ].map((action) => (
