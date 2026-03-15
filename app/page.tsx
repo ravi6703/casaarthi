@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FAQAccordion } from "@/components/faq-accordion";
 import { ProductPreview } from "@/components/product-preview";
+import { BLOG_POSTS } from "@/lib/blog-data";
 
 export default async function HomePage() {
   // Only check auth if Supabase is configured
@@ -51,7 +52,10 @@ export default async function HomePage() {
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">CA</div>
             <span className="font-bold text-lg text-gray-900">CA Saarthi</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
+            <Link href="/blog" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">
+              Blog
+            </Link>
             <Link href="/login">
               <Button variant="outline" size="sm">Log in</Button>
             </Link>
@@ -155,6 +159,36 @@ export default async function HomePage() {
               <Button className="w-full" size="lg">Get Started Free →</Button>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section className="max-w-6xl mx-auto px-4 py-20">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">From Our Blog</h2>
+        <p className="text-center text-gray-600 mb-12">Expert tips and strategies to ace your CA Foundation exam</p>
+        <div className="grid md:grid-cols-3 gap-6">
+          {BLOG_POSTS.slice(0, 3).map((post) => (
+            <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
+              <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow h-full flex flex-col">
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {post.keywords.slice(0, 2).map((kw) => (
+                    <span key={kw} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{kw}</span>
+                  ))}
+                </div>
+                <h3 className="font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{post.title}</h3>
+                <p className="text-sm text-gray-600 flex-1">{post.excerpt}</p>
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100 text-xs text-gray-500">
+                  <span>{post.author}</span>
+                  <span>{post.readTime}</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className="text-center mt-8">
+          <Link href="/blog">
+            <Button variant="outline">View All Articles →</Button>
+          </Link>
         </div>
       </section>
 
