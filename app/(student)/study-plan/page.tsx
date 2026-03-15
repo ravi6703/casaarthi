@@ -127,32 +127,6 @@ export default async function StudyPlanPage() {
         </CardContent>
       </Card>
 
-      {/* Current Phase */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <Badge variant="secondary" className="text-xs">{currentPhase.label}</Badge>
-            <span className="text-sm text-gray-500">{currentPhase.desc}</span>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
-            <div className="bg-blue-50 rounded-xl p-4">
-              <div className="text-2xl font-bold text-blue-600">{currentPhase.dailyQuestions}</div>
-              <div className="text-xs text-gray-500 mt-1">Questions / day</div>
-            </div>
-            <div className="bg-purple-50 rounded-xl p-4">
-              <div className="text-2xl font-bold text-purple-600">{currentPhase.mocksPerWeek}</div>
-              <div className="text-xs text-gray-500 mt-1">Mocks / week</div>
-            </div>
-            <div className="bg-green-50 rounded-xl p-4">
-              <div className="text-2xl font-bold text-green-600">{lowTopics.length}</div>
-              <div className="text-xs text-gray-500 mt-1">Topics mastered</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Paper-wise Status */}
       <Card>
         <CardHeader><CardTitle>Paper-wise Readiness</CardTitle></CardHeader>
@@ -189,6 +163,7 @@ export default async function StudyPlanPage() {
         papers={PAPERS}
         daysRemaining={daysRemaining}
         phase={phase}
+        totalTopics={topics.length}
       />
     </div>
   );
