@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/dashboard", "/practice", "/mock-tests", "/profile", "/analytics", "/leaderboard", "/diagnostic", "/resources"],
       },
     ],
-    sitemap: "https://casaarthi-seven.vercel.app/sitemap.xml",
+    sitemap: "https://www.casaarthi.in/sitemap.xml",
   };
 }

@@ -6,7 +6,7 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-const SITE_URL = "https://casaarthi-seven.vercel.app";
+const SITE_URL = "https://www.casaarthi.in";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID; // Google Analytics Measurement ID
 
 export const metadata: Metadata = {

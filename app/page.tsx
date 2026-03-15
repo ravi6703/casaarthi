@@ -15,7 +15,7 @@ export default async function HomePage() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "CA Saarthi",
-    url: "https://casaarthi-seven.vercel.app",
+    url: "https://www.casaarthi.in",
     description: "India's #1 free CA Foundation preparation platform with 10,000+ questions, 40 mock tests, AI tutor and personalised study plans.",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Web",
@@ -32,7 +32,7 @@ export default async function HomePage() {
     provider: {
       "@type": "Organization",
       name: "CA Saarthi",
-      url: "https://casaarthi-seven.vercel.app",
+      url: "https://www.casaarthi.in",
     },
   };
 
