@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { FAQAccordion } from "@/components/faq-accordion";
 
 export default async function HomePage() {
   // Only check auth if Supabase is configured
@@ -92,7 +93,7 @@ export default async function HomePage() {
             { value: "19.23%", label: "National pass rate Jan 2026", sub: "Our target: 35%+" },
             { value: "10,000+", label: "Practice questions", sub: "Across all 4 papers" },
             { value: "40", label: "Full mock tests", sub: "10 per paper, ICAI-pattern" },
-            { value: "350K+", label: "Students appear annually", sub: "We are building for all of them" },
+            { value: "500+", label: "Students already preparing", sub: "Join the growing community" },
           ].map((s) => (
             <div key={s.label}>
               <div className="text-3xl font-bold text-blue-600 mb-1">{s.value}</div>
@@ -153,8 +154,61 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <footer className="border-t border-gray-200 py-8 text-center text-sm text-gray-500">
-        <p>© 2026 CA Saarthi · Built for Indian CA Foundation aspirants · Not affiliated with ICAI</p>
+      {/* FAQ */}
+      <FAQAccordion />
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-400 pt-16 pb-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            {/* Brand */}
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">CA</div>
+                <span className="font-bold text-lg text-white">CA Saarthi</span>
+              </div>
+              <p className="text-sm leading-relaxed">
+                India&apos;s free CA Foundation preparation platform. Smart diagnostics, practice, and mock tests.
+              </p>
+            </div>
+
+            {/* Product */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wide">Product</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white transition-colors">Diagnostic Test</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Practice Questions</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Mock Tests</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">AI Study Plan</a></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wide">Legal</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+              </ul>
+            </div>
+
+            {/* Connect */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wide">Connect</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="mailto:support@casaarthi.in" className="hover:text-white transition-colors">
+                    support@casaarthi.in
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 pt-6 text-center text-sm">
+            <p>&copy; {new Date().getFullYear()} CA Saarthi. All rights reserved. Not affiliated with ICAI.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );

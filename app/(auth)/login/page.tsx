@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Chrome, AlertTriangle, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Chrome, AlertTriangle, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 
 type Mode = "otp" | "password";
 
@@ -88,6 +88,18 @@ export default function LoginPage() {
     router.refresh();
   }
 
+  async function handleForgotPassword() {
+    if (!supabase) return toast.error("Supabase not configured");
+    if (!email) return toast.error("Enter your email address first");
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+    setLoading(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Password reset link sent! Check your email.");
+  }
+
   async function handleGoogleLogin() {
     if (!supabase) return toast.error("Supabase not configured");
     setLoading(true);
@@ -161,6 +173,7 @@ export default function LoginPage() {
                     </div>
                   </div>
                   <Button className="w-full" onClick={handleEmailOTP} disabled={loading}>
+                    {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                     {loading ? "Sending..." : "Send OTP"}
                   </Button>
                 </div>
@@ -186,6 +199,7 @@ export default function LoginPage() {
                     />
                   </div>
                   <Button className="w-full" onClick={handleVerifyOTP} disabled={loading}>
+                    {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                     {loading ? "Verifying..." : "Verify & Sign In"}
                   </Button>
                   <button
@@ -236,8 +250,16 @@ export default function LoginPage() {
                 </div>
               </div>
               <Button className="w-full" onClick={handlePasswordLogin} disabled={loading}>
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {loading ? "Signing in..." : "Sign In"}
               </Button>
+              <button
+                onClick={handleForgotPassword}
+                className="w-full text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                type="button"
+              >
+                Forgot password?
+              </button>
             </div>
           )}
 
@@ -251,6 +273,7 @@ export default function LoginPage() {
           </div>
 
           <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={loading}>
+            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             <Chrome className="h-4 w-4" />
             Sign in with Google
           </Button>

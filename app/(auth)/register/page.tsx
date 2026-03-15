@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, User, Chrome, AlertTriangle, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, User, Chrome, AlertTriangle, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 
 type Mode = "otp" | "password";
 
@@ -174,8 +174,15 @@ export default function RegisterPage() {
                     </div>
                   </div>
                   <Button className="w-full" onClick={handleRegisterOTP} disabled={loading}>
+                    {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                     {loading ? "Sending..." : "Create Account — It's Free"}
                   </Button>
+                  <p className="text-xs text-gray-500 text-center mt-2">
+                    By registering, you agree to our{" "}
+                    <Link href="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>{" "}
+                    and{" "}
+                    <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -199,6 +206,7 @@ export default function RegisterPage() {
                     />
                   </div>
                   <Button className="w-full" onClick={handleVerifyOTP} disabled={loading}>
+                    {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                     {loading ? "Verifying..." : "Verify & Start Diagnostic"}
                   </Button>
                   <button
@@ -276,10 +284,14 @@ export default function RegisterPage() {
                 </div>
               </div>
               <Button className="w-full" onClick={handleRegisterPassword} disabled={loading}>
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {loading ? "Creating..." : "Create Account — It's Free"}
               </Button>
               <p className="text-xs text-gray-500 text-center">
-                By registering, you agree to our Terms of Service and Privacy Policy
+                By registering, you agree to our{" "}
+                <Link href="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
               </p>
             </div>
           )}
@@ -294,6 +306,7 @@ export default function RegisterPage() {
           </div>
 
           <Button variant="outline" className="w-full" onClick={handleGoogleRegister} disabled={loading}>
+            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             <Chrome className="h-4 w-4" />
             Continue with Google
           </Button>
