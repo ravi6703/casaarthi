@@ -32,6 +32,7 @@ export default function RegisterPage() {
       options: {
         shouldCreateUser: true,
         data: { full_name: form.name },
+        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
       },
     });
     setLoading(false);
@@ -180,7 +181,8 @@ export default function RegisterPage() {
                 <div className="space-y-4">
                   <div className="text-center mb-4">
                     <div className="text-4xl mb-2">📬</div>
-                    <p className="text-sm text-gray-600">We sent an 8-digit OTP to <strong>{form.email}</strong></p>
+                    <p className="text-sm text-gray-600">We sent a login link to <strong>{form.email}</strong></p>
+                    <p className="text-xs text-gray-500 mt-1">Click the link in the email <strong>or</strong> enter the OTP code below</p>
                     <p className="text-xs text-gray-400 mt-1">Check spam/junk if not in inbox</p>
                   </div>
                   <div>

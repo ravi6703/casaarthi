@@ -29,7 +29,10 @@ export default function LoginPage() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: false },
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+      },
     });
     setLoading(false);
     if (error) {
@@ -43,7 +46,7 @@ export default function LoginPage() {
       return;
     }
     setOtpSent(true);
-    toast.success("OTP sent! Check your inbox (and spam folder).");
+    toast.success("Check your email! Enter the OTP code or click the magic link.");
   }
 
   async function handleVerifyOTP() {
@@ -165,7 +168,8 @@ export default function LoginPage() {
                 <div className="space-y-4">
                   <div className="text-center mb-4">
                     <div className="text-4xl mb-2">📬</div>
-                    <p className="text-sm text-gray-600">We sent an 8-digit OTP to <strong>{email}</strong></p>
+                    <p className="text-sm text-gray-600">We sent a login link to <strong>{email}</strong></p>
+                    <p className="text-xs text-gray-500 mt-1">Click the link in the email <strong>or</strong> enter the OTP code below</p>
                     <p className="text-xs text-gray-400 mt-1">Check spam/junk if not in inbox</p>
                   </div>
                   <div>
