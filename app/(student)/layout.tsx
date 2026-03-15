@@ -5,6 +5,7 @@ import { Topbar } from "@/components/layout/topbar";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { AIChatbot } from "@/components/chat/ai-chatbot";
 import { DailyQuote } from "@/components/daily-quote";
+import { GuestSignupPrompt } from "@/components/guest-signup-prompt";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -21,6 +22,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
 
   const streak = streakData as any;
   const userName = user.user_metadata?.full_name || user.email?.split("@")[0] || "Student";
+  const isAnonymous = user.is_anonymous ?? !user.email;
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -45,6 +47,9 @@ export default async function StudentLayout({ children }: { children: React.Reac
 
       {/* Daily Motivational Quote */}
       <DailyQuote />
+
+      {/* Guest signup prompt (shows after time/views for anonymous users) */}
+      <GuestSignupPrompt isAnonymous={isAnonymous} />
     </div>
   );
 }

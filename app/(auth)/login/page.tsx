@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Chrome, AlertTriangle, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Mail, Chrome, AlertTriangle, Lock, Eye, EyeOff, Loader2, UserCircle } from "lucide-react";
 
 type Mode = "otp" | "password";
 
@@ -276,6 +276,28 @@ export default function LoginPage() {
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             <Chrome className="h-4 w-4" />
             Sign in with Google
+          </Button>
+
+          <Button
+            variant="ghost"
+            className="w-full mt-3 text-gray-500 hover:text-gray-700"
+            onClick={async () => {
+              if (!supabase) return toast.error("Supabase not configured");
+              setLoading(true);
+              const { error } = await supabase.auth.signInAnonymously();
+              setLoading(false);
+              if (error) {
+                toast.error("Guest login not available. Please sign up instead.");
+                return;
+              }
+              toast.success("Browsing as guest — sign up to save your progress!");
+              router.push("/dashboard");
+              router.refresh();
+            }}
+            disabled={loading}
+          >
+            <UserCircle className="h-4 w-4" />
+            Continue as Guest
           </Button>
         </div>
 

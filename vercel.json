@@ -4,6 +4,12 @@
   "devCommand": "next dev",
   "installCommand": "npm install",
   "regions": ["bom1"],
+  "crons": [
+    {
+      "path": "/api/cron/daily-progress",
+      "schedule": "30 2 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
