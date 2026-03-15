@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, BookOpen, FileText, Target, TrendingUp, AlertCircle, Zap, BarChart3 } from "lucide-react";
-import { getReadinessBgColor, calculateAccuracy } from "@/lib/utils";
+import { ArrowRight, BookOpen, FileText, Target, TrendingUp, AlertCircle, Zap, BarChart3, CalendarDays } from "lucide-react";
+import { getReadinessBgColor, calculateAccuracy, getNextExamDate, getDaysUntilExam } from "@/lib/utils";
 
 export const metadata = { title: "Dashboard" };
 
@@ -72,6 +72,16 @@ export default async function DashboardPage() {
   const overallScore = scores?.overall_score ?? 0;
   const paperScores: Record<string, number> = (scores?.paper_scores as Record<string, number>) ?? {};
 
+  // Day counter — days since account creation
+  const createdAt = new Date(profile?.created_at ?? user.created_at);
+  const studyDay = Math.max(1, Math.floor((Date.now() - createdAt.getTime()) / 86400000) + 1);
+
+  // Days until exam
+  const cycle = (profile?.target_exam_cycle ?? "may") as "january" | "may" | "september";
+  const examYear = profile?.target_exam_year ?? new Date().getFullYear() + 1;
+  const examDate = getNextExamDate(cycle, examYear);
+  const daysToExam = getDaysUntilExam(examDate);
+
   // Compute total practice accuracy
   const totalCorrect = recentPractice.reduce((s: number, r: any) => s + r.correct, 0);
   const totalQ = recentPractice.reduce((s: number, r: any) => s + r.total_questions, 0);
@@ -82,17 +92,26 @@ export default async function DashboardPage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Good {getGreeting()}, {firstName(userName)} 👋</h1>
-          <p className="text-gray-500 mt-1">Here is your preparation snapshot for today</p>
+          <p className="text-gray-500 mt-1">Day {studyDay} of your CA journey · {daysToExam} days to exam</p>
         </div>
-        {streak && streak.current_streak > 0 && (
-          <div className="hidden sm:flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-xl px-4 py-2">
-            <span className="text-2xl">🔥</span>
+        <div className="hidden sm:flex items-center gap-3">
+          {streak && streak.current_streak > 0 && (
+            <div className="flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-xl px-4 py-2">
+              <span className="text-2xl">🔥</span>
+              <div>
+                <div className="font-bold text-orange-700">{streak.current_streak} day streak!</div>
+                <div className="text-xs text-orange-600">Keep it up</div>
+              </div>
+            </div>
+          )}
+          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2">
+            <span className="text-2xl">📅</span>
             <div>
-              <div className="font-bold text-orange-700">{streak.current_streak} day streak!</div>
-              <div className="text-xs text-orange-600">Keep it up</div>
+              <div className="font-bold text-blue-700">Day {studyDay}</div>
+              <div className="text-xs text-blue-600">{daysToExam}d to exam</div>
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Readiness Score Banner */}
@@ -188,9 +207,9 @@ export default async function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { href: "/practice", icon: <BookOpen className="h-5 w-5 text-blue-500" />, label: "Practice", sub: "Topic drill-down" },
-              { href: "/analytics", icon: <BarChart3 className="h-5 w-5 text-indigo-500" />, label: "Analytics", sub: "Charts & insights" },
+              { href: "/study-plan", icon: <CalendarDays className="h-5 w-5 text-teal-500" />, label: "Study Plan", sub: "Your daily roadmap" },
               { href: "/mock-tests", icon: <FileText className="h-5 w-5 text-purple-500" />, label: "Mock Test", sub: "Full exam simulation" },
-              { href: "/profile", icon: <TrendingUp className="h-5 w-5 text-green-500" />, label: "My Profile", sub: "Heat map & progress" },
+              { href: "/analytics", icon: <BarChart3 className="h-5 w-5 text-indigo-500" />, label: "Analytics", sub: "Charts & insights" },
             ].map((action) => (
               <Link key={action.href} href={action.href}>
                 <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">

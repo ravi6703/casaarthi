@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { getHeatClass } from "@/lib/utils";
 import { PersonalInfoForm } from "@/components/profile/personal-info-form";
+import { TopicHeatCharts } from "@/components/profile/topic-heat-charts";
 
 export const metadata = { title: "My Profile" };
 
@@ -137,50 +138,28 @@ export default async function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Heat Map */}
+      {/* Heat Map — Bar Charts */}
       <Card>
         <CardHeader>
-          <CardTitle>Topic Heat Map</CardTitle>
-          <div className="flex items-center gap-3 flex-wrap text-xs mt-2">
-            {[["heat-strong","80%+"],["heat-good","65-79%"],["heat-medium","40-64%"],["heat-weak","20-39%"],["heat-critical","<20%"],["heat-untested","Not tested"]].map(([cls, label]) => (
-              <div key={cls} className="flex items-center gap-1">
-                <span className={`${cls} px-2 py-0.5 rounded text-xs`}>·</span>
-                <span className="text-gray-600">{label}</span>
-              </div>
-            ))}
-          </div>
+          <CardTitle>Topic Performance</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-5">
-            {PAPERS.map((paper) => {
-              const paperTopics = topics.filter((t: any) => t.paper_id === paper.id);
-              return (
-                <div key={paper.id}>
-                  <div className="text-xs font-bold text-gray-500 uppercase mb-2">{paper.short} — {paper.name}</div>
-                  <div className="flex flex-wrap gap-2">
-                    {paperTopics.map((topic: any) => {
-                      const ts = topicScores[topic.id];
-                      const p = progressMap[topic.id];
-                      // Use actual practice accuracy if available, else diagnostic score
-                      const score = p?.total_attempted > 0 ? Math.round(p.accuracy_rate) : ts?.score ?? null;
-                      const cls = score !== null ? getHeatClass(score) : "heat-untested";
-                      return (
-                        <Link key={topic.id} href={`/practice/session?type=topic&topicId=${topic.id}`}>
-                          <span
-                            className={`${cls} px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-transform hover:scale-105 inline-block`}
-                            title={score !== null ? `${score}% · ${p?.total_attempted ?? 0} practiced` : "Not tested yet"}
-                          >
-                            {topic.name}
-                            {score !== null && <span className="ml-1 opacity-75">({score}%)</span>}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <TopicHeatCharts
+            papers={PAPERS}
+            topicsByPaper={Object.fromEntries(
+              PAPERS.map((paper) => [
+                paper.id,
+                topics
+                  .filter((t: any) => t.paper_id === paper.id)
+                  .map((topic: any) => {
+                    const ts = topicScores[topic.id];
+                    const p = progressMap[topic.id];
+                    const score = p?.total_attempted > 0 ? Math.round(p.accuracy_rate) : ts?.score ?? null;
+                    return { name: topic.name, score, attempted: p?.total_attempted ?? 0 };
+                  }),
+              ])
+            )}
+          />
         </CardContent>
       </Card>
 

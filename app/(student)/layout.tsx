@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { AIChatbot } from "@/components/chat/ai-chatbot";
+import { DailyQuote } from "@/components/daily-quote";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -41,6 +42,9 @@ export default async function StudentLayout({ children }: { children: React.Reac
 
       {/* AI Doubt Solver Chatbot */}
       <AIChatbot />
+
+      {/* Daily Motivational Quote */}
+      <DailyQuote />
     </div>
   );
 }

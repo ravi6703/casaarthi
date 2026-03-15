@@ -35,7 +35,7 @@ export default async function PracticePage() {
     .select("topic_id, total_attempted, accuracy_rate, last_practiced_at")
     .eq("user_id", user.id);
 
-  // Fetch topics
+  // Fetch topics with question counts
   const { data: topicsData } = await supabase
     .from("topics")
     .select("id, paper_id, name, slug, exam_weightage")
@@ -44,6 +44,16 @@ export default async function PracticePage() {
 
   const progress = (progressData as any[]) ?? [];
   const topics = (topicsData as any[]) ?? [];
+
+  // Get question counts per topic
+  const { data: qCountData } = await supabase
+    .from("questions")
+    .select("topic_id")
+    .eq("status", "approved");
+  const qCounts: Record<string, number> = {};
+  ((qCountData as any[]) ?? []).forEach((q: any) => {
+    qCounts[q.topic_id] = (qCounts[q.topic_id] || 0) + 1;
+  });
 
   const progressMap = Object.fromEntries(progress.map((p: any) => [p.topic_id, p]));
 
@@ -79,7 +89,7 @@ export default async function PracticePage() {
       {/* Quick Start Filter */}
       <QuickStartFilter
         papers={PAPERS.map((p) => ({ id: p.id, code: p.code, name: p.name, emoji: p.emoji }))}
-        topics={topics.map((t: any) => ({ id: t.id, paper_id: t.paper_id, name: t.name }))}
+        topics={topics.map((t: any) => ({ id: t.id, paper_id: t.paper_id, name: t.name, questionCount: qCounts[t.id] || 0 }))}
       />
 
       {/* Session Types */}

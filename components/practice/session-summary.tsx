@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { calculateAccuracy, formatDuration } from "@/lib/utils";
 import { CheckCircle2, XCircle, SkipForward, Trophy, RefreshCw, ArrowRight } from "lucide-react";
+import { SocialShare } from "@/components/social-share";
 
 interface Question {
   id: string;
@@ -131,6 +132,15 @@ export function SessionSummary({ questions, answers, skipped, totalTime, session
           </CardContent>
         </Card>
       )}
+
+      {/* Share Score */}
+      <SocialShare
+        score={correct}
+        total={answered}
+        accuracy={accuracy}
+        label={topicName ?? sessionType.replace("_", " ")}
+        type="practice"
+      />
 
       {/* CTAs */}
       <div className="flex flex-col sm:flex-row gap-3">

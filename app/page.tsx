@@ -184,6 +184,7 @@ export default async function HomePage() {
                 <li><a href="#" className="hover:text-white transition-colors">Practice Questions</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Mock Tests</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">AI Study Plan</a></li>
+                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               </ul>
             </div>
 

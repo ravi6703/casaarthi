@@ -7,7 +7,7 @@ import { Zap } from "lucide-react";
 
 interface Props {
   papers: { id: number; code: string; name: string; emoji: string }[];
-  topics: { id: string; paper_id: number; name: string }[];
+  topics: { id: string; paper_id: number; name: string; questionCount: number }[];
 }
 
 export function QuickStartFilter({ papers, topics }: Props) {
@@ -16,7 +16,7 @@ export function QuickStartFilter({ papers, topics }: Props) {
   const [selectedTopic, setSelectedTopic] = useState<string>("");
 
   const filteredTopics = selectedPaper
-    ? topics.filter((t) => t.paper_id === selectedPaper)
+    ? topics.filter((t) => t.paper_id === selectedPaper && t.questionCount > 0)
     : [];
 
   function handleStart() {
@@ -64,7 +64,7 @@ export function QuickStartFilter({ papers, topics }: Props) {
             >
               <option value="">All Topics (Mixed)</option>
               {filteredTopics.map((t) => (
-                <option key={t.id} value={t.id}>{t.name}</option>
+                <option key={t.id} value={t.id}>{t.name} ({t.questionCount} Qs)</option>
               ))}
             </select>
           </div>
