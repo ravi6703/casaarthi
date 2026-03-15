@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FAQAccordion } from "@/components/faq-accordion";
+import { ProductPreview } from "@/components/product-preview";
 
 export default async function HomePage() {
   // Only check auth if Supabase is configured
@@ -125,6 +126,9 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Product Preview */}
+      <ProductPreview />
+
       {/* Free Platform */}
       <section className="bg-gray-50 border-t border-gray-200 py-20">
         <div className="max-w-3xl mx-auto px-4 text-center">
@@ -160,7 +164,7 @@ export default async function HomePage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 pt-16 pb-8">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
             {/* Brand */}
             <div className="md:col-span-1">
               <div className="flex items-center gap-2 mb-4">
@@ -180,6 +184,17 @@ export default async function HomePage() {
                 <li><a href="#" className="hover:text-white transition-colors">Practice Questions</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Mock Tests</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">AI Study Plan</a></li>
+              </ul>
+            </div>
+
+            {/* Papers */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wide">Papers</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/papers/accounting" className="hover:text-white transition-colors">Paper 1: Accounting</Link></li>
+                <li><Link href="/papers/business-laws" className="hover:text-white transition-colors">Paper 2: Business Laws</Link></li>
+                <li><Link href="/papers/quantitative-aptitude" className="hover:text-white transition-colors">Paper 3: Quant & Stats</Link></li>
+                <li><Link href="/papers/business-economics" className="hover:text-white transition-colors">Paper 4: Economics</Link></li>
               </ul>
             </div>
 

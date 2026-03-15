@@ -22,6 +22,22 @@ export default function RegisterPage() {
   const [otp, setOtp] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  function getPasswordStrength(pw: string): { level: number; label: string; color: string } {
+    if (!pw) return { level: 0, label: "", color: "" };
+    const hasNumber = /\d/.test(pw);
+    const hasUpper = /[A-Z]/.test(pw);
+    const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+    if (pw.length >= 10 && hasNumber && hasUpper && hasSpecial)
+      return { level: 4, label: "Strong", color: "bg-green-500" };
+    if (pw.length >= 8 && hasNumber && hasUpper)
+      return { level: 3, label: "Good", color: "bg-yellow-400" };
+    if (pw.length >= 8 && hasNumber)
+      return { level: 2, label: "Fair", color: "bg-orange-400" };
+    if (pw.length >= 6)
+      return { level: 1, label: "Weak", color: "bg-red-500" };
+    return { level: 0, label: "Too short", color: "bg-red-500" };
+  }
+
   async function handleRegisterOTP() {
     if (!supabase) return toast.error("Supabase not configured — add credentials to .env.local");
     if (!form.name.trim()) return toast.error("Enter your full name");
@@ -267,6 +283,17 @@ export default function RegisterPage() {
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
+                {form.password && (
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${getPasswordStrength(form.password).color}`}
+                        style={{ width: `${(getPasswordStrength(form.password).level / 4) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-gray-500 w-16 text-right">{getPasswordStrength(form.password).label}</span>
+                  </div>
+                )}
               </div>
               <div>
                 <Label htmlFor="confirm">Confirm password</Label>

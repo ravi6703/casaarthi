@@ -77,40 +77,37 @@ async function main() {
   const paperMap = {};
   papers.forEach(p => { paperMap[p.code] = p; });
 
-  // 2. Delete existing mock tests (cascade will delete mock_test_questions too)
-  console.log('\nDeleting existing mock tests...');
-  const { error: delErr } = await supabase
+  // 2. Check existing mock tests
+  console.log('\nChecking existing mock tests...');
+  const { data: existingTests } = await supabase
     .from('mock_tests')
-    .delete()
-    .gte('test_number', 0);
+    .select('paper_id, test_number')
+    .order('paper_id')
+    .order('test_number');
 
-  if (delErr) {
-    console.error('Error deleting mock tests:', delErr);
-    // Fallback: delete by iterating test numbers
-    for (let i = 1; i <= TESTS_PER_PAPER; i++) {
-      await supabase.from('mock_tests').delete().eq('test_number', i);
-    }
-  }
-  console.log('Deleted existing mock tests.');
+  const existingSet = new Set(
+    (existingTests || []).map(t => `${t.paper_id}_${t.test_number}`)
+  );
+  console.log(`Found ${existingSet.size} existing mock tests.`);
 
-  // 3. Build mock test rows for all papers x 10 tests
-  console.log('\nCreating mock tests...');
+  // 3. Build mock test rows — only for tests that don't exist yet
+  console.log('\nCreating missing mock tests...');
   const mockTestRows = [];
 
   for (const paper of papers) {
     const paperName = PAPER_NAMES[paper.code] || paper.name;
     for (const tier of TEST_TIERS) {
+      const key = `${paper.id}_${tier.test_number}`;
+      if (existingSet.has(key)) {
+        console.log(`  Skipping ${paperName} Test ${tier.test_number} (already exists)`);
+        continue;
+      }
       const suffix = tier.test_number === 10 ? ' (Final Exam Simulation)' : '';
       mockTestRows.push({
         paper_id:               paper.id,
         test_number:            tier.test_number,
         title:                  `Mock Test ${tier.test_number} — ${paperName}${suffix}`,
         difficulty_label:       tier.difficulty_label,
-        total_questions:        QUESTIONS_PER_TEST,
-        duration_minutes:       60,
-        total_marks:            100,
-        negative_marking:       -0.25,
-        passing_marks:          40,
         unlock_condition:       tier.unlock_condition,
         is_active:              true,
         scheduled_release_date: null,
@@ -118,38 +115,37 @@ async function main() {
     }
   }
 
-  console.log(`Inserting ${mockTestRows.length} mock tests (${papers.length} papers x ${TESTS_PER_PAPER} tests)...`);
+  if (mockTestRows.length === 0) {
+    console.log('\nAll mock tests already exist! Fetching all for question assignment...');
+    const { data: allExisting } = await supabase
+      .from('mock_tests')
+      .select('id, paper_id, title, test_number')
+      .order('paper_id')
+      .order('test_number');
+    await assignQuestions(allExisting || [], papers);
+    return;
+  }
 
-  const { data: mockTests, error: mtErr } = await supabase
+  console.log(`\nInserting ${mockTestRows.length} new mock tests...`);
+
+  const { data: newTests, error: mtErr } = await supabase
     .from('mock_tests')
     .insert(mockTestRows)
     .select('id, paper_id, title, test_number');
 
   if (mtErr) {
     console.error('Error inserting mock tests:', mtErr);
-    // Retry with base schema columns only (in case extra columns don't exist yet)
-    console.log('Retrying with base schema columns only...');
-    const baseRows = mockTestRows.map(r => ({
-      paper_id:               r.paper_id,
-      test_number:            r.test_number,
-      title:                  r.title,
-      difficulty_label:       r.difficulty_label,
-      unlock_condition:       r.unlock_condition,
-      is_active:              r.is_active,
-      scheduled_release_date: r.scheduled_release_date,
-    }));
-
-    const { data: mockTests2, error: mtErr2 } = await supabase
-      .from('mock_tests')
-      .insert(baseRows)
-      .select('id, paper_id, title, test_number');
-
-    if (mtErr2) { console.error('Error inserting mock tests (retry):', mtErr2); process.exit(1); }
-    await assignQuestions(mockTests2, papers);
-    return;
+    process.exit(1);
   }
 
-  await assignQuestions(mockTests, papers);
+  // Fetch ALL mock tests (existing + new) for question assignment
+  const { data: allTests } = await supabase
+    .from('mock_tests')
+    .select('id, paper_id, title, test_number')
+    .order('paper_id')
+    .order('test_number');
+
+  await assignQuestions(allTests || [], papers);
 }
 
 async function assignQuestions(mockTests, papers) {
@@ -192,7 +188,18 @@ async function assignQuestions(mockTests, papers) {
   console.log('\nAssigning questions to mock tests...');
   let totalAssigned = 0;
 
+  // Check which tests already have questions
+  const { data: existingMTQ } = await supabase
+    .from('mock_test_questions')
+    .select('mock_test_id');
+  const testsWithQuestions = new Set((existingMTQ || []).map(q => q.mock_test_id));
+
   for (const mt of mockTests) {
+    if (testsWithQuestions.has(mt.id)) {
+      console.log(`  ${mt.title}: already has questions — skipping`);
+      continue;
+    }
+
     const pool = questionsByPaper[mt.paper_id] || [];
 
     if (pool.length === 0) {
