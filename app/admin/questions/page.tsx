@@ -38,8 +38,8 @@ export default async function QuestionsPage({
     .range(offset, offset + limit - 1);
 
   if (params.paper) query = query.eq("paper_id", Number(params.paper));
-  if (params.difficulty) query = query.eq("difficulty", params.difficulty);
-  if (params.status) query = query.eq("status", params.status);
+  if (params.difficulty) query = query.eq("difficulty", params.difficulty as "easy" | "medium" | "hard");
+  if (params.status) query = query.eq("status", params.status as "pending_review" | "approved" | "retired");
   if (params.topic) query = query.eq("topic_id", params.topic);
 
   const { data: questionsRaw, count } = await query;
@@ -51,7 +51,7 @@ export default async function QuestionsPage({
 
   // Fetch stats
   const [pendingRes, approvedRes, retiredRes] = await Promise.all([
-    supabase.from("questions").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    supabase.from("questions").select("id", { count: "exact", head: true }).eq("status", "pending_review"),
     supabase.from("questions").select("id", { count: "exact", head: true }).eq("status", "approved"),
     supabase.from("questions").select("id", { count: "exact", head: true }).eq("status", "retired"),
   ]);

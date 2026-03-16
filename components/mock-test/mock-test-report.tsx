@@ -52,7 +52,7 @@ export function MockTestReport({ userId, attemptId, questions, answers, mock, to
         .order("started_at"),
       supabase.from("topics").select("id, name"),
     ]);
-    setPreviousAttempts(attemptsRes.data ?? []);
+    setPreviousAttempts((attemptsRes.data ?? []) as { percentage: number; started_at: string }[]);
     setTopics(topicsRes.data ?? []);
   }
 

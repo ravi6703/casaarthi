@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, BookOpen, FileText, Target, TrendingUp, AlertCircle, Zap, BarChart3, CalendarDays } from "lucide-react";
 import { getReadinessBgColor, calculateAccuracy, getNextExamDate, getDaysUntilExam } from "@/lib/utils";
+import { DailyChallenge } from "@/components/dashboard/daily-challenge";
 
 export const metadata = { title: "Dashboard" };
 
@@ -137,6 +138,9 @@ export default async function DashboardPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Daily Challenge */}
+      <DailyChallenge />
 
       {/* Paper Scores */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

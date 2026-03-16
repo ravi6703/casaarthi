@@ -68,7 +68,7 @@ export function MockBuilderClient({ papers, topics, existingMocks }: {
       .limit(50);
 
     if (searchQuery.trim()) query = query.ilike("question_text", `%${searchQuery.trim()}%`);
-    if (filterDifficulty) query = query.eq("difficulty", filterDifficulty);
+    if (filterDifficulty) query = query.eq("difficulty", filterDifficulty as "easy" | "medium" | "hard");
     if (filterTopic) query = query.eq("topic_id", filterTopic);
 
     const { data, error } = await query;

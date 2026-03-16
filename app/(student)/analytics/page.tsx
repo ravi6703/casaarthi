@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { AnalyticsCharts } from "@/components/analytics/analytics-charts";
+import { PeerComparison } from "@/components/analytics/peer-comparison";
 
 export const metadata = { title: "Analytics" };
 
@@ -62,6 +63,16 @@ export default async function AnalyticsPage() {
       .eq("user_id", user.id)
       .single(),
   ]);
+
+  // Peer comparison: count all scores and those below user
+  const userScore = (scoresRes.data as any)?.overall_score ?? 0;
+  const [allScoresRes] = await Promise.all([
+    supabase.from("readiness_scores").select("overall_score"),
+  ]);
+  const allScores = (allScoresRes.data as any[]) ?? [];
+  const totalStudents = allScores.length;
+  const belowUser = allScores.filter((s: any) => s.overall_score < userScore).length;
+  const percentile = totalStudents > 0 ? Math.round((belowUser / totalStudents) * 100) : 0;
 
   const weeklySessions = (weeklyRes.data as any[]) ?? [];
   const recentSessions = (recentRes.data as any[]) ?? [];
@@ -140,6 +151,9 @@ export default async function AnalyticsPage() {
           </Button>
         </Link>
       </div>
+
+      {/* Peer Comparison */}
+      <PeerComparison percentile={percentile} totalStudents={totalStudents} userScore={userScore} />
 
       <AnalyticsCharts
         weeklyPractice={weeklyPractice}

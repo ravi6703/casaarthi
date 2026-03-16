@@ -147,7 +147,7 @@ export function DiagnosticTest({ userId, sessionId, diagnosticTier, onComplete }
             .from("questions")
             .select("*, topics(name)")
             .eq("paper_id", paperId)
-            .eq("difficulty", diff)
+            .eq("difficulty", diff as "easy" | "medium" | "hard")
             .eq("status", "approved")
             .eq("is_diagnostic", true)
             .limit(count);

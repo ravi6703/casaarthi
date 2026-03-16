@@ -5,8 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, Target, Clock, RefreshCw, Zap, Trophy } from "lucide-react";
+import { BookOpen, Target, Clock, RefreshCw, Zap, Trophy, FileText } from "lucide-react";
 import { QuickStartFilter } from "@/components/practice/quick-start-filter";
+import { MicroChallengeCards } from "@/components/practice/micro-challenge-card";
 
 export const metadata = { title: "Practice" };
 
@@ -65,6 +66,14 @@ export default async function PracticePage() {
 
   const progressMap = Object.fromEntries(progress.map((p: any) => [p.topic_id, p]));
 
+  // Fetch micro-challenges
+  const { data: challengesData } = await supabase
+    .from("micro_challenges")
+    .select("*")
+    .eq("is_active", true)
+    .limit(3);
+  const microChallenges = (challengesData as any[]) ?? [];
+
   // Topics not practiced in 7+ days (for revision mode)
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const revisionTopics = topics.filter((t: any) => {
@@ -99,6 +108,9 @@ export default async function PracticePage() {
         papers={PAPERS.map((p) => ({ id: p.id, code: p.code, name: p.name, emoji: p.emoji }))}
         topics={topics.map((t: any) => ({ id: t.id, paper_id: t.paper_id, name: t.name, questionCount: qCounts[t.id] || 0 }))}
       />
+
+      {/* Micro-Challenges */}
+      {microChallenges.length > 0 && <MicroChallengeCards challenges={microChallenges} />}
 
       {/* Session Types */}
       <div>
@@ -182,6 +194,22 @@ export default async function PracticePage() {
           })}
         </div>
       </div>
+
+      {/* Previous Year Papers */}
+      <Link href="/practice/previous-years">
+        <Card className="hover:shadow-md transition-all cursor-pointer border-indigo-200 bg-indigo-50/50">
+          <CardContent className="p-5 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+              <FileText className="h-6 w-6 text-indigo-600" />
+            </div>
+            <div className="flex-1">
+              <div className="font-semibold text-gray-900">Previous Year Papers</div>
+              <div className="text-sm text-gray-500">Practice with actual ICAI exam questions organized by year</div>
+            </div>
+            <span className="text-indigo-600 font-medium text-sm">Browse →</span>
+          </CardContent>
+        </Card>
+      </Link>
 
       {/* Weak topics alert */}
       {weakTopics.length > 0 && (

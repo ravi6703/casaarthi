@@ -5,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { getNextExamDate, getDaysUntilExam } from "@/lib/utils";
 import { StudyPlanClient } from "@/components/study-plan/study-plan-client";
+import { RevisionDue } from "@/components/study-plan/revision-due";
+import { RevisionCalendar } from "@/components/study-plan/revision-calendar";
+import { ConceptMap } from "@/components/study-plan/concept-map";
 
 export const metadata = { title: "Study Plan" };
 
@@ -20,17 +23,19 @@ export default async function StudyPlanPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const [profileRes, progressRes, topicsRes, scoresRes] = await Promise.all([
+  const [profileRes, progressRes, topicsRes, scoresRes, chaptersRes] = await Promise.all([
     supabase.from("student_profiles").select("*").eq("user_id", user.id).single(),
     supabase.from("topic_progress").select("topic_id, total_attempted, correct, accuracy_rate, last_practiced_at").eq("user_id", user.id),
-    supabase.from("topics").select("id, name, paper_id, sort_order").order("paper_id").order("sort_order"),
+    supabase.from("topics").select("id, name, paper_id, chapter_id, sort_order").order("paper_id").order("sort_order"),
     supabase.from("readiness_scores").select("paper_scores, topic_scores").eq("user_id", user.id).single(),
+    supabase.from("chapters").select("id, name, paper_id, chapter_number").order("paper_id").order("chapter_number"),
   ]);
 
   const profile = profileRes.data as any;
   const progress = (progressRes.data as any[]) ?? [];
   const topics = (topicsRes.data as any[]) ?? [];
   const scores = scoresRes.data as any;
+  const chapters = (chaptersRes.data as any[]) ?? [];
 
   // Calculate days until exam
   const cycle = (profile?.target_exam_cycle ?? "may") as "january" | "may" | "september";
@@ -106,6 +111,9 @@ export default async function StudyPlanPage() {
         <p className="text-gray-500 mt-1">Your personalised preparation roadmap</p>
       </div>
 
+      {/* Revision Due */}
+      <RevisionDue />
+
       {/* Exam Countdown */}
       <Card className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-0">
         <CardContent className="p-6">
@@ -165,6 +173,41 @@ export default async function StudyPlanPage() {
         phase={phase}
         totalTopics={topics.length}
       />
+
+      {/* Revision Calendar */}
+      <RevisionCalendar />
+
+      {/* Concept Map */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Concept Map</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ConceptMap
+            papers={PAPERS.map((paper) => ({
+              id: paper.id,
+              code: paper.short,
+              name: paper.name,
+              chapters: chapters
+                .filter((ch: any) => ch.paper_id === paper.id)
+                .map((ch: any) => ({
+                  id: ch.id,
+                  name: ch.name,
+                  chapter_number: ch.chapter_number,
+                  topics: topicData
+                    .filter((t) => t.paperId === paper.id && topics.find((tp: any) => tp.id === t.id)?.chapter_id === ch.id)
+                    .map((t) => ({
+                      id: t.id,
+                      name: t.name,
+                      paper_id: t.paperId,
+                      accuracy: t.accuracy,
+                      attempted: t.attempted,
+                    })),
+                })),
+            }))}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }

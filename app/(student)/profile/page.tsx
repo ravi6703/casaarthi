@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { getHeatClass } from "@/lib/utils";
 import { PersonalInfoForm } from "@/components/profile/personal-info-form";
 import { TopicHeatCharts } from "@/components/profile/topic-heat-charts";
+import { BadgeGallery } from "@/components/profile/badge-gallery";
+import { ReferralCard } from "@/components/profile/referral-card";
 
 export const metadata = { title: "My Profile" };
 
@@ -117,6 +119,15 @@ export default async function ProfilePage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Achievements */}
+      <BadgeGallery />
+
+      {/* Refer a Friend */}
+      <ReferralCard
+        referralCode={profile?.referral_code ?? null}
+        referralCount={profile?.referral_count ?? 0}
+      />
 
       {/* Paper readiness */}
       <Card>

@@ -1,5 +1,6 @@
 "use client";
-import { Bell, Menu, X, LogOut, User } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
+import { NotificationBell } from "./notification-bell";
 import { useState, useRef, useEffect } from "react";
 import { Sidebar } from "./sidebar";
 import { createClient } from "@/lib/supabase/client";
@@ -58,9 +59,7 @@ export function Topbar({ userName, userEmail, streakCount }: TopbarProps) {
               <span className="text-orange-600 text-xs">day streak</span>
             </div>
           )}
-          <button className="p-2 rounded-lg hover:bg-gray-100 relative">
-            <Bell className="h-5 w-5 text-gray-500" />
-          </button>
+          <NotificationBell />
 
           {/* Avatar with dropdown */}
           <div className="relative" ref={dropdownRef}>

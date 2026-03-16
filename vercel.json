@@ -8,6 +8,14 @@
     {
       "path": "/api/cron/daily-progress",
       "schedule": "30 2 * * *"
+    },
+    {
+      "path": "/api/cron/daily-challenge",
+      "schedule": "30 18 * * *"
+    },
+    {
+      "path": "/api/cron/weekly-report",
+      "schedule": "30 12 * * 0"
     }
   ],
   "headers": [
