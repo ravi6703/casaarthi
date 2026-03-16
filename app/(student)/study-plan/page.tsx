@@ -172,6 +172,7 @@ export default async function StudyPlanPage() {
         daysRemaining={daysRemaining}
         phase={phase}
         totalTopics={topics.length}
+        savedPace={(profile?.study_pace as string) ?? null}
       />
 
       {/* Revision Calendar */}

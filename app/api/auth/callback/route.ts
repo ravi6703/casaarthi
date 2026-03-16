@@ -17,7 +17,7 @@ export async function GET(request: Request) {
           .from("student_profiles")
           .select("onboarding_completed_at")
           .eq("user_id", user.id)
-          .single();
+          .maybeSingle();
 
         const profile = profileData as any;
 

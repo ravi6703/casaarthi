@@ -116,6 +116,8 @@ export interface Database {
           referral_code: string | null;
           referred_by: string | null;
           referral_count: number;
+          study_pace: "relaxed" | "balanced" | "intensive" | "crash" | null;
+          study_plan_created_at: string | null;
           created_at: string;
           updated_at: string;
         };

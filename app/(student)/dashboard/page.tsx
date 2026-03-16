@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, BookOpen, FileText, Target, TrendingUp, AlertCircle, Zap, BarChart3, CalendarDays } from "lucide-react";
 import { getReadinessBgColor, calculateAccuracy, getNextExamDate, getDaysUntilExam } from "@/lib/utils";
 import { DailyChallenge } from "@/components/dashboard/daily-challenge";
+import { FeatureTour } from "@/components/onboarding/feature-tour";
 
 export const metadata = { title: "Dashboard" };
 
@@ -308,6 +309,8 @@ export default async function DashboardPage() {
           )}
         </div>
       </div>
+
+      <FeatureTour />
     </div>
   );
 }

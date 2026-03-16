@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Plus, CheckCircle2, ArrowUp, Clock } from "lucide-react";
+import { AIDoubtAssistant } from "@/components/discussions/ai-doubt-assistant";
 
 export const metadata = { title: "Doubts" };
 
@@ -52,6 +53,9 @@ export default async function DiscussionsPage({
           </Button>
         </Link>
       </div>
+
+      {/* AI Doubt Assistant */}
+      <AIDoubtAssistant />
 
       {/* Paper filters */}
       <div className="flex flex-wrap gap-2">

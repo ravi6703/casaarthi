@@ -71,6 +71,7 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
     rubricScores: Record<string, number>; keyPointsMissed: string[]; grade: string; timeSec: number;
   }>>({});
   const [evaluatingId, setEvaluatingId] = useState<string | null>(null);
+  const [videosByTopic, setVideosByTopic] = useState<Record<string, { id: string; title: string; url: string }[]>>({});
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -307,6 +308,24 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
       // Update study streak
       await (supabase as any).rpc("update_study_streak", { p_user_id: userId });
     }
+    // Fetch related videos for wrong-answer topics
+    const wrongTopicIds = [...new Set(qs.filter(q => answers[q.id] && !answers[q.id].isCorrect).map(q => q.topic_id))];
+    if (wrongTopicIds.length > 0) {
+      const { data: vids } = await supabase
+        .from("teaching_resources")
+        .select("id, title, url, topic_id, topics(name)")
+        .eq("resource_type", "youtube")
+        .in("topic_id", wrongTopicIds);
+
+      const grouped: Record<string, any[]> = {};
+      ((vids as any[]) ?? []).forEach(v => {
+        const name = (v.topics as any)?.name ?? "General";
+        if (!grouped[name]) grouped[name] = [];
+        grouped[name].push(v);
+      });
+      setVideosByTopic(grouped);
+    }
+
     setSessionDone(true);
   }
 
@@ -320,6 +339,7 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
         sessionType={sessionType}
         topicName={topicName}
         subjectiveResults={subjectiveResults}
+        videosByTopic={videosByTopic}
       />
     );
   }

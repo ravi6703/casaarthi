@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Target, BookOpen, CheckCircle2, Calendar, Zap, Clock, Flame, Rocket } from "lucide-react";
+import { AlertTriangle, Target, BookOpen, CheckCircle2, Calendar, Zap, Clock, Flame, Rocket, ArrowRight, Sparkles } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface TopicItem {
   id: string;
@@ -25,6 +26,7 @@ interface Props {
   daysRemaining: number;
   phase: string;
   totalTopics: number;
+  savedPace: string | null;
 }
 
 const PRIORITY_CONFIG = {
@@ -97,8 +99,7 @@ const PACE_OPTIONS = [
   },
 ];
 
-export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, mediumTopics, papers, daysRemaining, phase, totalTopics }: Props) {
-  // Auto-select pace based on days remaining
+export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, mediumTopics, papers, daysRemaining, phase, totalTopics, savedPace }: Props) {
   const getDefaultPace = () => {
     if (daysRemaining <= 30) return "crash";
     if (daysRemaining <= 60) return "intensive";
@@ -106,19 +107,40 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
     return "relaxed";
   };
 
-  const [selectedPace, setSelectedPace] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("ca_study_pace") || getDefaultPace();
-    }
-    return getDefaultPace();
-  });
+  const [selectedPace, setSelectedPace] = useState(savedPace || getDefaultPace());
+  const [showOnboarding, setShowOnboarding] = useState(!savedPace);
+  const [saving, setSaving] = useState(false);
 
   const pace = PACE_OPTIONS.find((p) => p.id === selectedPace) || PACE_OPTIONS[1];
   const getPaperName = (paperId: number) => papers.find((p) => p.id === paperId)?.short ?? "";
 
-  const handlePaceChange = (paceId: string) => {
+  const handlePaceChange = async (paceId: string) => {
     setSelectedPace(paceId);
-    localStorage.setItem("ca_study_pace", paceId);
+    // Persist to DB
+    try {
+      await fetch("/api/study-plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pace: paceId }),
+      });
+    } catch {}
+  };
+
+  const handleOnboardingConfirm = async () => {
+    setSaving(true);
+    try {
+      await fetch("/api/study-plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pace: selectedPace }),
+      });
+      setShowOnboarding(false);
+      toast.success("Study plan created! Your daily reminders are now active.");
+    } catch {
+      toast.error("Failed to save plan");
+    } finally {
+      setSaving(false);
+    }
   };
 
   // Generate today's study plan based on pace
@@ -170,6 +192,80 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
   const estimatedDays = Math.ceil(topicsToFinish / Math.max(pace.topicsPerDay, 1));
   const completionFeasible = estimatedDays <= daysRemaining;
 
+  // First-time onboarding flow
+  if (showOnboarding) {
+    return (
+      <div className="space-y-6">
+        <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-indigo-50">
+          <CardContent className="p-8">
+            <div className="text-center mb-6">
+              <Sparkles className="h-10 w-10 text-blue-600 mx-auto mb-3" />
+              <h2 className="text-2xl font-bold text-gray-900">Let&apos;s Create Your Study Plan</h2>
+              <p className="text-gray-600 mt-2 max-w-lg mx-auto">
+                Choose a study pace that fits your schedule. Your entire plan — daily topics, weekly schedule,
+                revision reminders, and email nudges — will be built around this choice.
+              </p>
+              <p className="text-sm text-blue-600 mt-2 font-medium">
+                You have {daysRemaining} days until your exam. We recommend the &quot;{PACE_OPTIONS.find(p => p.id === getDefaultPace())?.label}&quot; pace.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {PACE_OPTIONS.map((option) => {
+                const isSelected = selectedPace === option.id;
+                const isRecommended = option.id === getDefaultPace();
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => setSelectedPace(option.id)}
+                    className={`relative p-5 rounded-xl border-2 text-left transition-all ${
+                      isSelected ? option.activeBg : `${option.bg} hover:shadow-md`
+                    }`}
+                  >
+                    {isRecommended && (
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+                        <Badge className="bg-blue-600 text-white text-[10px]">Recommended</Badge>
+                      </div>
+                    )}
+                    {isSelected && (
+                      <div className="absolute top-2 right-2">
+                        <CheckCircle2 className={`h-5 w-5 text-${option.color}-600`} />
+                      </div>
+                    )}
+                    <div className="text-3xl mb-2">{option.emoji}</div>
+                    <div className="font-bold text-gray-900">{option.label}</div>
+                    <div className="text-xs text-gray-500 mt-1">{option.description}</div>
+                    <div className="mt-3 space-y-1 text-xs text-gray-600">
+                      <div>{option.dailyQuestions} questions/day</div>
+                      <div>{option.topicsPerDay} topics/day</div>
+                      <div>{option.mocksPerWeek} mocks/week</div>
+                      <div>{option.studyDays} days/week</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="text-center">
+              <Button
+                size="lg"
+                onClick={handleOnboardingConfirm}
+                disabled={saving}
+                className="bg-blue-600 hover:bg-blue-700 px-8"
+              >
+                {saving ? "Creating Plan..." : "Create My Study Plan"}
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+              <p className="text-xs text-gray-400 mt-3">
+                You&apos;ll get daily email reminders and in-app notifications. You can change your pace anytime.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Pace Selector */}
@@ -177,9 +273,9 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-blue-600" />
-            Choose Your Study Pace
+            Your Study Pace — {pace.emoji} {pace.label}
           </CardTitle>
-          <p className="text-sm text-gray-500 mt-1">Select a pace that fits your schedule. Your plan will adjust automatically.</p>
+          <p className="text-sm text-gray-500 mt-1">Your plan adjusts automatically. Click a different pace to switch.</p>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">

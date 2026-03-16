@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { calculateAccuracy, formatDuration } from "@/lib/utils";
-import { CheckCircle2, XCircle, SkipForward, Trophy, RefreshCw, ArrowRight } from "lucide-react";
+import { CheckCircle2, XCircle, SkipForward, Trophy, RefreshCw, ArrowRight, PlayCircle } from "lucide-react";
 import { SocialShare } from "@/components/social-share";
 
 interface Question {
@@ -40,9 +40,10 @@ interface Props {
   sessionType: string;
   topicName?: string;
   subjectiveResults?: Record<string, SubjectiveResult>;
+  videosByTopic?: Record<string, { id: string; title: string; url: string }[]>;
 }
 
-export function SessionSummary({ questions, answers, skipped, totalTime, sessionType, topicName, subjectiveResults = {} }: Props) {
+export function SessionSummary({ questions, answers, skipped, totalTime, sessionType, topicName, subjectiveResults = {}, videosByTopic = {} }: Props) {
   const correct = Object.values(answers).filter((a) => a.isCorrect).length;
   const wrong = Object.values(answers).filter((a) => !a.isCorrect).length;
   const answered = Object.keys(answers).length;
@@ -201,6 +202,38 @@ export function SessionSummary({ questions, answers, skipped, totalTime, session
                 </div>
               );
             })}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Video Suggestions for Wrong Topics */}
+      {Object.keys(videosByTopic).length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm flex items-center gap-2">
+              <PlayCircle className="h-4 w-4 text-red-500" />
+              Recommended Videos — Topics You Need to Review
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {Object.entries(videosByTopic).map(([topicName, videos]) => (
+                <div key={topicName}>
+                  <div className="text-xs font-semibold text-gray-600 mb-1.5">{topicName}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {videos.map((v: any) => {
+                      const ytId = v.url.match(/(?:youtu\.be\/|v=)([^&\s]+)/)?.[1];
+                      return (
+                        <a key={v.id} href={v.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-all text-xs max-w-xs">
+                          {ytId && <img src={`https://img.youtube.com/vi/${ytId}/default.jpg`} alt="" className="w-16 h-12 rounded object-cover flex-shrink-0" />}
+                          <span className="text-gray-700 line-clamp-2">{v.title}</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       )}
