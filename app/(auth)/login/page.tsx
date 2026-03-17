@@ -38,10 +38,12 @@ export default function LoginPage() {
     if (error) {
       if (error.message.toLowerCase().includes("not found") || error.message.toLowerCase().includes("invalid login")) {
         toast.error("No account found. Please register first.");
-      } else if (error.message.toLowerCase().includes("email") && error.message.toLowerCase().includes("invalid")) {
-        toast.error("Email delivery failed. Try password login or contact support.");
+      } else if (error.message.toLowerCase().includes("rate") || error.message.toLowerCase().includes("limit")) {
+        toast.error("Too many attempts. Please wait a few minutes and try again, or use password login.");
+      } else if (error.message.toLowerCase().includes("email") || error.message.toLowerCase().includes("sending") || error.message.toLowerCase().includes("magic link")) {
+        toast.error("Email delivery failed. Please try password login or contact us on Telegram.");
       } else {
-        toast.error(error.message);
+        toast.error(error.message || "Something went wrong. Please try again.");
       }
       return;
     }

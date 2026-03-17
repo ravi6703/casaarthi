@@ -53,10 +53,12 @@ export default function RegisterPage() {
     });
     setLoading(false);
     if (error) {
-      if (error.message.toLowerCase().includes("email") && error.message.toLowerCase().includes("invalid")) {
-        toast.error("Email delivery failed. Try password signup instead.");
+      if (error.message.toLowerCase().includes("rate") || error.message.toLowerCase().includes("limit")) {
+        toast.error("Too many attempts. Please wait a few minutes and try again, or use password signup.");
+      } else if (error.message.toLowerCase().includes("email") || error.message.toLowerCase().includes("sending") || error.message.toLowerCase().includes("magic link")) {
+        toast.error("Email delivery failed. Please try password signup instead, or contact us on Telegram.");
       } else {
-        toast.error(error.message);
+        toast.error(error.message || "Something went wrong. Please try again.");
       }
       return;
     }
