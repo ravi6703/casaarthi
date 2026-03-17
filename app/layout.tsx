@@ -82,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="antialiased min-h-screen bg-gray-50 dark:bg-slate-900">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>

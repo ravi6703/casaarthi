@@ -22,7 +22,9 @@ export async function GET() {
     earnedAt: earnedMap[def.id] ?? null,
   }));
 
-  return NextResponse.json({ badges });
+  return NextResponse.json({ badges }, {
+    headers: { "Cache-Control": "private, max-age=120, stale-while-revalidate=60" },
+  });
 }
 
 export async function POST() {

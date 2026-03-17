@@ -27,7 +27,9 @@ export async function GET() {
     .eq("challenge_date", today)
     .single();
 
-  return NextResponse.json({ challenge, response });
+  return NextResponse.json({ challenge, response }, {
+    headers: { "Cache-Control": "private, max-age=60, stale-while-revalidate=30" },
+  });
 }
 
 export async function POST(request: NextRequest) {
