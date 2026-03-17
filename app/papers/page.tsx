@@ -175,7 +175,7 @@ export default function PapersIndexPage() {
             Ready to start preparing?
           </h2>
           <p className="text-blue-100 mb-8 text-lg">
-            Access 10,000+ practice questions, 40 mock tests, and AI-powered
+            Access 2,500+ practice questions, 40 mock tests, and AI-powered
             study plans across all 4 papers — completely free.
           </p>
           <Link href="/register">

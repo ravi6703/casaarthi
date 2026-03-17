@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | CA Saarthi",
   },
   description:
-    "India's #1 free CA Foundation preparation platform. 10,000+ practice questions, 40 mock tests, AI doubt solver, diagnostic profiling & personalised study plans. Covers Accounting, Laws, Maths & Economics.",
+    "India's #1 free CA Foundation preparation platform. 2,500+ practice questions, 40 mock tests, AI doubt solver, diagnostic profiling & personalised study plans. Covers Accounting, Laws, Maths & Economics.",
   keywords: [
     "CA Foundation", "CA Foundation preparation", "CA Foundation mock test",
     "CA Foundation practice questions", "ICAI exam prep", "CA Saarthi",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "CA Saarthi",
     title: "CA Saarthi — Free CA Foundation Exam Prep",
-    description: "10,000+ questions, 40 mock tests, AI tutor & personalised study plans. 100% free.",
+    description: "2,500+ questions, 40 mock tests, AI tutor & personalised study plans. 100% free.",
     images: [
       {
         url: "/og-image.png",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "CA Saarthi — Free CA Foundation Exam Prep",
-    description: "10,000+ questions, 40 mock tests, AI tutor & study plans. 100% free.",
+    description: "2,500+ questions, 40 mock tests, AI tutor & study plans. 100% free.",
     images: ["/og-image.png"],
   },
   robots: {

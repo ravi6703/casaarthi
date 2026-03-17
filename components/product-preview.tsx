@@ -28,7 +28,7 @@ const tabs = [
     gradient: "from-indigo-600 via-blue-500 to-cyan-500",
     heading: "Drill down to the exact topic you need",
     features: [
-      "10,000+ questions sorted by topic & difficulty",
+      "2,500+ questions sorted by topic & difficulty",
       "Instant detailed explanations for every answer",
       "Spaced-repetition scheduling for lasting recall",
       "Bookmark & revisit flagged questions anytime",

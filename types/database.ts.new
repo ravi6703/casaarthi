@@ -1,2 +1,0 @@
-npm warn exec The following package was not found and will be installed: supabase@2.79.0
-2026/03/17 00:15:27 Access token not provided. Supply an access token by running supabase login or setting the SUPABASE_ACCESS_TOKEN environment variable.

@@ -204,7 +204,7 @@ export default async function BlogPostPage({ params }: Props) {
         {/* CTA */}
         <div className="mt-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-3">Ready to Start Your CA Foundation Journey?</h2>
-          <p className="text-blue-100 mb-6">Free diagnostic test, 10,000+ questions, and 40 mock tests.</p>
+          <p className="text-blue-100 mb-6">Free diagnostic test, 2,500+ questions, and 40 mock tests.</p>
           <Link href="/register">
             <button className="bg-white text-blue-600 font-bold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors">
               Get Started Free →

@@ -12,7 +12,7 @@ const faqs = [
   {
     question: "How many questions are available?",
     answer:
-      "We have 10,000+ practice questions covering all 4 papers of CA Foundation — Accounting, Business Laws, Mathematics & Statistics, and Business Economics.",
+      "We have 2,500+ practice questions covering all 4 papers of CA Foundation — Accounting, Business Laws, Mathematics & Statistics, and Business Economics. We keep adding more questions regularly.",
   },
   {
     question: "What is the diagnostic test?",

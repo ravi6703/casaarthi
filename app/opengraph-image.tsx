@@ -76,7 +76,7 @@ export default async function Image() {
             fontSize: "22px",
           }}
         >
-          <span>10,000+ Questions</span>
+          <span>2,500+ Questions</span>
           <span>•</span>
           <span>40 Mock Tests</span>
           <span>•</span>

@@ -12,14 +12,14 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    slug: "how-to-prepare-for-ca-foundation-2025",
-    title: "How to Prepare for CA Foundation 2025: Complete Strategy Guide",
+    slug: "how-to-prepare-for-ca-foundation-2026",
+    title: "How to Prepare for CA Foundation 2026: Complete Strategy Guide",
     excerpt: "A comprehensive study plan covering all 4 papers, time management tips, and proven strategies to clear CA Foundation in your first attempt.",
     author: "CA Saarthi Team",
     date: "2026-02-15",
     readTime: "8 min read",
-    keywords: ["CA Foundation preparation", "CA Foundation 2025", "CA Foundation study plan", "how to clear CA Foundation"],
-    metaDescription: "Complete CA Foundation 2025 preparation guide with paper-wise strategy, study plan, time management tips, and expert advice to clear in first attempt.",
+    keywords: ["CA Foundation preparation", "CA Foundation 2026", "CA Foundation study plan", "how to clear CA Foundation"],
+    metaDescription: "Complete CA Foundation 2026 preparation guide with paper-wise strategy, study plan, time management tips, and expert advice to clear in first attempt.",
     content: `
 ## Why a Structured Approach Matters
 
@@ -123,18 +123,18 @@ This is the most theory-heavy paper but also very scoring.
 
 ## Start Your Preparation Today
 
-CA Saarthi provides free diagnostic tests, 10,000+ practice questions, and 40 full-length mock tests to help you prepare systematically. Start with our diagnostic test to know exactly where you stand.
+CA Saarthi provides free diagnostic tests, 2,500+ practice questions, and 40 full-length mock tests to help you prepare systematically. Start with our diagnostic test to know exactly where you stand.
     `.trim(),
   },
   {
-    slug: "ca-foundation-syllabus-2025-paper-wise-topics-weightage",
-    title: "CA Foundation Syllabus 2025: Paper-wise Topics and Weightage",
+    slug: "ca-foundation-syllabus-2026-paper-wise-topics-weightage",
+    title: "CA Foundation Syllabus 2026: Paper-wise Topics and Weightage",
     excerpt: "Complete breakdown of the CA Foundation 2025 syllabus with ICAI exam pattern, topic weightage, marking scheme, and preparation priorities for each paper.",
     author: "CA Saarthi Team",
     date: "2026-01-20",
     readTime: "10 min read",
-    keywords: ["CA Foundation syllabus 2025", "CA Foundation papers", "CA Foundation weightage", "ICAI CA Foundation"],
-    metaDescription: "Complete CA Foundation syllabus 2025 with paper-wise topics, exam weightage, marking scheme, and ICAI pattern. Know what to study for each paper.",
+    keywords: ["CA Foundation syllabus 2026", "CA Foundation papers", "CA Foundation weightage", "ICAI CA Foundation"],
+    metaDescription: "Complete CA Foundation syllabus 2026 with paper-wise topics, exam weightage, marking scheme, and ICAI pattern. Know what to study for each paper.",
     content: `
 ## CA Foundation Exam Overview
 
