@@ -39,7 +39,7 @@ export default function RegisterPage() {
   }
 
   async function handleRegisterOTP() {
-    if (!supabase) return toast.error("Supabase not configured — add credentials to .env.local");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!form.name.trim()) return toast.error("Enter your full name");
     if (!form.email.trim()) return toast.error("Enter your email address");
     setLoading(true);
@@ -65,7 +65,7 @@ export default function RegisterPage() {
   }
 
   async function handleVerifyOTP() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!otp) return toast.error("Enter the OTP");
     setLoading(true);
     const { error } = await supabase.auth.verifyOtp({
@@ -81,7 +81,7 @@ export default function RegisterPage() {
   }
 
   async function handleRegisterPassword() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!form.name.trim()) return toast.error("Enter your full name");
     if (!form.email.trim()) return toast.error("Enter your email address");
     if (!form.password || form.password.length < 6) return toast.error("Password must be at least 6 characters");
@@ -106,7 +106,7 @@ export default function RegisterPage() {
   }
 
   async function handleGoogleRegister() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -133,12 +133,7 @@ export default function RegisterPage() {
           <p className="text-gray-500 mt-1">Start with a free diagnostic — know exactly where you stand</p>
         </div>
 
-        {!configured && (
-          <div className="mb-4 flex items-start gap-2 bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-xs text-yellow-800">
-            <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5 text-yellow-600" />
-            <span>Supabase not configured. Add credentials to <code className="font-mono">.env.local</code> to enable auth.</span>
-          </div>
-        )}
+        {/* Warning removed — users should never see dev messages */}
 
         {/* Mode Toggle */}
         <div className="flex bg-gray-100 rounded-xl p-1 mb-4">

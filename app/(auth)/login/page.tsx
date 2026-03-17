@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [otp, setOtp] = useState("");
 
   async function handleEmailOTP() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!email) return toast.error("Enter your email address");
     setLoading(true);
     const { error } = await supabase.auth.signInWithOtp({
@@ -50,7 +50,7 @@ export default function LoginPage() {
   }
 
   async function handleVerifyOTP() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!otp) return toast.error("Enter the OTP");
     setLoading(true);
     const { error } = await supabase.auth.verifyOtp({
@@ -69,7 +69,7 @@ export default function LoginPage() {
   }
 
   async function handlePasswordLogin() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!email) return toast.error("Enter your email address");
     if (!password) return toast.error("Enter your password");
     setLoading(true);
@@ -89,7 +89,7 @@ export default function LoginPage() {
   }
 
   async function handleForgotPassword() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!email) return toast.error("Enter your email address first");
     setLoading(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -101,7 +101,7 @@ export default function LoginPage() {
   }
 
   async function handleGoogleLogin() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -129,12 +129,7 @@ export default function LoginPage() {
           <p className="text-gray-500 mt-1">Sign in to continue your preparation</p>
         </div>
 
-        {!configured && (
-          <div className="mb-4 flex items-start gap-2 bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-xs text-yellow-800">
-            <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5 text-yellow-600" />
-            <span>Supabase not configured. Add credentials to <code className="font-mono">.env.local</code> to enable auth.</span>
-          </div>
-        )}
+        {/* Warning removed — users should never see dev messages */}
 
         {/* Mode Toggle */}
         <div className="flex bg-gray-100 rounded-xl p-1 mb-4">
@@ -282,7 +277,7 @@ export default function LoginPage() {
             variant="ghost"
             className="w-full mt-3 text-gray-500 hover:text-gray-700"
             onClick={async () => {
-              if (!supabase) return toast.error("Supabase not configured");
+              if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
               setLoading(true);
               const { error } = await supabase.auth.signInAnonymously();
               setLoading(false);

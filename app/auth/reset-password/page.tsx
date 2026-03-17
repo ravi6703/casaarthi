@@ -19,7 +19,7 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
 
   async function handleResetPassword() {
-    if (!supabase) return toast.error("Supabase not configured");
+    if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!password || password.length < 6) return toast.error("Password must be at least 6 characters");
     if (password !== confirmPassword) return toast.error("Passwords do not match");
     setLoading(true);
