@@ -25,7 +25,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
   const isAnonymous = user.is_anonymous ?? !user.email;
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900">
       {/* Sidebar — hidden on mobile */}
       <div className="hidden md:flex flex-shrink-0">
         <Sidebar />

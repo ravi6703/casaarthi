@@ -1,6 +1,8 @@
 "use client";
 import { Menu, X, LogOut, User } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { NotificationBell } from "./notification-bell";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useState, useRef, useEffect } from "react";
 import { Sidebar } from "./sidebar";
 import { createClient } from "@/lib/supabase/client";
@@ -41,7 +43,7 @@ export function Topbar({ userName, userEmail, streakCount }: TopbarProps) {
 
   return (
     <>
-      <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 sticky top-0 z-20">
+      <header className="h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between px-4 md:px-6 sticky top-0 z-20">
         <button
           className="md:hidden p-2 rounded-lg hover:bg-gray-100"
           onClick={() => setMobileOpen(true)}
@@ -52,13 +54,24 @@ export function Topbar({ userName, userEmail, streakCount }: TopbarProps) {
         <div className="hidden md:block" />
 
         <div className="flex items-center gap-4">
-          {streakCount != null && streakCount > 0 && (
-            <div className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 rounded-full px-3 py-1 text-sm">
-              <span>🔥</span>
-              <span className="font-bold text-orange-700">{streakCount}</span>
-              <span className="text-orange-600 text-xs">day streak</span>
+          {streakCount != null && (
+            <div
+              className={cn(
+                "flex items-center gap-1.5 rounded-full px-3 py-1 text-sm cursor-default transition-all",
+                streakCount > 0
+                  ? "bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 hover:scale-105"
+                  : "bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700"
+              )}
+              title={streakCount > 0 ? `${streakCount} day streak! Keep it going!` : "Start a streak by practicing today!"}
+            >
+              <span className={streakCount > 0 ? "animate-bounce" : ""}>{streakCount > 0 ? "🔥" : "❄️"}</span>
+              <span className={cn("font-bold", streakCount > 0 ? "text-orange-700 dark:text-orange-300" : "text-gray-400")}>{streakCount || 0}</span>
+              <span className={cn("text-xs hidden sm:inline", streakCount > 0 ? "text-orange-600 dark:text-orange-400" : "text-gray-400")}>
+                {streakCount > 0 ? "day streak" : "no streak"}
+              </span>
             </div>
           )}
+          <ThemeToggle />
           <NotificationBell />
 
           {/* Avatar with dropdown */}
@@ -71,9 +84,9 @@ export function Topbar({ userName, userEmail, streakCount }: TopbarProps) {
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl border border-gray-200 shadow-lg py-2 z-50">
-                <div className="px-4 py-2 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-900 truncate">{userName || "Student"}</p>
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-lg py-2 z-50">
+                <div className="px-4 py-2 border-b border-gray-100 dark:border-slate-700">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{userName || "Student"}</p>
                   <p className="text-xs text-gray-500 truncate">{userEmail}</p>
                 </div>
                 <Link

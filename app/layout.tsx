@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "next-themes";
 import Script from "next/script";
 import "./globals.css";
 
@@ -78,11 +79,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={inter.className} suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
-      <body className="antialiased min-h-screen bg-gray-50">
+      <body className="antialiased min-h-screen bg-gray-50 dark:bg-slate-900">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
         {children}
         <Toaster
           position="top-right"
@@ -93,6 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             error:   { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
           }}
         />
+        </ThemeProvider>
         {/* Google Analytics */}
         {GA_ID && (
           <>
