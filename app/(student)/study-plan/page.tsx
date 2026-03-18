@@ -25,7 +25,7 @@ export default async function StudyPlanPage() {
 
   const [profileRes, progressRes, topicsRes, scoresRes, chaptersRes] = await Promise.all([
     supabase.from("student_profiles").select("*").eq("user_id", user.id).single(),
-    supabase.from("topic_progress").select("topic_id, total_attempted, correct, accuracy_rate, last_practiced_at").eq("user_id", user.id),
+    supabase.from("topic_progress").select("topic_id, total_attempted, total_correct, accuracy_rate, last_practiced_at").eq("user_id", user.id),
     supabase.from("topics").select("id, name, paper_id, chapter_id, sort_order").order("paper_id").order("sort_order"),
     supabase.from("readiness_scores").select("paper_scores, topic_scores").eq("user_id", user.id).single(),
     supabase.from("chapters").select("id, name, paper_id, chapter_number").order("paper_id").order("chapter_number"),

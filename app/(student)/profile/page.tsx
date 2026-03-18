@@ -34,7 +34,7 @@ export default async function ProfilePage() {
     supabase.from("student_profiles").select("*").eq("user_id", user.id).single(),
     supabase.from("topics").select("id, name, paper_id, slug").order("paper_id").order("sort_order"),
     supabase.from("study_streaks").select("*").eq("user_id", user.id).single(),
-    supabase.from("topic_progress").select("topic_id, total_attempted, correct, accuracy_rate, last_practiced_at").eq("user_id", user.id),
+    supabase.from("topic_progress").select("topic_id, total_attempted, total_correct, accuracy_rate, last_practiced_at").eq("user_id", user.id),
   ]);
 
   const scores = scoresRes.data as any;
