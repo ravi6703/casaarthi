@@ -19,34 +19,36 @@ export default async function LeaderboardPage() {
 
   const admin = await createAdminClient();
 
-  // Fetch all leaderboard data in parallel
+  // Fetch top 50 for each leaderboard category (avoids fetching all users)
   const [scoresRes, streaksRes, progressRes] = await Promise.all([
-    admin.from("readiness_scores").select("user_id, overall_score").order("overall_score", { ascending: false }),
-    admin.from("study_streaks").select("user_id, current_streak").order("current_streak", { ascending: false }),
-    admin.from("topic_progress").select("user_id, total_attempted"),
+    admin.from("readiness_scores").select("user_id, overall_score").order("overall_score", { ascending: false }).gt("overall_score", 0).limit(50),
+    admin.from("study_streaks").select("user_id, current_streak").order("current_streak", { ascending: false }).gt("current_streak", 0).limit(50),
+    admin.from("topic_progress").select("user_id, total_attempted").gt("total_attempted", 0),
   ]);
 
   const scores = (scoresRes.data as any[]) ?? [];
   const streaks = (streaksRes.data as any[]) ?? [];
   const progress = (progressRes.data as any[]) ?? [];
 
-  // Collect all unique user IDs
+  // Collect unique user IDs from top entries only
   const allUserIds = new Set<string>();
   scores.forEach((r: any) => allUserIds.add(r.user_id));
   streaks.forEach((r: any) => allUserIds.add(r.user_id));
   progress.forEach((r: any) => allUserIds.add(r.user_id));
 
-  // Fetch user names from auth.users via admin
+  // Fetch user names - only for IDs we need (paginate if needed)
   const userNames: Record<string, string> = {};
   if (allUserIds.size > 0) {
-    const { data: usersData } = await admin.auth.admin.listUsers({ perPage: 1000 });
+    const { data: usersData } = await admin.auth.admin.listUsers({ perPage: Math.min(allUserIds.size + 10, 500) });
     if (usersData?.users) {
       for (const u of usersData.users) {
-        const name =
-          u.user_metadata?.full_name ||
-          u.email?.split("@")[0] ||
-          "Student";
-        userNames[u.id] = name;
+        if (allUserIds.has(u.id)) {
+          const name =
+            u.user_metadata?.full_name ||
+            u.email?.split("@")[0] ||
+            "Student";
+          userNames[u.id] = name;
+        }
       }
     }
   }
@@ -75,14 +77,14 @@ export default async function LeaderboardPage() {
       rank: i + 1,
     }));
 
-  // Build Practice Warriors leaderboard (aggregate total_attempted per user)
+  // Build Practice Warriors leaderboard (aggregate total_attempted per user, top 50)
   const practiceMap = new Map<string, number>();
   for (const row of progress) {
     practiceMap.set(row.user_id, (practiceMap.get(row.user_id) ?? 0) + row.total_attempted);
   }
   const practiceWarriors: LeaderboardEntry[] = Array.from(practiceMap.entries())
-    .filter(([, total]) => total > 0)
     .sort((a, b) => b[1] - a[1])
+    .slice(0, 50)
     .map(([userId, total], i) => ({
       user_id: userId,
       name: getName(userId),

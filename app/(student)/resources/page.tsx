@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export const metadata = { title: "Resources — CA Saarthi" };
+export const revalidate = 3600; // Revalidate every hour
 
 const RESOURCES = [
   {

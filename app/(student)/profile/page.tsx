@@ -6,10 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { getHeatClass } from "@/lib/utils";
+import dynamic from "next/dynamic";
 import { PersonalInfoForm } from "@/components/profile/personal-info-form";
-import { TopicHeatCharts } from "@/components/profile/topic-heat-charts";
 import { BadgeGallery } from "@/components/profile/badge-gallery";
 import { ReferralCard } from "@/components/profile/referral-card";
+
+const TopicHeatCharts = dynamic(
+  () => import("@/components/profile/topic-heat-charts").then((m) => m.TopicHeatCharts),
+  { loading: () => <div className="h-48 flex items-center justify-center text-gray-400 animate-pulse">Loading charts...</div> }
+);
 
 export const metadata = { title: "My Profile" };
 

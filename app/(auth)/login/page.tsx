@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,16 @@ import { Mail, Chrome, AlertTriangle, Lock, Eye, EyeOff, Loader2, UserCircle } f
 type Mode = "otp" | "password";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-blue-600" /></div>}>
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const configured = isSupabaseConfigured();
   const supabase = configured ? createClient() : null;
   const [mode, setMode] = useState<Mode>("otp");
@@ -22,6 +31,17 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
+
+  // Show error from auth callback if present
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (error === "auth_callback_failed") {
+      toast.error("Login failed. Please try again.");
+    } else if (error) {
+      const desc = searchParams.get("error_description");
+      toast.error(desc || "Authentication error. Please try again.");
+    }
+  }, [searchParams]);
 
   async function handleEmailOTP() {
     if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
@@ -51,6 +71,9 @@ export default function LoginPage() {
     toast.success("Check your email! Enter the OTP code or click the magic link.");
   }
 
+  // Redirect destination after login (middleware sets this for protected routes)
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+
   async function handleVerifyOTP() {
     if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!otp) return toast.error("Enter the OTP");
@@ -66,7 +89,7 @@ export default function LoginPage() {
       return;
     }
     toast.success("Welcome back!");
-    router.push("/dashboard");
+    router.push(redirectTo);
     router.refresh();
   }
 
@@ -86,7 +109,7 @@ export default function LoginPage() {
       return;
     }
     toast.success("Welcome back!");
-    router.push("/dashboard");
+    router.push(redirectTo);
     router.refresh();
   }
 
@@ -288,7 +311,7 @@ export default function LoginPage() {
                 return;
               }
               toast.success("Browsing as guest — sign up to save your progress!");
-              router.push("/dashboard");
+              router.push(redirectTo);
               router.refresh();
             }}
             disabled={loading}

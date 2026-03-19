@@ -20,21 +20,15 @@ export default async function MockTestsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const [mocksRes, attemptsRes, practiceRes] = await Promise.all([
+  const [mocksRes, attemptsRes, practiceCountRes] = await Promise.all([
     supabase.from("mock_tests").select("*").eq("is_active", true).order("paper_id").order("test_number"),
     supabase.from("mock_test_attempts").select("mock_test_id, total_score, percentage, status, started_at").eq("user_id", user.id).eq("status", "completed"),
-    supabase.from("practice_sessions").select("paper_id", { count: "exact" }).eq("user_id", user.id).eq("status", "completed"),
+    supabase.from("practice_sessions").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed"),
   ]);
 
   const mocks = (mocksRes.data as any[]) ?? [];
   const attempts = (attemptsRes.data as any[]) ?? [];
-
-  // Count practice sessions per paper
-  const { count: totalPracticeSessions } = await supabase
-    .from("practice_sessions")
-    .select("id", { count: "exact", head: true })
-    .eq("user_id", user.id)
-    .eq("status", "completed");
+  const totalPracticeSessions = practiceCountRes.count ?? 0;
 
   const attemptMap = Object.fromEntries(
     attempts.map((a: any) => [a.mock_test_id, a])
