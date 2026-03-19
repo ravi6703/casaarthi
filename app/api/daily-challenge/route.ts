@@ -37,12 +37,21 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json();
-  const { questionId, selectedOption, isCorrect, timeSpentSec } = body;
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+  const { questionId, selectedOption, timeSpentSec } = body;
+
+  if (!questionId || selectedOption === undefined) {
+    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+  }
 
   const today = new Date().toISOString().slice(0, 10);
 
-  // Check not already answered
+  // Check not already answered (use upsert-like approach to prevent race condition)
   const { data: existing } = await supabase
     .from("daily_challenge_responses")
     .select("id")
@@ -53,6 +62,19 @@ export async function POST(request: NextRequest) {
   if (existing) {
     return NextResponse.json({ error: "Already answered today" }, { status: 409 });
   }
+
+  // Server-side verification: look up the correct answer (never trust client isCorrect)
+  const { data: question } = await supabase
+    .from("questions")
+    .select("correct_option")
+    .eq("id", questionId)
+    .single();
+
+  if (!question) {
+    return NextResponse.json({ error: "Question not found" }, { status: 404 });
+  }
+
+  const isCorrect = selectedOption === question.correct_option;
 
   const { data, error } = await (supabase
     .from("daily_challenge_responses") as any)

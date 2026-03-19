@@ -25,7 +25,9 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { pace } = await request.json();
+  let body: any;
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid request body" }, { status: 400 }); }
+  const { pace } = body;
   if (!["relaxed", "balanced", "intensive", "crash"].includes(pace)) {
     return NextResponse.json({ error: "Invalid pace" }, { status: 400 });
   }

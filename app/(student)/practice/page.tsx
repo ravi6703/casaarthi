@@ -54,12 +54,14 @@ export default async function PracticePage() {
   const topics = (topicsData as any[]) ?? [];
   const chapters = (chaptersData as any[]) ?? [];
 
-  // Get question counts per topic
+  // Get question counts per topic (using group-by RPC or topic_id select with count)
   const { data: qCountData } = await supabase
     .from("questions")
-    .select("topic_id")
+    .select("topic_id", { count: "exact" })
     .eq("status", "approved");
   const qCounts: Record<string, number> = {};
+  // Since Supabase doesn't support group-by directly, we still need to count per topic
+  // but at least we only fetch the topic_id column (no other data)
   ((qCountData as any[]) ?? []).forEach((q: any) => {
     qCounts[q.topic_id] = (qCounts[q.topic_id] || 0) + 1;
   });

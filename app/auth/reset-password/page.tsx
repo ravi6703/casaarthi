@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -17,6 +17,22 @@ export default function ResetPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sessionValid, setSessionValid] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  // Verify the user has a valid session (from reset email link)
+  useEffect(() => {
+    if (!supabase) { setChecking(false); return; }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        toast.error("Invalid or expired reset link. Please request a new one.");
+        router.push("/login");
+      } else {
+        setSessionValid(true);
+      }
+      setChecking(false);
+    });
+  }, [supabase, router]);
 
   async function handleResetPassword() {
     if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
@@ -31,9 +47,19 @@ export default function ResetPasswordPage() {
       toast.error(error.message);
       return;
     }
-    toast.success("Password updated successfully! Please sign in.");
-    router.push("/login");
+    toast.success("Password updated successfully!");
+    router.push("/dashboard");
   }
+
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  if (!sessionValid) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">

@@ -9,7 +9,13 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { topic, question } = await request.json();
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json({ error: "AI service not configured" }, { status: 503 });
+  }
+
+  let body: any;
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid request body" }, { status: 400 }); }
+  const { topic, question } = body;
   if (!topic && !question) return NextResponse.json({ error: "Topic or question required" }, { status: 400 });
 
   const prompt = question
@@ -69,20 +75,25 @@ mindmap
 
 **Explanation:** Your brief explanation here.`;
 
-  const response = await anthropic.messages.create({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 1024,
-    messages: [{ role: "user", content: prompt }],
-  });
+  try {
+    const response = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1024,
+      messages: [{ role: "user", content: prompt }],
+    });
 
-  const text = response.content[0].type === "text" ? response.content[0].text : "";
+    const text = response.content[0].type === "text" ? response.content[0].text : "";
 
-  // Extract mermaid code and explanation
-  const mermaidMatch = text.match(/```mermaid\n([\s\S]*?)```/);
-  const explanationMatch = text.match(/\*\*Explanation:\*\*\s*([\s\S]*?)$/);
+    // Extract mermaid code and explanation
+    const mermaidMatch = text.match(/```mermaid\n([\s\S]*?)```/);
+    const explanationMatch = text.match(/\*\*Explanation:\*\*\s*([\s\S]*?)$/);
 
-  return NextResponse.json({
-    mermaid: mermaidMatch?.[1]?.trim() ?? "",
-    explanation: explanationMatch?.[1]?.trim() ?? text.replace(/```mermaid[\s\S]*?```/, "").trim(),
-  });
+    return NextResponse.json({
+      mermaid: mermaidMatch?.[1]?.trim() ?? "",
+      explanation: explanationMatch?.[1]?.trim() ?? text.replace(/```mermaid[\s\S]*?```/, "").trim(),
+    });
+  } catch (err: unknown) {
+    console.error("AI visual explain error:", err);
+    return NextResponse.json({ error: "Failed to generate visual explanation" }, { status: 500 });
+  }
 }
