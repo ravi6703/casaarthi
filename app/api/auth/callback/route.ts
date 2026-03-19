@@ -1,10 +1,22 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
+function safeRedirectPath(raw: string | null, fallback = "/dashboard"): string {
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return fallback;
+  return raw;
+}
+
+const KNOWN_ERRORS: Record<string, string> = {
+  auth_callback_failed: "Login failed. Please try again.",
+  access_denied: "Access was denied. Please try again.",
+  server_error: "A server error occurred. Please try again.",
+  temporarily_unavailable: "Service temporarily unavailable. Please try again later.",
+};
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/dashboard";
+  const next = safeRedirectPath(searchParams.get("next"));
 
   if (code) {
     const supabase = await createClient();
@@ -38,11 +50,8 @@ export async function GET(request: Request) {
     }
   }
 
-  // Provide more specific error context
+  // Map to safe, known error messages (prevent phishing via spoofed error_description)
   const errorType = searchParams.get("error") || "auth_callback_failed";
-  const errorDesc = searchParams.get("error_description") || "";
-  const errorParam = errorDesc
-    ? `error=${encodeURIComponent(errorType)}&error_description=${encodeURIComponent(errorDesc)}`
-    : `error=${encodeURIComponent(errorType)}`;
-  return NextResponse.redirect(`${origin}/login?${errorParam}`);
+  const safeMessage = KNOWN_ERRORS[errorType] || KNOWN_ERRORS.auth_callback_failed;
+  return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(safeMessage)}`);
 }

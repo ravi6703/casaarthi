@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Chrome, AlertTriangle, Lock, Eye, EyeOff, Loader2, UserCircle } from "lucide-react";
+import { Mail, Chrome, Lock, Eye, EyeOff, Loader2, UserCircle } from "lucide-react";
 
 type Mode = "otp" | "password";
 
@@ -32,14 +32,11 @@ function LoginContent() {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
 
-  // Show error from auth callback if present
+  // Show error from auth callback if present (message is already sanitized server-side)
   useEffect(() => {
     const error = searchParams.get("error");
-    if (error === "auth_callback_failed") {
-      toast.error("Login failed. Please try again.");
-    } else if (error) {
-      const desc = searchParams.get("error_description");
-      toast.error(desc || "Authentication error. Please try again.");
+    if (error) {
+      toast.error(error);
     }
   }, [searchParams]);
 
@@ -51,7 +48,7 @@ function LoginContent() {
       email,
       options: {
         shouldCreateUser: false,
-        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(redirectTo)}`,
       },
     });
     setLoading(false);
@@ -72,7 +69,9 @@ function LoginContent() {
   }
 
   // Redirect destination after login (middleware sets this for protected routes)
-  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+  // Validate to prevent open redirect attacks
+  const rawRedirect = searchParams.get("redirectTo") || "/dashboard";
+  const redirectTo = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") ? rawRedirect : "/dashboard";
 
   async function handleVerifyOTP() {
     if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
@@ -118,7 +117,7 @@ function LoginContent() {
     if (!email) return toast.error("Enter your email address first");
     setLoading(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `${window.location.origin}/api/auth/callback?next=/auth/reset-password`,
     });
     setLoading(false);
     if (error) { toast.error(error.message); return; }
@@ -131,8 +130,8 @@ function LoginContent() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/api/auth/callback`,
-        queryParams: { access_type: "offline", prompt: "consent" },
+        redirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+        queryParams: { access_type: "offline", prompt: "select_account" },
       },
     });
     if (error) {

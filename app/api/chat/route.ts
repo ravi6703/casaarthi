@@ -17,7 +17,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "AI service not configured" }, { status: 503 });
   }
 
-  const body = await request.json();
+  let body: any;
+  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid request body" }, { status: 400 }); }
   const { messages } = body;
 
   if (!messages || !Array.isArray(messages) || messages.length === 0) {

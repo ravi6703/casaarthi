@@ -10,7 +10,7 @@ export async function updateSession(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL !== "your_supabase_project_url";
 
   const pathname = request.nextUrl.pathname;
-  const publicPaths = ["/login", "/register", "/verify", "/auth", "/blog", "/papers", "/terms", "/privacy", "/not-found", "/api/auth"];
+  const publicPaths = ["/login", "/register", "/verify", "/auth", "/blog", "/papers", "/terms", "/privacy", "/not-found", "/api/auth", "/api/cron", "/diagnostic"];
   const isPublic = pathname === "/" || publicPaths.some((p) => pathname === p || pathname.startsWith(p + "/"));
 
   // If Supabase not configured, redirect protected routes to /login (avoid server crash)
@@ -58,9 +58,16 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Redirect logged-in users away from login/register
+  if (user && (pathname === "/login" || pathname === "/register")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
+
   if (user && isAdminPath) {
-    // Check admin role via user metadata
-    const role = user.user_metadata?.role;
+    // Check admin role via app_metadata (cannot be set by users, only by service_role)
+    const role = user.app_metadata?.role;
     if (role !== "admin" && role !== "content_manager") {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
