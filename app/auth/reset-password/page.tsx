@@ -20,7 +20,9 @@ export default function ResetPasswordPage() {
 
   async function handleResetPassword() {
     if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
-    if (!password || password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (!password || password.length < 8) return toast.error("Password must be at least 8 characters");
+    if (!/\d/.test(password)) return toast.error("Password must include at least one number");
+    if (!/[A-Z]/.test(password)) return toast.error("Password must include at least one uppercase letter");
     if (password !== confirmPassword) return toast.error("Passwords do not match");
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password });
@@ -54,7 +56,7 @@ export default function ResetPasswordPage() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Min 6 characters"
+                  placeholder="Min 8 characters (A-Z, 0-9)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 pr-10"

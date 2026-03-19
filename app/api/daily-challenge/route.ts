@@ -28,7 +28,7 @@ export async function GET() {
     .single();
 
   return NextResponse.json({ challenge, response }, {
-    headers: { "Cache-Control": "private, max-age=60, stale-while-revalidate=30" },
+    headers: { "Cache-Control": "private, max-age=300, stale-while-revalidate=120" },
   });
 }
 

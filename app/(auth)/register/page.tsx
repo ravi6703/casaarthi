@@ -27,13 +27,13 @@ export default function RegisterPage() {
     const hasNumber = /\d/.test(pw);
     const hasUpper = /[A-Z]/.test(pw);
     const hasSpecial = /[^A-Za-z0-9]/.test(pw);
-    if (pw.length >= 10 && hasNumber && hasUpper && hasSpecial)
+    if (pw.length >= 12 && hasNumber && hasUpper && hasSpecial)
       return { level: 4, label: "Strong", color: "bg-green-500" };
-    if (pw.length >= 8 && hasNumber && hasUpper)
+    if (pw.length >= 10 && hasNumber && hasUpper)
       return { level: 3, label: "Good", color: "bg-yellow-400" };
-    if (pw.length >= 8 && hasNumber)
+    if (pw.length >= 8 && hasNumber && hasUpper)
       return { level: 2, label: "Fair", color: "bg-orange-400" };
-    if (pw.length >= 6)
+    if (pw.length >= 8)
       return { level: 1, label: "Weak", color: "bg-red-500" };
     return { level: 0, label: "Too short", color: "bg-red-500" };
   }
@@ -86,7 +86,9 @@ export default function RegisterPage() {
     if (!supabase) return toast.error("Service temporarily unavailable. Please try again later.");
     if (!form.name.trim()) return toast.error("Enter your full name");
     if (!form.email.trim()) return toast.error("Enter your email address");
-    if (!form.password || form.password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (!form.password || form.password.length < 8) return toast.error("Password must be at least 8 characters");
+    if (!/\d/.test(form.password)) return toast.error("Password must include at least one number");
+    if (!/[A-Z]/.test(form.password)) return toast.error("Password must include at least one uppercase letter");
     if (form.password !== form.confirmPassword) return toast.error("Passwords do not match");
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
@@ -267,7 +269,7 @@ export default function RegisterPage() {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Min 6 characters"
+                    placeholder="Min 8 characters (A-Z, 0-9)"
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                     className="pl-10 pr-10"

@@ -1,10 +1,11 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Zap, CheckCircle2, XCircle, Clock, Loader2 } from "lucide-react";
-import ReactConfetti from "react-confetti";
+
+const ReactConfetti = lazy(() => import("react-confetti"));
 
 interface Question {
   id: string;
@@ -101,7 +102,11 @@ export function DailyChallenge() {
 
   return (
     <>
-      {showConfetti && <ReactConfetti recycle={false} numberOfPieces={150} style={{ position: "fixed", top: 0, left: 0, zIndex: 100 }} />}
+      {showConfetti && (
+        <Suspense fallback={null}>
+          <ReactConfetti recycle={false} numberOfPieces={150} style={{ position: "fixed", top: 0, left: 0, zIndex: 100 }} />
+        </Suspense>
+      )}
       <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50 overflow-hidden">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-3">

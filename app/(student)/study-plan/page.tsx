@@ -81,12 +81,16 @@ export default async function StudyPlanPage() {
     };
   });
 
-  // Generate daily plan based on days remaining
-  const criticalTopics = topicData.filter((t) => t.priority === "critical");
-  const highTopics = topicData.filter((t) => t.priority === "high");
-  const untestedTopics = topicData.filter((t) => t.priority === "untested");
-  const mediumTopics = topicData.filter((t) => t.priority === "medium");
-  const lowTopics = topicData.filter((t) => t.priority === "low");
+  // Generate daily plan based on days remaining (single pass)
+  const grouped = topicData.reduce<Record<string, typeof topicData>>((acc, t) => {
+    (acc[t.priority] ??= []).push(t);
+    return acc;
+  }, {});
+  const criticalTopics = grouped.critical ?? [];
+  const highTopics = grouped.high ?? [];
+  const untestedTopics = grouped.untested ?? [];
+  const mediumTopics = grouped.medium ?? [];
+  const lowTopics = grouped.low ?? [];
 
   // Phase allocation
   let phase: "foundation" | "practice" | "mock" | "revision" = "foundation";

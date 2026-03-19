@@ -3,8 +3,13 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { AnalyticsCharts } from "@/components/analytics/analytics-charts";
+import dynamic from "next/dynamic";
 import { PeerComparison } from "@/components/analytics/peer-comparison";
+
+const AnalyticsCharts = dynamic(
+  () => import("@/components/analytics/analytics-charts").then((m) => m.AnalyticsCharts),
+  { loading: () => <div className="h-96 flex items-center justify-center"><div className="animate-pulse text-gray-400">Loading charts...</div></div> }
+);
 
 export const metadata = { title: "Analytics" };
 
@@ -64,14 +69,14 @@ export default async function AnalyticsPage() {
       .single(),
   ]);
 
-  // Peer comparison: count all scores and those below user
+  // Peer comparison: use count queries instead of fetching all scores
   const userScore = (scoresRes.data as any)?.overall_score ?? 0;
-  const [allScoresRes] = await Promise.all([
-    supabase.from("readiness_scores").select("overall_score"),
+  const [totalRes, belowRes] = await Promise.all([
+    supabase.from("readiness_scores").select("id", { count: "exact", head: true }),
+    supabase.from("readiness_scores").select("id", { count: "exact", head: true }).lt("overall_score", userScore),
   ]);
-  const allScores = (allScoresRes.data as any[]) ?? [];
-  const totalStudents = allScores.length;
-  const belowUser = allScores.filter((s: any) => s.overall_score < userScore).length;
+  const totalStudents = totalRes.count ?? 0;
+  const belowUser = belowRes.count ?? 0;
   const percentile = totalStudents > 0 ? Math.round((belowUser / totalStudents) * 100) : 0;
 
   const weeklySessions = (weeklyRes.data as any[]) ?? [];
