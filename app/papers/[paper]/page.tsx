@@ -586,7 +586,7 @@ export default async function PaperPage({
           </h2>
           <p className="text-blue-100 mb-8 text-lg">
             Get access to{" "}
-            {paper.questionType.includes("MCQ") ? "2,500+" : "2,500+"} practice
+            2,500+ practice
             questions, 10 full-length mock tests, and a personalised study plan
             — completely free.
           </p>
@@ -639,24 +639,24 @@ export default async function PaperPage({
               </h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     Diagnostic Test
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     Practice Questions
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     Mock Tests
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     AI Study Plan
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

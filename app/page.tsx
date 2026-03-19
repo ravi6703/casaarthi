@@ -90,7 +90,7 @@ export default async function HomePage() {
           </h1>
 
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-            AI-powered diagnostics, 2,500+ practice questions, full-length mock tests, and personalised study plans — everything you need in one platform.
+            AI-powered diagnostics, 2,500+ practice questions, personalised study plans, and an AI doubt solver — everything you need in one platform.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -130,8 +130,8 @@ export default async function HomePage() {
           {[
             { value: "19.23%", label: "National Pass Rate", sub: "Jan 2026 — We help you beat the odds" },
             { value: "2,500+", label: "Practice Questions", sub: "All 4 papers covered" },
-            { value: "40", label: "Full Mock Tests", sub: "ICAI-pattern simulations" },
-            { value: "4", label: "AI-Powered Modules", sub: "Diagnostic, Practice, Mock, Plan" },
+            { value: "393", label: "Topics Covered", sub: "Across 48 chapters" },
+            { value: "4", label: "AI-Powered Modules", sub: "Diagnostic, Practice, Plan & Doubt Solver" },
           ].map((s) => (
             <div key={s.label}>
               <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{s.value}</div>
@@ -157,7 +157,7 @@ export default async function HomePage() {
             {[
               { icon: <Target className="h-6 w-6" />, bg: "bg-blue-50", iconColor: "text-blue-600", title: "Smart Diagnostic", desc: "60-question adaptive test identifies your exact weak spots across all 4 papers in just 45 minutes." },
               { icon: <BookOpen className="h-6 w-6" />, bg: "bg-emerald-50", iconColor: "text-emerald-600", title: "Practice Engine", desc: "2,500+ questions with 6 practice modes — topic drill, weak area focus, revision, exam simulation & more." },
-              { icon: <FileText className="h-6 w-6" />, bg: "bg-violet-50", iconColor: "text-violet-600", title: "Mock Test Series", desc: "40 full-length ICAI-pattern mocks with proctored full-screen mode, timers, and deep analytics." },
+              { icon: <FileText className="h-6 w-6" />, bg: "bg-violet-50", iconColor: "text-violet-600", title: "Mock Test Series", desc: "Full-length ICAI-pattern mocks with proctored full-screen mode, timers, and deep analytics. Coming soon!" },
               { icon: <Brain className="h-6 w-6" />, bg: "bg-amber-50", iconColor: "text-amber-600", title: "AI Study Plan", desc: "Personalised daily recommendations based on your performance, weak areas, and exam countdown." },
               { icon: <BarChart3 className="h-6 w-6" />, bg: "bg-rose-50", iconColor: "text-rose-600", title: "Deep Analytics", desc: "Track accuracy, speed, and consistency trends. Topic heatmaps and peer comparisons keep you motivated." },
               { icon: <Sparkles className="h-6 w-6" />, bg: "bg-indigo-50", iconColor: "text-indigo-600", title: "AI Doubt Solver", desc: "Get instant explanations for any concept. Our AI tutor breaks down complex topics into simple language." },
@@ -263,7 +263,7 @@ export default async function HomePage() {
                   { feature: "AI Diagnostic", us: true, coaching: false, others: false },
                   { feature: "Personalised Study Plan", us: true, coaching: false, others: "Limited" },
                   { feature: "Practice Questions", us: "2,500+", coaching: "Varies", others: "500-2,000" },
-                  { feature: "Full-Length Mocks", us: "40 mocks", coaching: "5-10", others: "5-15" },
+                  { feature: "Full-Length Mocks", us: "Coming soon", coaching: "5-10", others: "5-15" },
                   { feature: "AI Doubt Solver", us: true, coaching: false, others: false },
                   { feature: "Performance Analytics", us: true, coaching: false, others: "Basic" },
                   { feature: "Available 24/7", us: true, coaching: false, others: true },

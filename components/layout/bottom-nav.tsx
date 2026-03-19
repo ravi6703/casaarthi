@@ -5,17 +5,17 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   BookOpen,
-  FileText,
+  CalendarDays,
+  BarChart2,
   User,
-  MoreHorizontal,
 } from "lucide-react";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Home", icon: LayoutDashboard },
   { href: "/practice", label: "Practice", icon: BookOpen },
-  { href: "/mock-tests", label: "Mock Tests", icon: FileText },
+  { href: "/study-plan", label: "Plan", icon: CalendarDays },
+  { href: "/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/profile", label: "Profile", icon: User },
-  { href: "/resources", label: "More", icon: MoreHorizontal },
 ];
 
 export function BottomNav() {
