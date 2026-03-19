@@ -4,21 +4,21 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, BookOpen, FileText, Trophy,
-  BookMarked, Settings, ChevronRight, BarChart2, CalendarDays,
-  MessageSquare, Brain,
+  BookMarked, ChevronRight, BarChart2, CalendarDays,
+  MessageSquare, Brain, ExternalLink, Clock,
 } from "lucide-react";
 
 const NAV = [
-  { href: "/dashboard",   label: "Dashboard",   icon: LayoutDashboard },
-  { href: "/practice",    label: "Practice",    icon: BookOpen },
-  { href: "/study-plan",  label: "Study Plan",  icon: CalendarDays },
-  { href: "/analytics",   label: "Analytics",   icon: BarChart2 },
-  { href: "/mock-tests",  label: "Mock Tests",  icon: FileText },
-  { href: "/profile",     label: "My Profile",  icon: BookMarked },
-  { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
-  { href: "/resources",   label: "Resources",   icon: Settings },
-  { href: "/learn",       label: "AI Explainer", icon: Brain },
-  { href: "/discussions",  label: "Doubts",      icon: MessageSquare },
+  { href: "/dashboard",   label: "Dashboard",    icon: LayoutDashboard },
+  { href: "/practice",    label: "Practice",     icon: BookOpen },
+  { href: "/study-plan",  label: "Study Plan",   icon: CalendarDays },
+  { href: "/analytics",   label: "Analytics",    icon: BarChart2 },
+  { href: "/mock-tests",  label: "Mock Tests",   icon: FileText, comingSoon: true },
+  { href: "/profile",     label: "My Profile",   icon: BookMarked },
+  { href: "/resources",   label: "Resources",    icon: ExternalLink },
+  { href: "/learn",       label: "AI Explainer",  icon: Brain },
+  { href: "/discussions",  label: "Doubts",       icon: MessageSquare, comingSoon: true },
+  { href: "/leaderboard", label: "Leaderboard",  icon: Trophy, comingSoon: true },
 ];
 
 export function Sidebar() {
@@ -36,22 +36,30 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {NAV.map(({ href, label, icon: Icon }) => {
+        {NAV.map(({ href, label, icon: Icon, comingSoon }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link
               key={href}
-              href={href}
+              href={comingSoon ? "#" : href}
+              onClick={comingSoon ? (e) => e.preventDefault() : undefined}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors group",
-                active
-                  ? "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-gray-200"
+                comingSoon
+                  ? "text-gray-400 dark:text-gray-600 cursor-default"
+                  : active
+                    ? "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-gray-200"
               )}
             >
-              <Icon className={cn("h-4 w-4 flex-shrink-0", active ? "text-blue-600 dark:text-blue-400" : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300")} />
+              <Icon className={cn("h-4 w-4 flex-shrink-0", comingSoon ? "text-gray-300" : active ? "text-blue-600 dark:text-blue-400" : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300")} />
               {label}
-              {active && <ChevronRight className="ml-auto h-3 w-3 text-blue-400" />}
+              {comingSoon && (
+                <span className="ml-auto text-[10px] bg-gray-100 dark:bg-slate-800 text-gray-400 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                  <Clock className="h-2.5 w-2.5" /> Soon
+                </span>
+              )}
+              {!comingSoon && active && <ChevronRight className="ml-auto h-3 w-3 text-blue-400" />}
             </Link>
           );
         })}

@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, BookOpen, FileText, Target, TrendingUp, AlertCircle, Zap, BarChart3, CalendarDays } from "lucide-react";
 import { getReadinessBgColor, calculateAccuracy, getNextExamDate, getDaysUntilExam } from "@/lib/utils";
-import { DailyChallenge } from "@/components/dashboard/daily-challenge";
+// DailyChallenge removed — 0 challenges in DB, will add back when content exists
 import { FeatureTour } from "@/components/onboarding/feature-tour";
 
 export const metadata = { title: "Dashboard" };
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
   const userName = user.user_metadata?.full_name || user.email?.split("@")[0] || "Student";
 
   // Parallel fetch
-  const [profileRes, scoresRes, streakRes, practiceRes, recsRes, mockRes] = await Promise.all([
+  const [profileRes, scoresRes, streakRes, practiceRes, recsRes] = await Promise.all([
     supabase.from("student_profiles").select("*").eq("user_id", user.id).single(),
     supabase.from("readiness_scores").select("*").eq("user_id", user.id).single(),
     supabase.from("study_streaks").select("*").eq("user_id", user.id).single(),
@@ -51,12 +51,6 @@ export default async function DashboardPage() {
       .gte("expires_at", new Date().toISOString())
       .order("generated_at", { ascending: false })
       .limit(3),
-    supabase.from("mock_test_attempts")
-      .select("total_score, percentage, completed_at, mock_tests(paper_id, test_number)")
-      .eq("user_id", user.id)
-      .eq("status", "completed")
-      .order("completed_at", { ascending: false })
-      .limit(3),
   ]);
 
   const profile = profileRes.data as any;
@@ -64,7 +58,6 @@ export default async function DashboardPage() {
   const streak = streakRes.data as any;
   const recentPractice = (practiceRes.data as any[]) ?? [];
   const recommendations = (recsRes.data as any[]) ?? [];
-  const recentMocks = (mockRes.data as any[]) ?? [];
 
   // If no onboarding, redirect to diagnostic
   if (!profile || !profile.onboarding_completed_at) {
@@ -140,8 +133,7 @@ export default async function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Daily Challenge */}
-      <DailyChallenge />
+      {/* Daily Challenge — will be added back when challenges are populated */}
 
       {/* Paper Scores */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -213,7 +205,7 @@ export default async function DashboardPage() {
             {[
               { href: "/practice", icon: <BookOpen className="h-5 w-5 text-blue-500" />, label: "Practice", sub: "Topic drill-down" },
               { href: "/study-plan", icon: <CalendarDays className="h-5 w-5 text-teal-500" />, label: "Study Plan", sub: "Your daily roadmap" },
-              { href: "/mock-tests", icon: <FileText className="h-5 w-5 text-purple-500" />, label: "Mock Test", sub: "Full exam simulation" },
+              { href: "/learn", icon: <FileText className="h-5 w-5 text-purple-500" />, label: "AI Explainer", sub: "Concept deep-dives" },
               { href: "/analytics", icon: <BarChart3 className="h-5 w-5 text-indigo-500" />, label: "Analytics", sub: "Charts & insights" },
             ].map((action) => (
               <Link key={action.href} href={action.href}>
@@ -262,31 +254,17 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Recent Mocks */}
-          <Card>
+          {/* Mock Tests Coming Soon */}
+          <Card className="border-dashed border-gray-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Recent Mock Tests</CardTitle>
+              <CardTitle className="text-sm flex items-center gap-2">
+                Mock Tests
+                <Badge variant="secondary" className="text-[10px]">Coming Soon</Badge>
+              </CardTitle>
             </CardHeader>
-            <CardContent className="pt-0">
-              {recentMocks.length > 0 ? (
-                <div className="space-y-2">
-                  {recentMocks.map((m: any, i: number) => (
-                    <div key={i} className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">
-                        P{m.mock_tests?.paper_id} · Mock {m.mock_tests?.test_number}
-                      </span>
-                      <span className={`font-bold ${(m.percentage ?? 0) >= 50 ? "text-green-600" : "text-red-600"}`}>
-                        {m.percentage?.toFixed(0)}%
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-gray-400 text-center py-2">No mock tests taken yet</p>
-              )}
-              <Link href="/mock-tests" className="mt-3 block">
-                <Button variant="outline" size="sm" className="w-full">Take a Mock →</Button>
-              </Link>
+            <CardContent className="pt-0 text-center">
+              <FileText className="h-8 w-8 text-gray-200 mx-auto mb-2" />
+              <p className="text-sm text-gray-400">Full-length ICAI-pattern mock tests are being prepared.</p>
             </CardContent>
           </Card>
 

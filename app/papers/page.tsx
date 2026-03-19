@@ -216,24 +216,24 @@ export default function PapersIndexPage() {
               </h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     Diagnostic Test
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     Practice Questions
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     Mock Tests
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition-colors">
+                  <Link href="/register" className="hover:text-white transition-colors">
                     AI Study Plan
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
