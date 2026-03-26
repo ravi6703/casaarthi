@@ -1,60 +1,63 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { BLOG_POSTS, getBlogBySlug } from "@/lib/blog-data";
+import { getBlogBySlug, getAllBlogSlugs, getAllBlogs } from "@/lib/data";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({ slug: post.slug }));
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogBySlug(slug);
+  const post = await getBlogBySlug(slug);
   if (!post) return { title: "Blog Post Not Found" };
 
   return {
     title: `${post.title} | CA Saarthi Blog`,
-    description: post.metaDescription,
+    description: post.meta_description,
     keywords: post.keywords,
     openGraph: {
       title: post.title,
-      description: post.metaDescription,
+      description: post.meta_description,
       url: `https://www.casaarthi.in/blog/${post.slug}`,
       type: "article",
-      publishedTime: post.date,
+      publishedTime: post.published_at,
       authors: [post.author],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.metaDescription,
+      description: post.meta_description,
     },
   };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogBySlug(slug);
+  const post = await getBlogBySlug(slug);
   if (!post) notFound();
+
+  const allPosts = await getAllBlogs();
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    description: post.metaDescription,
+    description: post.meta_description,
     author: { "@type": "Organization", name: post.author },
     publisher: {
       "@type": "Organization",
       name: "CA Saarthi",
       url: "https://www.casaarthi.in",
     },
-    datePublished: post.date,
+    datePublished: post.published_at,
     url: `https://www.casaarthi.in/blog/${post.slug}`,
-    keywords: post.keywords.join(", "),
+    keywords: (post.keywords ?? []).join(", "),
   };
 
   // Simple markdown-like rendering
@@ -184,14 +187,14 @@ export default async function BlogPostPage({ params }: Props) {
           {post.title}
         </h1>
         <div className="flex items-center gap-3 text-sm text-gray-500 mb-2">
-          <span>{new Date(post.date).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
+          <span>{new Date(post.published_at).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
           <span>·</span>
-          <span>{post.readTime}</span>
+          <span>{post.read_time}</span>
           <span>·</span>
           <span>By {post.author}</span>
         </div>
         <div className="flex flex-wrap gap-2 mb-10">
-          {post.keywords.map((kw) => (
+          {(post.keywords ?? []).map((kw: string) => (
             <span key={kw} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md">{kw}</span>
           ))}
         </div>
@@ -216,10 +219,10 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="mt-16">
           <h3 className="text-lg font-bold text-gray-900 mb-6">More Articles</h3>
           <div className="space-y-4">
-            {BLOG_POSTS.filter((p) => p.slug !== post.slug).map((p) => (
+            {allPosts.filter((p) => p.slug !== post.slug).map((p) => (
               <Link key={p.slug} href={`/blog/${p.slug}`}>
                 <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-blue-200 transition-all">
-                  <div className="text-sm text-gray-500 mb-1">{p.readTime}</div>
+                  <div className="text-sm text-gray-500 mb-1">{p.read_time}</div>
                   <div className="font-semibold text-gray-900 hover:text-blue-600">{p.title}</div>
                 </div>
               </Link>

@@ -1,15 +1,10 @@
 import type { MetadataRoute } from "next";
-import { BLOG_POSTS } from "@/lib/blog-data";
+import { getAllPapers, getAllBlogs } from "@/lib/data";
 
 const SITE_URL = "https://www.casaarthi.in";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const paperSlugs = [
-    "accounting",
-    "business-laws",
-    "quantitative-aptitude",
-    "business-economics",
-  ];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [papers, blogs] = await Promise.all([getAllPapers(), getAllBlogs()]);
 
   return [
     {
@@ -36,8 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
     },
-    ...paperSlugs.map((slug) => ({
-      url: `${SITE_URL}/papers/${slug}`,
+    ...papers.map((p) => ({
+      url: `${SITE_URL}/papers/${p.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.85,
@@ -48,9 +43,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    ...BLOG_POSTS.map((post) => ({
+    ...blogs.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.date),
+      lastModified: new Date(post.published_at),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),

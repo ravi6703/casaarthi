@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { getAllPapers } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "CA Foundation Papers — Complete Syllabus & Exam Pattern Guide",
@@ -28,58 +29,9 @@ export const metadata: Metadata = {
   },
 };
 
-const papers = [
-  {
-    number: 1,
-    slug: "accounting",
-    name: "Principles and Practice of Accounting",
-    shortName: "Accounting",
-    marks: 100,
-    duration: "3 hours",
-    type: "Subjective",
-    description:
-      "Covers journal entries, ledger, trial balance, final accounts, depreciation, partnership and company accounts as per ICAI syllabus.",
-    topicCount: 7,
-  },
-  {
-    number: 2,
-    slug: "business-laws",
-    name: "Business Laws and Business Correspondence and Reporting",
-    shortName: "Business Laws & BCR",
-    marks: 100,
-    duration: "3 hours",
-    type: "Subjective",
-    description:
-      "Includes Indian Contract Act, Sale of Goods Act, Partnership Act, LLP Act, Company Law basics, and business communication skills.",
-    topicCount: 7,
-  },
-  {
-    number: 3,
-    slug: "quantitative-aptitude",
-    name: "Business Mathematics and Logical Reasoning & Statistics",
-    shortName: "Quant, Reasoning & Stats",
-    marks: 100,
-    duration: "3 hours",
-    type: "Objective (MCQ)",
-    description:
-      "Covers ratio & proportion, equations, matrices, sequences, permutations, logical reasoning, statistics, probability and distributions.",
-    topicCount: 8,
-  },
-  {
-    number: 4,
-    slug: "business-economics",
-    name: "Business Economics and Business and Commercial Knowledge",
-    shortName: "Economics & BCK",
-    marks: 100,
-    duration: "3 hours",
-    type: "Objective (MCQ)",
-    description:
-      "Covers demand & supply, production theory, market structures, business cycles, macroeconomics, and business & commercial knowledge.",
-    topicCount: 8,
-  },
-];
+export default async function PapersIndexPage() {
+  const papers = await getAllPapers();
 
-export default function PapersIndexPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Nav */}
@@ -137,11 +89,11 @@ export default function PapersIndexPage() {
             >
               <div className="flex items-start gap-4">
                 <span className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-bold">
-                  {paper.number}
+                  {paper.sort_order}
                 </span>
                 <div className="flex-1 min-w-0">
                   <h2 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
-                    Paper {paper.number}: {paper.shortName}
+                    Paper {paper.sort_order}: {paper.short_name}
                   </h2>
                   <p className="text-sm text-gray-500 mb-3">{paper.name}</p>
                   <p className="text-sm text-gray-600 mb-4">
@@ -149,16 +101,13 @@ export default function PapersIndexPage() {
                   </p>
                   <div className="flex flex-wrap gap-3 text-xs">
                     <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                      {paper.marks} marks
+                      {paper.total_marks} marks
                     </span>
                     <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                      {paper.duration}
+                      {paper.duration_minutes} min
                     </span>
                     <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                      {paper.type}
-                    </span>
-                    <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
-                      {paper.topicCount} topics
+                      {paper.question_type}
                     </span>
                   </div>
                 </div>

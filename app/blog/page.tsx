@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { BLOG_POSTS } from "@/lib/blog-data";
+import { getAllBlogs } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Blog | CA Saarthi — CA Foundation Preparation Tips & Guides",
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getAllBlogs();
+
   return (
     <div className="min-h-screen bg-white">
       {/* Nav */}
@@ -35,13 +37,13 @@ export default function BlogPage() {
         </p>
 
         <div className="space-y-8">
-          {BLOG_POSTS.map((post) => (
+          {posts.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}>
               <article className="group border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-blue-200 transition-all">
                 <div className="flex items-center gap-3 text-sm text-gray-500 mb-3">
-                  <span>{new Date(post.date).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
+                  <span>{new Date(post.published_at).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
                   <span>·</span>
-                  <span>{post.readTime}</span>
+                  <span>{post.read_time}</span>
                   <span>·</span>
                   <span>{post.author}</span>
                 </div>
@@ -50,7 +52,7 @@ export default function BlogPage() {
                 </h2>
                 <p className="text-gray-600 leading-relaxed">{post.excerpt}</p>
                 <div className="flex flex-wrap gap-2 mt-4">
-                  {post.keywords.slice(0, 3).map((kw) => (
+                  {(post.keywords ?? []).slice(0, 3).map((kw: string) => (
                     <span key={kw} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md">{kw}</span>
                   ))}
                 </div>

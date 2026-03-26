@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FAQAccordion } from "@/components/faq-accordion";
-import { BLOG_POSTS } from "@/lib/blog-data";
+import { getAllBlogs, getPlatformStats } from "@/lib/data";
 import {
   Target, BookOpen, FileText, Brain, BarChart3, Shield, Sparkles,
   CheckCircle2, ArrowRight, Star, Users, Clock, Zap, GraduationCap,
@@ -16,6 +16,11 @@ export default async function HomePage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) redirect("/dashboard");
   }
+
+  const [stats, blogPosts] = await Promise.all([
+    getPlatformStats(),
+    getAllBlogs(),
+  ]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -129,8 +134,8 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { value: "19.23%", label: "National Pass Rate", sub: "Jan 2026 — We help you beat the odds" },
-            { value: "2,500+", label: "Practice Questions", sub: "All 4 papers covered" },
-            { value: "393", label: "Topics Covered", sub: "Across 48 chapters" },
+            { value: `${stats.questionCount.toLocaleString("en-IN")}+`, label: "Practice Questions", sub: "All 4 papers covered" },
+            { value: `${stats.topicCount}`, label: "Topics Covered", sub: `Across ${stats.chapterCount} chapters` },
             { value: "4", label: "AI-Powered Modules", sub: "Diagnostic, Practice, Plan & Doubt Solver" },
           ].map((s) => (
             <div key={s.label}>
@@ -316,11 +321,11 @@ export default async function HomePage() {
             <p className="text-gray-600 text-lg">Expert tips and strategies for CA Foundation</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {BLOG_POSTS.slice(0, 3).map((post) => (
+            {blogPosts.slice(0, 3).map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
                 <div className="bg-white rounded-2xl border border-gray-200/80 p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {post.keywords.slice(0, 2).map((kw) => (
+                    {(post.keywords ?? []).slice(0, 2).map((kw: string) => (
                       <span key={kw} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">{kw}</span>
                     ))}
                   </div>
@@ -328,7 +333,7 @@ export default async function HomePage() {
                   <p className="text-sm text-gray-600 flex-1 line-clamp-3">{post.excerpt}</p>
                   <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-100 text-xs text-gray-500">
                     <span>{post.author}</span>
-                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{post.readTime}</span>
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{post.read_time}</span>
                   </div>
                 </div>
               </Link>
