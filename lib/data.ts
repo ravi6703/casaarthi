@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createStaticClient } from "@/lib/supabase/static";
 import type { Database } from "@/types/database";
 
 type Blog = Database["public"]["Tables"]["blogs"]["Row"];
@@ -8,7 +9,7 @@ type MockTest = Database["public"]["Tables"]["mock_tests"]["Row"];
 // ── Papers ──────────────────────────────────────────────────────────
 
 export async function getAllPapers(): Promise<Paper[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("papers")
     .select("*")
@@ -17,7 +18,7 @@ export async function getAllPapers(): Promise<Paper[]> {
 }
 
 export async function getPaperBySlug(slug: string): Promise<Paper | null> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("papers")
     .select("*")
@@ -27,7 +28,7 @@ export async function getPaperBySlug(slug: string): Promise<Paper | null> {
 }
 
 export async function getPaperWithChaptersAndTopics(slug: string) {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   const { data: paper } = await supabase
     .from("papers")
@@ -52,7 +53,7 @@ export async function getPaperWithChaptersAndTopics(slug: string) {
 // ── Platform Stats ──────────────────────────────────────────────────
 
 export async function getPlatformStats() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   const [questionsRes, topicsRes, chaptersRes, mockTestsRes] =
     await Promise.all([
@@ -79,7 +80,7 @@ export async function getPlatformStats() {
 // ── Blogs ───────────────────────────────────────────────────────────
 
 export async function getAllBlogs(): Promise<Blog[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("blogs")
     .select("*")
@@ -89,7 +90,7 @@ export async function getAllBlogs(): Promise<Blog[]> {
 }
 
 export async function getBlogBySlug(slug: string): Promise<Blog | null> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("blogs")
     .select("*")
@@ -100,7 +101,7 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
 }
 
 export async function getAllBlogSlugs(): Promise<string[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   const { data } = await supabase
     .from("blogs")
     .select("slug")
