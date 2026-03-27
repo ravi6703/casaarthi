@@ -1,24 +1,29 @@
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/types/database";
+
+type Blog = Database["public"]["Tables"]["blogs"]["Row"];
+type Paper = Database["public"]["Tables"]["papers"]["Row"];
+type MockTest = Database["public"]["Tables"]["mock_tests"]["Row"];
 
 // ── Papers ──────────────────────────────────────────────────────────
 
-export async function getAllPapers() {
+export async function getAllPapers(): Promise<Paper[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("papers")
     .select("*")
     .order("sort_order");
-  return data ?? [];
+  return (data ?? []) as unknown as Paper[];
 }
 
-export async function getPaperBySlug(slug: string) {
+export async function getPaperBySlug(slug: string): Promise<Paper | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("papers")
     .select("*")
     .eq("slug", slug)
     .single();
-  return data;
+  return (data as unknown as Paper) ?? null;
 }
 
 export async function getPaperWithChaptersAndTopics(slug: string) {
@@ -73,17 +78,17 @@ export async function getPlatformStats() {
 
 // ── Blogs ───────────────────────────────────────────────────────────
 
-export async function getAllBlogs() {
+export async function getAllBlogs(): Promise<Blog[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("blogs")
     .select("*")
     .eq("is_published", true)
     .order("published_at", { ascending: false });
-  return data ?? [];
+  return (data ?? []) as unknown as Blog[];
 }
 
-export async function getBlogBySlug(slug: string) {
+export async function getBlogBySlug(slug: string): Promise<Blog | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("blogs")
@@ -91,14 +96,14 @@ export async function getBlogBySlug(slug: string) {
     .eq("slug", slug)
     .eq("is_published", true)
     .single();
-  return data;
+  return (data as unknown as Blog) ?? null;
 }
 
-export async function getAllBlogSlugs() {
+export async function getAllBlogSlugs(): Promise<string[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("blogs")
     .select("slug")
     .eq("is_published", true);
-  return (data ?? []).map((b) => b.slug);
+  return ((data ?? []) as unknown as Pick<Blog, "slug">[]).map((b) => b.slug);
 }
