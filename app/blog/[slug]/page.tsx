@@ -133,8 +133,8 @@ export default async function BlogPostPage({ params }: Props) {
         const match = line.match(/^\*\*(.+?)\*\*\s*(.*)/);
         if (match) {
           elements.push(
-            <div key={i} className="bg-blue-50 border-l-4 border-blue-500 p-4 my-4 rounded-r-lg">
-              <span className="font-bold text-blue-800">{match[1]}</span>
+            <div key={i} className="bg-[var(--sage-light)] border-l-4 border-[var(--primary)] p-4 my-4 rounded-r-lg">
+              <span className="font-bold text-[var(--teal-dark)]">{match[1]}</span>
               <span className="text-gray-700"> {match[2]}</span>
             </div>
           );
@@ -163,10 +163,10 @@ export default async function BlogPostPage({ params }: Props) {
       <nav className="border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">CA</div>
+            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white font-bold text-sm">CA</div>
             <span className="font-bold text-lg text-gray-900">CA Saarthi</span>
           </Link>
-          <Link href="/blog" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+          <Link href="/blog" className="text-sm font-medium text-[var(--muted-foreground)] hover:text-gray-900">
             ← All Posts
           </Link>
         </div>
@@ -175,9 +175,9 @@ export default async function BlogPostPage({ params }: Props) {
       <article className="max-w-3xl mx-auto px-4 py-16">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-          <Link href="/" className="hover:text-blue-600">Home</Link>
+          <Link href="/" className="hover:text-[var(--primary)]">Home</Link>
           <span>/</span>
-          <Link href="/blog" className="hover:text-blue-600">Blog</Link>
+          <Link href="/blog" className="hover:text-[var(--primary)]">Blog</Link>
           <span>/</span>
           <span className="text-gray-700 truncate">{post.title}</span>
         </div>
@@ -195,7 +195,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
         <div className="flex flex-wrap gap-2 mb-10">
           {(post.keywords ?? []).map((kw: string) => (
-            <span key={kw} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md">{kw}</span>
+            <span key={kw} className="text-xs bg-[var(--sage-light)] text-[var(--teal-dark)] px-2 py-1 rounded-md">{kw}</span>
           ))}
         </div>
 
@@ -205,11 +205,11 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-8 text-center text-white">
+        <div className="mt-16 bg-gradient-to-br from-[var(--primary)] to-[var(--teal-dark)] rounded-2xl p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-3">Ready to Start Your CA Foundation Journey?</h2>
-          <p className="text-blue-100 mb-6">Free diagnostic test, 2,500+ questions, and 40 mock tests.</p>
+          <p className="text-blue-100 mb-6">Free diagnostic test, 2,500+ practice questions, and personalised study plans.</p>
           <Link href="/register">
-            <button className="bg-white text-blue-600 font-bold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors">
+            <button className="bg-white text-[var(--teal-dark)] font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors">
               Get Started Free →
             </button>
           </Link>
@@ -221,9 +221,9 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="space-y-4">
             {allPosts.filter((p) => p.slug !== post.slug).map((p) => (
               <Link key={p.slug} href={`/blog/${p.slug}`}>
-                <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-blue-200 transition-all">
+                <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-[var(--primary)]/40 transition-all">
                   <div className="text-sm text-gray-500 mb-1">{p.read_time}</div>
-                  <div className="font-semibold text-gray-900 hover:text-blue-600">{p.title}</div>
+                  <div className="font-semibold text-gray-900 hover:text-[var(--primary)]">{p.title}</div>
                 </div>
               </Link>
             ))}

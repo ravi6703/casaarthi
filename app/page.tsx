@@ -54,7 +54,7 @@ export default async function HomePage() {
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-xl border-b border-gray-100 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-blue-600/25">CA</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--teal-dark)] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[var(--primary)]/25">CA</div>
             <span className="font-bold text-lg text-gray-900 tracking-tight">CA Saarthi</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
@@ -68,7 +68,7 @@ export default async function HomePage() {
               <Button variant="ghost" size="sm" className="text-gray-700 font-medium">Log in</Button>
             </Link>
             <Link href="/register">
-              <Button size="sm" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/25 font-medium">
+              <Button size="sm" className="bg-gradient-to-r from-[var(--primary)] to-[var(--teal-dark)] hover:from-[var(--teal-dark)] hover:to-[var(--primary)] shadow-lg shadow-[var(--primary)]/25 font-medium">
                 Get Started Free
               </Button>
             </Link>
@@ -78,18 +78,18 @@ export default async function HomePage() {
 
       {/* ───── Hero Section ───── */}
       <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-50/80 via-white to-white" />
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-br from-blue-100/40 via-indigo-100/30 to-transparent rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--sage-light)]/60 via-[var(--background)] to-[var(--background)]" />
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[var(--sage-light)]/40 via-[var(--amber-light)]/20 to-transparent rounded-full blur-3xl" />
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 rounded-full px-5 py-2 text-sm text-blue-700 mb-8 shadow-sm">
-            <Sparkles className="h-4 w-4 text-blue-500" />
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[var(--sage-light)] to-[var(--amber-light)] border border-[var(--sage)]/30 rounded-full px-5 py-2 text-sm text-[var(--teal-dark)] mb-8 shadow-sm">
+            <Sparkles className="h-4 w-4 text-[var(--accent)]" />
             <span className="font-medium">100% Free Platform — No Hidden Charges</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-6">
             Your smartest path to{" "}
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[var(--primary)] via-[var(--sage)] to-[var(--accent)] bg-clip-text text-transparent">
               clearing CA Foundation
             </span>
           </h1>
@@ -100,7 +100,7 @@ export default async function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link href="/register">
-              <Button size="lg" className="w-full sm:w-auto px-8 h-12 text-base bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl shadow-blue-600/25 font-semibold">
+              <Button size="lg" className="w-full sm:w-auto px-8 h-12 text-base bg-gradient-to-r from-[var(--primary)] to-[var(--teal-dark)] hover:from-[var(--teal-dark)] hover:to-[var(--primary)] shadow-xl shadow-[var(--primary)]/25 font-semibold">
                 Start Free Diagnostic
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -118,7 +118,7 @@ export default async function HomePage() {
               No signup fees
             </span>
             <span className="flex items-center gap-1.5">
-              <Shield className="h-4 w-4 text-blue-500" />
+              <Shield className="h-4 w-4 text-[var(--primary)]" />
               ICAI syllabus aligned
             </span>
             <span className="flex items-center gap-1.5">
@@ -151,7 +151,7 @@ export default async function HomePage() {
       <section id="features" className="py-20 sm:py-28 bg-gray-50/50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-blue-50 rounded-full px-4 py-1.5 text-sm text-blue-700 font-medium mb-4">
+            <div className="inline-flex items-center gap-2 bg-[var(--sage-light)] rounded-full px-4 py-1.5 text-sm text-[var(--teal-dark)] font-medium mb-4">
               <Zap className="h-3.5 w-3.5" /> Everything You Need
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Built for serious CA aspirants</h2>
@@ -160,9 +160,9 @@ export default async function HomePage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: <Target className="h-6 w-6" />, bg: "bg-blue-50", iconColor: "text-blue-600", title: "Smart Diagnostic", desc: "60-question adaptive test identifies your exact weak spots across all 4 papers in just 45 minutes." },
+              { icon: <Target className="h-6 w-6" />, bg: "bg-[var(--sage-light)]", iconColor: "text-[var(--primary)]", title: "Smart Diagnostic", desc: "60-question adaptive test identifies your exact weak spots across all 4 papers in just 45 minutes." },
               { icon: <BookOpen className="h-6 w-6" />, bg: "bg-emerald-50", iconColor: "text-emerald-600", title: "Practice Engine", desc: "2,500+ questions with 6 practice modes — topic drill, weak area focus, revision, exam simulation & more." },
-              { icon: <FileText className="h-6 w-6" />, bg: "bg-violet-50", iconColor: "text-violet-600", title: "Mock Test Series", desc: "Full-length ICAI-pattern mocks with proctored full-screen mode, timers, and deep analytics. Coming soon!" },
+              { icon: <FileText className="h-6 w-6" />, bg: "bg-violet-50", iconColor: "text-violet-600", title: "Mock Test Series", desc: "Full-length ICAI-pattern mocks with proctored full-screen mode, timers, and detailed performance analytics." },
               { icon: <Brain className="h-6 w-6" />, bg: "bg-amber-50", iconColor: "text-amber-600", title: "AI Study Plan", desc: "Personalised daily recommendations based on your performance, weak areas, and exam countdown." },
               { icon: <BarChart3 className="h-6 w-6" />, bg: "bg-rose-50", iconColor: "text-rose-600", title: "Deep Analytics", desc: "Track accuracy, speed, and consistency trends. Topic heatmaps and peer comparisons keep you motivated." },
               { icon: <Sparkles className="h-6 w-6" />, bg: "bg-indigo-50", iconColor: "text-indigo-600", title: "AI Doubt Solver", desc: "Get instant explanations for any concept. Our AI tutor breaks down complex topics into simple language." },
@@ -192,7 +192,7 @@ export default async function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: "01", title: "Take the Diagnostic", desc: "Complete a 45-minute assessment. Our AI identifies your strengths and weak areas across all papers.", icon: <Target className="h-8 w-8 text-blue-600" />, border: "border-blue-200", bg: "bg-blue-50/50" },
+              { step: "01", title: "Take the Diagnostic", desc: "Complete a 45-minute assessment. Our AI identifies your strengths and weak areas across all papers.", icon: <Target className="h-8 w-8 text-[var(--primary)]" />, border: "border-[var(--sage)]/40", bg: "bg-[var(--sage-light)]/50" },
               { step: "02", title: "Follow Your Plan", desc: "Get a personalised daily study plan. Practice questions, flashcards, and revision schedules — all tailored to you.", icon: <TrendingUp className="h-8 w-8 text-emerald-600" />, border: "border-emerald-200", bg: "bg-emerald-50/50" },
               { step: "03", title: "Ace the Exam", desc: "Take full-length mock tests, track your progress with analytics, and walk into the exam hall with confidence.", icon: <Star className="h-8 w-8 text-amber-600" />, border: "border-amber-200", bg: "bg-amber-50/50" },
             ].map((s) => (
@@ -220,7 +220,7 @@ export default async function HomePage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { code: "P1", name: "Accounting", topics: "12 Chapters", color: "from-blue-500 to-blue-600", link: "/papers/accounting" },
+              { code: "P1", name: "Accounting", topics: "12 Chapters", color: "from-[var(--primary)] to-[var(--teal-dark)]", link: "/papers/accounting" },
               { code: "P2", name: "Business Laws", topics: "10 Chapters", color: "from-purple-500 to-purple-600", link: "/papers/business-laws" },
               { code: "P3", name: "Maths & Stats", topics: "14 Chapters", color: "from-emerald-500 to-emerald-600", link: "/papers/quantitative-aptitude" },
               { code: "P4", name: "Economics", topics: "11 Chapters", color: "from-amber-500 to-amber-600", link: "/papers/business-economics" },
@@ -232,7 +232,7 @@ export default async function HomePage() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-1">{p.name}</h3>
                   <p className="text-sm text-gray-500 mb-4">{p.topics}</p>
-                  <span className="inline-flex items-center text-sm text-blue-600 font-medium group-hover:gap-2 transition-all">
+                  <span className="inline-flex items-center text-sm text-[var(--primary)] font-medium group-hover:gap-2 transition-all">
                     View syllabus <ChevronRight className="h-4 w-4" />
                   </span>
                 </div>
@@ -256,7 +256,7 @@ export default async function HomePage() {
                 <tr className="bg-gray-50 border-b border-gray-200">
                   <th className="text-left py-4 px-5 font-medium text-gray-500">Feature</th>
                   <th className="py-4 px-4 text-center">
-                    <span className="inline-flex items-center gap-1.5 bg-blue-100 text-blue-800 rounded-lg px-3 py-1.5 font-bold text-xs">CA Saarthi</span>
+                    <span className="inline-flex items-center gap-1.5 bg-[var(--sage-light)] text-[var(--teal-dark)] rounded-lg px-3 py-1.5 font-bold text-xs">CA Saarthi</span>
                   </th>
                   <th className="py-4 px-4 font-medium text-gray-500 text-center">Coaching</th>
                   <th className="py-4 px-4 font-medium text-gray-500 text-center">Other Apps</th>
@@ -268,7 +268,7 @@ export default async function HomePage() {
                   { feature: "AI Diagnostic", us: true, coaching: false, others: false },
                   { feature: "Personalised Study Plan", us: true, coaching: false, others: "Limited" },
                   { feature: "Practice Questions", us: "2,500+", coaching: "Varies", others: "500-2,000" },
-                  { feature: "Full-Length Mocks", us: "Coming soon", coaching: "5-10", others: "5-15" },
+                  { feature: "Full-Length Mocks", us: `${stats.mockTestCount}+ available`, coaching: "5-10", others: "5-15" },
                   { feature: "AI Doubt Solver", us: true, coaching: false, others: false },
                   { feature: "Performance Analytics", us: true, coaching: false, others: "Basic" },
                   { feature: "Available 24/7", us: true, coaching: false, others: true },
@@ -276,7 +276,7 @@ export default async function HomePage() {
                   <tr key={row.feature} className="hover:bg-gray-50/50">
                     <td className="py-3.5 px-5 font-medium text-gray-900">{row.feature}</td>
                     <td className="py-3.5 px-4 text-center">
-                      {row.us === true ? <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" /> : <span className="font-semibold text-blue-700">{row.us}</span>}
+                      {row.us === true ? <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" /> : <span className="font-semibold text-[var(--teal-dark)]">{row.us}</span>}
                     </td>
                     <td className="py-3.5 px-4 text-center text-gray-500">
                       {row.coaching === true ? <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" /> : row.coaching === false ? <span className="text-gray-300">--</span> : row.coaching}
@@ -293,7 +293,7 @@ export default async function HomePage() {
       </section>
 
       {/* ───── CTA Banner ───── */}
-      <section className="py-20 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-[var(--primary)] via-[var(--teal-dark)] to-[var(--sage)] relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/4" />
@@ -304,12 +304,12 @@ export default async function HomePage() {
             Join students already preparing smarter. Completely free, forever.
           </p>
           <Link href="/register">
-            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 shadow-xl px-10 h-13 text-base font-semibold">
+            <Button size="lg" className="bg-white text-[var(--teal-dark)] hover:bg-gray-50 shadow-xl px-10 h-13 text-base font-semibold">
               Create Free Account
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </Link>
-          <p className="text-blue-200 text-sm mt-4">Takes less than 30 seconds</p>
+          <p className="text-white/70 text-sm mt-4">Takes less than 30 seconds</p>
         </div>
       </section>
 
@@ -326,10 +326,10 @@ export default async function HomePage() {
                 <div className="bg-white rounded-2xl border border-gray-200/80 p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
                   <div className="flex flex-wrap gap-2 mb-4">
                     {(post.keywords ?? []).slice(0, 2).map((kw: string) => (
-                      <span key={kw} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">{kw}</span>
+                      <span key={kw} className="text-xs bg-[var(--sage-light)] text-[var(--teal-dark)] px-2.5 py-1 rounded-full font-medium">{kw}</span>
                     ))}
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">{post.title}</h3>
+                  <h3 className="font-bold text-gray-900 mb-2 group-hover:text-[var(--primary)] transition-colors line-clamp-2">{post.title}</h3>
                   <p className="text-sm text-gray-600 flex-1 line-clamp-3">{post.excerpt}</p>
                   <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-100 text-xs text-gray-500">
                     <span>{post.author}</span>
@@ -361,14 +361,14 @@ export default async function HomePage() {
           <p className="text-gray-600 mb-8">Our team is here to help you with any issues or questions</p>
           <div className="flex flex-wrap justify-center gap-6">
             <a href="mailto:support@casaarthi.in" className="flex items-center gap-3 bg-gray-50 rounded-xl px-6 py-4 hover:bg-gray-100 transition-colors border border-gray-200">
-              <Mail className="h-5 w-5 text-blue-600" />
+              <Mail className="h-5 w-5 text-[var(--primary)]" />
               <div className="text-left">
                 <div className="text-sm font-semibold text-gray-900">Email Support</div>
                 <div className="text-xs text-gray-500">support@casaarthi.in</div>
               </div>
             </a>
             <a href="https://t.me/casaarthiindia" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-gray-50 rounded-xl px-6 py-4 hover:bg-gray-100 transition-colors border border-gray-200">
-              <MessageCircle className="h-5 w-5 text-blue-500" />
+              <MessageCircle className="h-5 w-5 text-[var(--primary)]" />
               <div className="text-left">
                 <div className="text-sm font-semibold text-gray-900">Telegram Community</div>
                 <div className="text-xs text-gray-500">Join our student group</div>
@@ -391,7 +391,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
             <div className="md:col-span-2">
               <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">CA</div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--teal-dark)] flex items-center justify-center text-white font-bold text-sm">CA</div>
                 <span className="font-bold text-lg text-white">CA Saarthi</span>
               </div>
               <p className="text-sm leading-relaxed max-w-xs">

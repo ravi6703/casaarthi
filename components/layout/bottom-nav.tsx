@@ -35,7 +35,7 @@ export function BottomNav() {
               href={href}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors",
-                active ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
+                active ? "text-[var(--primary)] dark:text-[var(--primary)]" : "text-gray-500 dark:text-gray-400"
               )}
             >
               <Icon className="h-5 w-5" />

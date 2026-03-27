@@ -78,7 +78,7 @@ export function Topbar({ userName, userEmail, streakCount }: TopbarProps) {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold hover:bg-blue-700 transition-colors"
+              className="w-8 h-8 rounded-full bg-[var(--primary)] flex items-center justify-center text-white text-sm font-bold hover:bg-[var(--teal-dark)] transition-colors"
             >
               {userName?.[0]?.toUpperCase() ?? "S"}
             </button>

@@ -254,17 +254,18 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Mock Tests Coming Soon */}
-          <Card className="border-dashed border-gray-200">
+          {/* Mock Tests */}
+          <Card className="border-gray-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
                 Mock Tests
-                <Badge variant="secondary" className="text-[10px]">Coming Soon</Badge>
+                <Badge variant="p1" className="text-[10px]">Available</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0 text-center">
-              <FileText className="h-8 w-8 text-gray-200 mx-auto mb-2" />
-              <p className="text-sm text-gray-400">Full-length ICAI-pattern mock tests are being prepared.</p>
+              <FileText className="h-8 w-8 text-[var(--primary)] mx-auto mb-2" />
+              <p className="text-sm text-gray-500 mb-3">Full-length ICAI-pattern mock tests with analytics.</p>
+              <Link href="/mock-tests"><Button size="sm" className="w-full">Take a Mock Test</Button></Link>
             </CardContent>
           </Card>
 

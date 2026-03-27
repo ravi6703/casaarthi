@@ -1,48 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #3b82f6;
-  --primary: #2563eb;
+  --background: #FAFAF7;
+  --foreground: #1a2332;
+  --border: #e0e4de;
+  --input: #e0e4de;
+  --ring: #4A90A4;
+  --primary: #4A90A4;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
-  --destructive: #ef4444;
+  --secondary: #f0f4ee;
+  --secondary-foreground: #1a2332;
+  --muted: #f0f4ee;
+  --muted-foreground: #6b7a6e;
+  --accent: #D4A76A;
+  --accent-foreground: #1a2332;
+  --destructive: #c0392b;
   --card: #ffffff;
-  --card-foreground: #0f172a;
-  --radius: 0.5rem;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --card-foreground: #1a2332;
+  --radius: 0.625rem;
+  --success: #6dab71;
+  --warning: #d4a76a;
+  --danger: #c0392b;
+  --sage: #8BAF92;
+  --sage-light: #dce8de;
+  --teal-dark: #3a7487;
+  --amber-light: #f5e6cc;
 }
 
 .dark {
-  --background: #0f172a;
-  --foreground: #f1f5f9;
-  --border: #334155;
-  --input: #334155;
-  --ring: #3b82f6;
-  --primary: #3b82f6;
+  --background: #141e1f;
+  --foreground: #e8ede9;
+  --border: #2a3a35;
+  --input: #2a3a35;
+  --ring: #5ba8bd;
+  --primary: #5ba8bd;
   --primary-foreground: #ffffff;
-  --secondary: #1e293b;
-  --secondary-foreground: #f1f5f9;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
-  --accent-foreground: #f1f5f9;
-  --destructive: #ef4444;
-  --card: #1e293b;
-  --card-foreground: #f1f5f9;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --secondary: #1c2b26;
+  --secondary-foreground: #e8ede9;
+  --muted: #1c2b26;
+  --muted-foreground: #8fa896;
+  --accent: #d4a76a;
+  --accent-foreground: #e8ede9;
+  --destructive: #c0392b;
+  --card: #1c2b26;
+  --card-foreground: #e8ede9;
+  --success: #6dab71;
+  --warning: #d4a76a;
+  --danger: #c0392b;
+  --sage: #8BAF92;
+  --sage-light: #2a3a35;
+  --teal-dark: #3a7487;
+  --amber-light: #3d3225;
 }
 
 @theme inline {
