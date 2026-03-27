@@ -545,6 +545,29 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["discussion_replies"]["Row"]>;
         Relationships: [];
       };
+      blogs: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          excerpt: string;
+          meta_description: string;
+          keywords: string[];
+          content: string;
+          author: string;
+          read_time: string;
+          published_at: string;
+          updated_at: string;
+          is_published: boolean;
+          sort_order: number;
+        };
+        Insert: Omit<
+          Database["public"]["Tables"]["blogs"]["Row"],
+          "id" | "updated_at"
+        > & { id?: string; updated_at?: string };
+        Update: Partial<Database["public"]["Tables"]["blogs"]["Row"]>;
+        Relationships: [];
+      };
       discussion_votes: {
         Row: {
           user_id: string;
