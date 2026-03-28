@@ -202,19 +202,21 @@ export default async function PaperPage({
         </p>
         <div className="grid md:grid-cols-2 gap-6">
           {chapters.map((chapter, i) => (
-            <Link
+            <div
               key={chapter.id}
-              href={`/papers/${paper.slug}/${chapter.slug}`}
               className="bg-white rounded-xl border border-gray-200 p-6 hover:border-[var(--primary)] hover:shadow-lg transition-all group"
             >
-              <div className="flex items-start gap-3 mb-4">
+              <Link
+                href={`/papers/${paper.slug}/${chapter.slug}`}
+                className="flex items-start gap-3 mb-4"
+              >
                 <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-[var(--sage-light)] text-[var(--teal-dark)] flex items-center justify-center text-sm font-bold">
                   {i + 1}
                 </span>
                 <h3 className="font-bold text-gray-900 text-lg group-hover:text-[var(--primary)] transition-colors">
                   {chapter.name}
                 </h3>
-              </div>
+              </Link>
               <ul className="space-y-2 ml-11">
                 {(chapter.topics ?? []).map((topic: { id: string; name: string; slug: string }) => (
                   <li
@@ -227,14 +229,13 @@ export default async function PaperPage({
                     <Link
                       href={`/topics/${topic.slug}`}
                       className="hover:text-[var(--primary)] transition-colors"
-                      onClick={(e) => e.stopPropagation()}
                     >
                       {topic.name}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
