@@ -632,7 +632,7 @@ export default async function ComparisonPage({ params }: Props) {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: comparison.faqs.map((q: any) => ({
+    mainEntity: (comparison.faqs || []).map((q: any) => ({
       "@type": "Question",
       name: q.q,
       acceptedAnswer: {
@@ -734,15 +734,15 @@ export default async function ComparisonPage({ params }: Props) {
                     Criteria
                   </th>
                   <th className="text-left py-3 px-4 font-semibold text-[var(--primary)]">
-                    {Object.keys(comparison.comparison[0])[1]}
+                    {Object.keys(comparison.comparison?.[0] || {})[1]}
                   </th>
                   <th className="text-left py-3 px-4 font-semibold text-[var(--teal-dark)]">
-                    {Object.keys(comparison.comparison[0])[2]}
+                    {Object.keys(comparison.comparison?.[0] || {})[2]}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {comparison.comparison.map(
+                {(comparison.comparison || []).map(
                   (row: any, idx: number) => (
                     <tr
                       key={idx}
@@ -769,10 +769,10 @@ export default async function ComparisonPage({ params }: Props) {
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span className="text-green-600">✓</span> Advantages of{" "}
-              {Object.keys(comparison.comparison[0])[1]}
+              {Object.keys(comparison.comparison?.[0] || {})[1]}
             </h3>
             <ul className="space-y-3">
-              {comparison.prosCA.map((pro: string, idx: number) => (
+              {(comparison.prosCA || []).map((pro: string, idx: number) => (
                 <li key={idx} className="flex gap-3 text-gray-700">
                   <span className="text-green-600 font-bold flex-shrink-0">•</span>
                   <span>{pro}</span>
@@ -785,10 +785,10 @@ export default async function ComparisonPage({ params }: Props) {
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span className="text-red-600">✗</span> Disadvantages of{" "}
-              {Object.keys(comparison.comparison[0])[1]}
+              {Object.keys(comparison.comparison?.[0] || {})[1]}
             </h3>
             <ul className="space-y-3">
-              {comparison.consCA.map((con: string, idx: number) => (
+              {(comparison.consCA || []).map((con: string, idx: number) => (
                 <li key={idx} className="flex gap-3 text-gray-700">
                   <span className="text-red-600 font-bold flex-shrink-0">•</span>
                   <span>{con}</span>
@@ -801,10 +801,10 @@ export default async function ComparisonPage({ params }: Props) {
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span className="text-green-600">✓</span> Advantages of{" "}
-              {Object.keys(comparison.comparison[0])[2]}
+              {Object.keys(comparison.comparison?.[0] || {})[2]}
             </h3>
             <ul className="space-y-3">
-              {comparison.prosCMA.map((pro: string, idx: number) => (
+              {(comparison.prosCMA || []).map((pro: string, idx: number) => (
                 <li key={idx} className="flex gap-3 text-gray-700">
                   <span className="text-green-600 font-bold flex-shrink-0">•</span>
                   <span>{pro}</span>
@@ -817,10 +817,10 @@ export default async function ComparisonPage({ params }: Props) {
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span className="text-red-600">✗</span> Disadvantages of{" "}
-              {Object.keys(comparison.comparison[0])[2]}
+              {Object.keys(comparison.comparison?.[0] || {})[2]}
             </h3>
             <ul className="space-y-3">
-              {comparison.consCMA.map((con: string, idx: number) => (
+              {(comparison.consCMA || []).map((con: string, idx: number) => (
                 <li key={idx} className="flex gap-3 text-gray-700">
                   <span className="text-red-600 font-bold flex-shrink-0">•</span>
                   <span>{con}</span>
@@ -844,7 +844,7 @@ export default async function ComparisonPage({ params }: Props) {
             Frequently Asked Questions
           </h2>
           <div className="space-y-4">
-            {comparison.faqs.map((item: any, idx: number) => (
+            {(comparison.faqs || []).map((item: any, idx: number) => (
               <details
                 key={idx}
                 className="group border border-gray-200 rounded-lg hover:border-[var(--primary)] transition-colors"
