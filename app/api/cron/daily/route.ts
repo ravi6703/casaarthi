@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/types/supabase";
 import { generateCurrentAffairs, generateSEOBlog } from "@/lib/automation/content-generator";
 import { sendDailyReport } from "@/lib/automation/email-report";
 
@@ -11,7 +12,7 @@ import { sendDailyReport } from "@/lib/automation/email-report";
 
 // Supabase admin client (uses service role key for inserts)
 function getSupabase() {
-  return createClient(
+  return createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
@@ -38,7 +39,7 @@ function isAuthorized(request: NextRequest): boolean {
 }
 
 // Get the next sort_order for blogs
-async function getNextSortOrder(supabase: ReturnType<typeof createClient>): Promise<number> {
+async function getNextSortOrder(supabase: ReturnType<typeof getSupabase>): Promise<number> {
   const { data } = await supabase
     .from("blogs")
     .select("sort_order")
@@ -49,7 +50,7 @@ async function getNextSortOrder(supabase: ReturnType<typeof createClient>): Prom
 }
 
 // Check if a blog with similar slug already exists today
-async function blogExistsToday(supabase: ReturnType<typeof createClient>, slugPrefix: string): Promise<boolean> {
+async function blogExistsToday(supabase: ReturnType<typeof getSupabase>, slugPrefix: string): Promise<boolean> {
   const today = new Date().toISOString().split("T")[0];
   const { data } = await supabase
     .from("blogs")
