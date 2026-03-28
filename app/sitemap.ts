@@ -1,10 +1,20 @@
 import type { MetadataRoute } from "next";
-import { getAllPapers, getAllBlogs } from "@/lib/data";
+import {
+  getAllPapers,
+  getAllBlogs,
+  getAllTopicsWithMeta,
+  getAllChaptersWithMeta,
+} from "@/lib/data";
 
 const SITE_URL = "https://www.casaarthi.in";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [papers, blogs] = await Promise.all([getAllPapers(), getAllBlogs()]);
+  const [papers, blogs, topics, chapters] = await Promise.all([
+    getAllPapers(),
+    getAllBlogs(),
+    getAllTopicsWithMeta(),
+    getAllChaptersWithMeta(),
+  ]);
 
   return [
     {
@@ -31,6 +41,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/faq`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
     ...papers.map((p) => ({
       url: `${SITE_URL}/papers/${p.slug}`,
       lastModified: new Date(),
@@ -48,6 +64,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(post.published_at),
       changeFrequency: "monthly" as const,
       priority: 0.8,
+    })),
+    ...chapters
+      .map((c) => {
+        const paperSlug = Array.isArray(c.papers)
+          ? c.papers[0]?.slug
+          : c.papers?.slug;
+        return {
+          url: `${SITE_URL}/papers/${paperSlug}/${c.slug}`,
+          lastModified: new Date(),
+          changeFrequency: "monthly" as const,
+          priority: 0.75,
+        };
+      })
+      .filter((item) => item.url.includes("/papers/") && !item.url.includes("undefined")),
+    ...topics.map((t) => ({
+      url: `${SITE_URL}/topics/${t.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
     {
       url: `${SITE_URL}/terms`,
