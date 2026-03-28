@@ -1,9 +1,3 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  robots: { index: false, follow: false },
-};
-
 "use client";
 import { useState, useEffect } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
