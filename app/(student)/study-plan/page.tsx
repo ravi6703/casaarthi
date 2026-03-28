@@ -23,6 +23,25 @@ export default async function StudyPlanPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  // Check if diagnostic is completed — redirect if not
+  const { data: profileCheck } = await supabase
+    .from("student_profiles")
+    .select("diagnostic_completed_at, study_plan_created_at")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!profileCheck?.diagnostic_completed_at) {
+    redirect("/diagnostic");
+  }
+
+  // Mark study_plan_created_at on first visit
+  if (!profileCheck?.study_plan_created_at) {
+    await supabase
+      .from("student_profiles")
+      .update({ study_plan_created_at: new Date().toISOString() })
+      .eq("user_id", user.id);
+  }
+
   const [profileRes, progressRes, topicsRes, scoresRes, chaptersRes] = await Promise.all([
     supabase.from("student_profiles").select("*").eq("user_id", user.id).single(),
     supabase.from("topic_progress").select("topic_id, total_attempted, total_correct, accuracy_rate, last_practiced_at").eq("user_id", user.id),

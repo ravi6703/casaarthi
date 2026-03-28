@@ -64,6 +64,7 @@ export default async function DashboardPage() {
     redirect("/diagnostic");
   }
 
+  const diagnosticPending = !profile.diagnostic_completed_at;
   const overallScore = scores?.overall_score ?? 0;
   const paperScores: Record<string, number> = (scores?.paper_scores as Record<string, number>) ?? {};
 
@@ -108,6 +109,26 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Diagnostic Pending Banner */}
+      {diagnosticPending && (
+        <Card className="border-yellow-200 bg-gradient-to-r from-yellow-50 to-amber-50">
+          <CardContent className="p-5 flex items-center justify-between">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-6 w-6 text-yellow-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="font-bold text-gray-900">Complete your diagnostic assessment</div>
+                <p className="text-sm text-gray-600 mt-0.5">Take a quick diagnostic test to get your personalised study plan and track your readiness across all 4 papers.</p>
+              </div>
+            </div>
+            <Link href="/diagnostic">
+              <Button size="sm" className="flex-shrink-0">
+                Start Now <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Readiness Score Banner */}
       <Card className="border-0 bg-gradient-to-r from-[var(--primary)] to-[var(--teal-dark)] text-white">

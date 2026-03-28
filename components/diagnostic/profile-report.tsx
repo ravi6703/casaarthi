@@ -249,13 +249,16 @@ export function ProfileReport({ userId }: Props) {
       {/* CTA */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
         <CheckCircle className="h-10 w-10 text-green-500 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">You are all set to start practicing!</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-2">Your personalised study plan is ready!</h2>
         <p className="text-gray-600 text-sm mb-6">
-          Your profile will automatically update as you practice. Retake the diagnostic in 30 days to measure your growth.
+          Based on your diagnostic results, we have created a study roadmap tailored to your strengths and gaps. Retake the diagnostic in 30 days to measure your growth.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link href="/study-plan">
+            <Button size="lg">View My Study Plan <ArrowRight className="h-4 w-4 ml-1" /></Button>
+          </Link>
           <Link href="/practice">
-            <Button size="lg">Start Practicing Now <ArrowRight className="h-4 w-4 ml-1" /></Button>
+            <Button variant="outline" size="lg">Start Practicing</Button>
           </Link>
           <Link href="/dashboard">
             <Button variant="outline" size="lg">Go to Dashboard</Button>
