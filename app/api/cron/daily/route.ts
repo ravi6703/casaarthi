@@ -3,12 +3,15 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/supabase";
 import { generateCurrentAffairs, generateSEOBlog } from "@/lib/automation/content-generator";
 import { sendDailyReport } from "@/lib/automation/email-report";
+import { notifySearchEngines } from "@/lib/automation/google-indexing";
 
 /* ------------------------------------------------------------------ */
-/*  Master Daily Cron Handler                                         */
+/*  Master Daily Cron Handler                                          */
 /*  Triggered by Vercel Cron at 6:00 AM IST (00:30 UTC) every day    */
 /*  Runs entirely on Vercel servers — no laptop needed                */
 /* ------------------------------------------------------------------ */
+
+const SITE_URL = "https://www.casaarthi.in";
 
 // Supabase admin client (uses service role key for inserts)
 function getSupabase() {
@@ -82,6 +85,7 @@ export async function GET(request: NextRequest) {
   const errors: string[] = [];
   let currentAffairsResult: { title: string; slug: string } | null = null;
   let seoBlogResult: { title: string; slug: string } | null = null;
+  const newUrls: string[] = [];
 
   // Skip on Sundays (give students a break, save API costs)
   const dayOfWeek = new Date().getDay();
@@ -110,7 +114,6 @@ export async function GET(request: NextRequest) {
     const nextOrder = await getNextSortOrder(supabase);
 
     // Check for duplicate
-    const todayStr = new Date().toISOString().split("T")[0];
     const exists = await blogExistsToday(supabase, "current-affairs");
     if (exists) {
       errors.push("Current affairs post already exists for today — skipped");
@@ -134,6 +137,7 @@ export async function GET(request: NextRequest) {
       }
 
       currentAffairsResult = { title: post.title, slug: post.slug };
+      newUrls.push(`${SITE_URL}/blog/${post.slug}`);
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -153,7 +157,6 @@ export async function GET(request: NextRequest) {
     const nextOrder = await getNextSortOrder(supabase);
 
     // Check for duplicate
-    const slugBase = post.slug.substring(0, 30);
     const { data: existing } = await supabase
       .from("blogs")
       .select("id")
@@ -182,6 +185,7 @@ export async function GET(request: NextRequest) {
       }
 
       seoBlogResult = { title: post.title, slug: post.slug };
+      newUrls.push(`${SITE_URL}/blog/${post.slug}`);
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -190,7 +194,34 @@ export async function GET(request: NextRequest) {
   }
 
   /* ---------------------------------------------------------------- */
-  /*  Task 3: Count total content for stats                           */
+  /*  Task 3: Notify search engines about new URLs                    */
+  /* ---------------------------------------------------------------- */
+  if (newUrls.length > 0) {
+    try {
+      // Also add sitemap and blog listing page for re-crawl
+      const urlsToSubmit = [
+        ...newUrls,
+        `${SITE_URL}/blog`,     // Blog listing updated
+        `${SITE_URL}/sitemap.xml`, // Sitemap updated
+      ];
+
+      const indexingResult = await notifySearchEngines(urlsToSubmit);
+      console.log("Search engine notifications:", JSON.stringify(indexingResult));
+
+      if (indexingResult.google.failed.length > 0) {
+        errors.push(
+          `Google indexing failed for ${indexingResult.google.failed.length} URLs`
+        );
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      errors.push(`Search engine notification error: ${msg}`);
+      console.error("Indexing notification error:", err);
+    }
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Task 4: Count total content for stats                           */
   /* ---------------------------------------------------------------- */
   let totalBlogs = 0;
   try {
@@ -204,7 +235,7 @@ export async function GET(request: NextRequest) {
   }
 
   /* ---------------------------------------------------------------- */
-  /*  Task 4: Send daily report email                                 */
+  /*  Task 5: Send daily report email                                 */
   /* ---------------------------------------------------------------- */
   const reportData = {
     date: today,
@@ -224,6 +255,7 @@ export async function GET(request: NextRequest) {
     currentAffairs: currentAffairsResult,
     seoBlog: seoBlogResult,
     totalBlogs,
+    newUrlsSubmitted: newUrls.length,
     errors,
     executionTimeMs: Date.now() - startTime,
   });
