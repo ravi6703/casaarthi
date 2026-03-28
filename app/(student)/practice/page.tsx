@@ -12,10 +12,10 @@ import { MicroChallengeCards } from "@/components/practice/micro-challenge-card"
 export const metadata = { title: "Practice" };
 
 const PAPERS = [
-  { id: 1, code: "P1", name: "Principles & Practice of Accounting", color: "blue",   emoji: "📊" },
-  { id: 2, code: "P2", name: "Business Laws & Correspondence",      color: "purple", emoji: "⚖️" },
-  { id: 3, code: "P3", name: "Business Mathematics & Statistics",   color: "green",  emoji: "🔢" },
-  { id: 4, code: "P4", name: "Business Economics & Commerce",       color: "orange", emoji: "📈" },
+  { id: 1, code: "P1", name: "Accounting (Subjective)",                    color: "blue",   emoji: "📊" },
+  { id: 2, code: "P2", name: "Business Laws (Subjective)",                 color: "purple", emoji: "⚖️" },
+  { id: 3, code: "P3", name: "Quantitative Aptitude (Objective, MCQ)",     color: "green",  emoji: "🔢" },
+  { id: 4, code: "P4", name: "Business Economics (Objective, MCQ)",        color: "orange", emoji: "📈" },
 ];
 
 const PAPER_COLORS: Record<string, string> = {
@@ -36,10 +36,10 @@ export default async function PracticePage() {
     .select("topic_id, total_attempted, accuracy_rate, last_practiced_at")
     .eq("user_id", user.id);
 
-  // Fetch topics with question counts
+  // Fetch topics with question counts (include chapter_id for grouping)
   const { data: topicsData } = await supabase
     .from("topics")
-    .select("id, paper_id, name, slug, exam_weightage")
+    .select("id, paper_id, chapter_id, name, slug, exam_weightage")
     .order("paper_id")
     .order("sort_order");
 
@@ -108,7 +108,8 @@ export default async function PracticePage() {
       {/* Quick Start Filter */}
       <QuickStartFilter
         papers={PAPERS.map((p) => ({ id: p.id, code: p.code, name: p.name, emoji: p.emoji }))}
-        topics={topics.map((t: any) => ({ id: t.id, paper_id: t.paper_id, name: t.name, questionCount: qCounts[t.id] || 0 }))}
+        topics={topics.map((t: any) => ({ id: t.id, paper_id: t.paper_id, chapter_id: t.chapter_id ?? null, name: t.name, questionCount: qCounts[t.id] || 0 }))}
+        chapters={chapters.map((c: any) => ({ id: c.id, paper_id: c.paper_id, chapter_number: c.chapter_number, name: c.name }))}
       />
 
       {/* Micro-Challenges */}
