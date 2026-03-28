@@ -6,20 +6,8 @@
   "regions": ["bom1"],
   "crons": [
     {
-      "path": "/api/cron/daily-progress",
-      "schedule": "30 2 * * *"
-    },
-    {
-      "path": "/api/cron/daily-challenge",
-      "schedule": "30 18 * * *"
-    },
-    {
-      "path": "/api/cron/weekly-report",
-      "schedule": "30 12 * * 0"
-    },
-    {
-      "path": "/api/cron/study-reminder",
-      "schedule": "0 13 * * *"
+      "path": "/api/cron/daily",
+      "schedule": "30 0 * * *"
     }
   ],
   "headers": [
