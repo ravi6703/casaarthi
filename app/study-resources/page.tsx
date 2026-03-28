@@ -29,13 +29,13 @@ export const metadata: Metadata = {
     "CA Saarthi free resources",
   ],
   alternates: {
-    canonical: "/resources",
+    canonical: "/study-resources",
   },
   openGraph: {
     title: "Free CA Foundation Study Material & Resources 2026 | CA Saarthi",
     description:
       "Complete free CA Foundation resources: 2,500+ practice questions, paper-wise study guides, topic notes, and exam preparation tools. 100% free access.",
-    url: "https://www.casaarthi.in/resources",
+    url: "https://www.casaarthi.in/study-resources",
     siteName: "CA Saarthi",
     type: "website",
   },
@@ -49,7 +49,7 @@ export default async function ResourcesPage() {
     "@type": "CollectionPage",
     name: "Free CA Foundation Study Resources",
     description: "Free CA Foundation study material, notes, and practice questions",
-    url: "https://www.casaarthi.in/resources",
+    url: "https://www.casaarthi.in/study-resources",
   };
 
   return (
@@ -467,7 +467,7 @@ export default async function ResourcesPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/resources" className="hover:text-white transition-colors">
+                  <Link href="/study-resources" className="hover:text-white transition-colors">
                     Free Resources
                   </Link>
                 </li>

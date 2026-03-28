@@ -267,7 +267,7 @@ export default async function DailyQuizPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/resources" className="hover:text-white transition-colors">
+                  <Link href="/study-resources" className="hover:text-white transition-colors">
                     Free Resources
                   </Link>
                 </li>
