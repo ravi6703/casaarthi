@@ -10,7 +10,7 @@ export async function updateSession(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL !== "your_supabase_project_url";
 
   const pathname = request.nextUrl.pathname;
-  const publicPaths = ["/login", "/register", "/verify", "/auth", "/blog", "/papers", "/terms", "/privacy", "/not-found", "/api/auth", "/api/cron", "/diagnostic"];
+  const publicPaths = ["/login", "/register", "/verify", "/auth", "/blog", "/papers", "/terms", "/privacy", "/not-found", "/api/auth", "/api/cron", "/diagnostic", "/faq", "/topics", "/daily-quiz", "/resources", "/compare"];
   const isPublic = pathname === "/" || publicPaths.some((p) => pathname === p || pathname.startsWith(p + "/"));
 
   // If Supabase not configured, redirect protected routes to /login (avoid server crash)

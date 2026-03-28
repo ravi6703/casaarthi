@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FAQAccordion } from "@/components/faq-accordion";
@@ -9,13 +9,11 @@ import {
   ChevronRight, TrendingUp, Phone, Mail, MessageCircle,
 } from "lucide-react";
 
+export const metadata: Metadata = {
+  robots: { index: true, follow: true },
+};
+
 export default async function HomePage() {
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL !== "your_supabase_project_url") {
-    const { createClient } = await import("@/lib/supabase/server");
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) redirect("/dashboard");
-  }
 
   const [stats, blogPosts] = await Promise.all([
     getPlatformStats(),
