@@ -20,7 +20,7 @@ const PAPERS = [
 ];
 
 const PAPER_COLORS: Record<string, string> = {
-  blue:   "bg-blue-100 text-blue-800 border-blue-200",
+  blue:   "bg-[var(--sage-light)] text-[var(--primary)] border-[var(--border)]",
   purple: "bg-purple-100 text-purple-800 border-purple-200",
   green:  "bg-green-100 text-green-800 border-green-200",
   orange: "bg-orange-100 text-orange-800 border-orange-200",
@@ -99,27 +99,27 @@ export default async function DashboardPage() {
               </div>
             </div>
           )}
-          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2">
+          <div className="flex items-center gap-2 bg-[var(--sage-light)] border border-[var(--border)] rounded-xl px-4 py-2">
             <span className="text-2xl">📅</span>
             <div>
-              <div className="font-bold text-blue-700">Day {studyDay}</div>
-              <div className="text-xs text-blue-600">{daysToExam}d to exam</div>
+              <div className="font-bold text-[var(--teal-dark)]">Day {studyDay}</div>
+              <div className="text-xs text-[var(--primary)]">{daysToExam}d to exam</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Readiness Score Banner */}
-      <Card className="border-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+      <Card className="border-0 bg-gradient-to-r from-[var(--primary)] to-[var(--teal-dark)] text-white">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">Exam Readiness Score</p>
+              <p className="text-white text-opacity-90 text-sm font-medium">Exam Readiness Score</p>
               <div className="flex items-end gap-3 mt-1">
                 <span className="text-5xl font-bold">{overallScore}</span>
-                <span className="text-blue-200 text-lg mb-1">/100</span>
+                <span className="text-white text-opacity-80 text-lg mb-1">/100</span>
               </div>
-              <p className="text-blue-200 text-sm mt-1">
+              <p className="text-white text-opacity-80 text-sm mt-1">
                 {overallScore >= 70 ? "Excellent — you are on track to pass!" :
                  overallScore >= 50 ? "Good progress — keep pushing!" :
                  overallScore >= 30 ? "Getting there — focus on weak areas" :
@@ -169,7 +169,7 @@ export default async function DashboardPage() {
               {recommendations.map((rec: any) => {
                 const content = rec.content as Record<string, string>;
                 return (
-                  <Card key={rec.id} className="hover:shadow-md transition-shadow border-l-4 border-l-blue-500">
+                  <Card key={rec.id} className="hover:shadow-md transition-shadow border-l-4 border-l-[var(--primary)]">
                     <CardContent className="p-4 flex items-center justify-between">
                       <div className="flex items-start gap-3">
                         <span className="text-xl">{getRecIcon(rec.type)}</span>
@@ -203,10 +203,10 @@ export default async function DashboardPage() {
           {/* Quick Actions */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { href: "/practice", icon: <BookOpen className="h-5 w-5 text-blue-500" />, label: "Practice", sub: "Topic drill-down" },
+              { href: "/practice", icon: <BookOpen className="h-5 w-5 text-[var(--primary)]" />, label: "Practice", sub: "Topic drill-down" },
               { href: "/study-plan", icon: <CalendarDays className="h-5 w-5 text-teal-500" />, label: "Study Plan", sub: "Your daily roadmap" },
               { href: "/learn", icon: <FileText className="h-5 w-5 text-purple-500" />, label: "AI Explainer", sub: "Concept deep-dives" },
-              { href: "/analytics", icon: <BarChart3 className="h-5 w-5 text-indigo-500" />, label: "Analytics", sub: "Charts & insights" },
+              { href: "/analytics", icon: <BarChart3 className="h-5 w-5 text-[var(--primary)]" />, label: "Analytics", sub: "Charts & insights" },
             ].map((action) => (
               <Link key={action.href} href={action.href}>
                 <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">

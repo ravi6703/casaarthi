@@ -409,7 +409,7 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => toggleBookmark(q.id)}
-                className={`p-1.5 rounded-lg transition-colors ${isBookmarked ? "text-blue-500 bg-blue-50" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`}
+                className={`p-1.5 rounded-lg transition-colors ${isBookmarked ? "text-[var(--primary)] bg-[var(--sage-light)]" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`}
                 title={isBookmarked ? "Remove bookmark" : "Bookmark"}
               >
                 {isBookmarked ? <BookmarkCheck className="h-4 w-4" /> : <BookmarkPlus className="h-4 w-4" />}
@@ -441,7 +441,7 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
                   else if (isSelected && !isCorrectOpt) cls = "border-red-400 bg-red-50 text-red-900";
                   else cls = "border-gray-100 bg-gray-50 text-gray-500";
                 } else if (isSelected) {
-                  cls = "border-blue-500 bg-blue-50 text-blue-900";
+                  cls = "border-[var(--primary)] bg-[var(--sage-light)] text-[var(--teal-dark)]";
                 }
 
                 return (
@@ -482,7 +482,7 @@ export function PracticeSession({ userId, questions: rawQuestions, sessionType, 
           {/* Explanation */}
           {isAnswered && q.question_type === "mcq" && (
             <div className="mt-5 space-y-3 animate-slide-up">
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+              <div className="p-4 bg-[var(--sage-light)] border border-[var(--border)] rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   {answer.isCorrect ? (
                     <><CheckCircle2 className="h-4 w-4 text-green-600" /><span className="text-sm font-bold text-green-700">Correct!</span></>

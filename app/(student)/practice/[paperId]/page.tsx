@@ -119,7 +119,7 @@ export default async function PaperDetailPage({ params }: { params: Promise<{ pa
                 {/* Chapter Header */}
                 <div className="p-4 bg-gray-50 border-b flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 text-sm font-bold">
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--sage-light)] text-[var(--teal-dark)] text-sm font-bold">
                       {chapter.chapter_number}
                     </span>
                     <div>
@@ -151,7 +151,7 @@ export default async function PaperDetailPage({ params }: { params: Promise<{ pa
                           <div className="flex-1 min-w-0">
                             <Link
                               href={topicQs > 0 ? `/practice/session?type=topic&topicId=${topic.id}` : "#"}
-                              className={`font-medium text-sm ${topicQs > 0 ? "text-gray-900 hover:text-blue-600" : "text-gray-400"} transition-colors flex items-center gap-2`}
+                              className={`font-medium text-sm ${topicQs > 0 ? "text-gray-900 hover:text-[var(--primary)]" : "text-gray-400"} transition-colors flex items-center gap-2`}
                             >
                               <BookOpen className="h-4 w-4 flex-shrink-0" />
                               <span className="truncate">{topic.name}</span>
@@ -192,7 +192,7 @@ export default async function PaperDetailPage({ params }: { params: Promise<{ pa
                             ) : topicQs > 0 ? (
                               <Link
                                 href={`/practice/session?type=topic&topicId=${topic.id}`}
-                                className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                                className="text-xs text-[var(--primary)] hover:text-[var(--teal-dark)] font-medium"
                               >
                                 Start
                               </Link>

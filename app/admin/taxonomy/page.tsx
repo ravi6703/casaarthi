@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 export const metadata = { title: "Taxonomy — Admin" };
 
 const PAPER_COLORS: Record<number, string> = {
-  1: "bg-blue-100 text-blue-700",
+  1: "bg-[var(--sage-light)] text-[var(--teal-dark)]",
   2: "bg-purple-100 text-purple-700",
   3: "bg-green-100 text-green-700",
   4: "bg-orange-100 text-orange-700",

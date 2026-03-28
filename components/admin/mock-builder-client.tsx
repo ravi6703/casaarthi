@@ -182,7 +182,7 @@ export function MockBuilderClient({ papers, topics, existingMocks }: {
                 <select
                   value={selectedPaper}
                   onChange={(e) => { setSelectedPaper(Number(e.target.value)); setSelected([]); setSearchResults([]); }}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 >
                   {papers.map((p) => <option key={p.id} value={p.id}>{p.code} — {p.name}</option>)}
                 </select>
@@ -192,7 +192,7 @@ export function MockBuilderClient({ papers, topics, existingMocks }: {
                 <select
                   value={testNumber}
                   onChange={(e) => setTestNumber(Number(e.target.value))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 >
                   {MOCK_COUNTS.map((n) => <option key={n} value={n}>Mock {n}</option>)}
                 </select>
@@ -203,7 +203,7 @@ export function MockBuilderClient({ papers, topics, existingMocks }: {
                   type="number"
                   value={duration}
                   onChange={(e) => setDuration(Number(e.target.value))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </div>
               <div className="flex items-end pb-2">
@@ -232,7 +232,7 @@ export function MockBuilderClient({ papers, topics, existingMocks }: {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="Search question text..."
-                className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
               <Button onClick={handleSearch} loading={searching} size="sm">
                 <Search className="h-4 w-4" />
@@ -273,11 +273,11 @@ export function MockBuilderClient({ papers, topics, existingMocks }: {
                     key={q.id}
                     onClick={() => toggleQuestion(q)}
                     className={`flex items-start gap-2 p-2.5 rounded-lg cursor-pointer border transition-colors ${
-                      isSelected ? "border-blue-400 bg-blue-50" : "border-gray-100 hover:bg-gray-50"
+                      isSelected ? "border-[var(--sage)] bg-[var(--sage-light)]" : "border-gray-100 hover:bg-gray-50"
                     }`}
                   >
                     {isSelected
-                      ? <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                      ? <CheckCircle className="h-4 w-4 text-[var(--primary)] flex-shrink-0 mt-0.5" />
                       : <Plus className="h-4 w-4 text-gray-400 flex-shrink-0 mt-0.5" />
                     }
                     <div className="text-xs">

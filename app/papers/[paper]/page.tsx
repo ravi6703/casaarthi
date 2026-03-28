@@ -84,18 +84,32 @@ export default async function PaperPage({
     },
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.casaarthi.in" },
+      { "@type": "ListItem", "position": 2, "name": "Papers", "item": "https://www.casaarthi.in/papers" },
+      { "@type": "ListItem", "position": 3, "name": paper.name, "item": `https://www.casaarthi.in/papers/${paper.slug}` }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--background)] via-white to-[var(--background)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Nav */}
       <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white font-bold text-sm">
               CA
             </div>
             <span className="font-bold text-lg text-gray-900">CA Saarthi</span>
@@ -116,13 +130,13 @@ export default async function PaperPage({
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 py-4">
         <nav className="text-sm text-gray-500">
-          <Link href="/" className="hover:text-blue-600 transition-colors">
+          <Link href="/" className="hover:text-[var(--primary)] transition-colors">
             Home
           </Link>
           <span className="mx-2">/</span>
           <Link
             href="/papers"
-            className="hover:text-blue-600 transition-colors"
+            className="hover:text-[var(--primary)] transition-colors"
           >
             Papers
           </Link>
@@ -133,7 +147,7 @@ export default async function PaperPage({
 
       {/* Header */}
       <section className="max-w-6xl mx-auto px-4 pt-8 pb-12">
-        <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1.5 text-sm text-blue-700 mb-6">
+        <div className="inline-flex items-center gap-2 bg-[var(--sage-light)] border border-[var(--border)] rounded-full px-4 py-1.5 text-sm text-[var(--teal-dark)] mb-6">
           Paper {paper.sort_order} of 4
         </div>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
@@ -166,7 +180,7 @@ export default async function PaperPage({
                 key={item.label}
                 className="bg-gray-50 rounded-xl p-4 text-center"
               >
-                <div className="text-2xl font-bold text-blue-600 mb-1">
+                <div className="text-2xl font-bold text-[var(--primary)] mb-1">
                   {item.value}
                 </div>
                 <div className="text-xs font-medium text-gray-600">
@@ -193,7 +207,7 @@ export default async function PaperPage({
               className="bg-white rounded-xl border border-gray-200 p-6"
             >
               <div className="flex items-start gap-3 mb-4">
-                <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold">
+                <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-[var(--sage-light)] text-[var(--teal-dark)] flex items-center justify-center text-sm font-bold">
                   {i + 1}
                 </span>
                 <h3 className="font-bold text-gray-900 text-lg">
@@ -206,7 +220,7 @@ export default async function PaperPage({
                     key={topic.id}
                     className="text-sm text-gray-600 flex items-start gap-2"
                   >
-                    <span className="text-blue-400 mt-1 flex-shrink-0">
+                    <span className="text-[var(--sage)] mt-1 flex-shrink-0">
                       &bull;
                     </span>
                     {topic.name}
@@ -219,12 +233,12 @@ export default async function PaperPage({
       </section>
 
       {/* CTA */}
-      <section className="bg-blue-600 py-16">
+      <section className="bg-[var(--primary)] py-16">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Start preparing for Paper {paper.sort_order} today
           </h2>
-          <p className="text-blue-100 mb-8 text-lg">
+          <p className="text-white text-opacity-90 mb-8 text-lg">
             Get access to{" "}
             2,500+ practice
             questions, 10 full-length mock tests, and a personalised study plan
@@ -234,7 +248,7 @@ export default async function PaperPage({
             <Link href="/register">
               <Button
                 size="lg"
-                className="w-full sm:w-auto px-8 bg-white text-blue-600 hover:bg-blue-50"
+                className="w-full sm:w-auto px-8 bg-white text-[var(--primary)] hover:bg-[var(--sage-light)]"
               >
                 Get Started Free
               </Button>
@@ -243,7 +257,7 @@ export default async function PaperPage({
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto px-8 border-white text-white hover:bg-blue-700"
+                className="w-full sm:w-auto px-8 border-white text-white hover:bg-[var(--teal-dark)]"
               >
                 View All Papers
               </Button>
@@ -259,7 +273,7 @@ export default async function PaperPage({
             {/* Brand */}
             <div className="md:col-span-1">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white font-bold text-sm">
                   CA
                 </div>
                 <span className="font-bold text-lg text-white">

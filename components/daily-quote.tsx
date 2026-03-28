@@ -29,7 +29,7 @@ export function DailyQuote() {
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={handleDismiss} />
 
       {/* Card */}
-      <div className="relative w-full max-w-md bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-md bg-gradient-to-br from-[var(--primary)] via-[var(--primary)] to-purple-700 rounded-2xl shadow-2xl overflow-hidden">
         {/* Close */}
         <button
           onClick={handleDismiss}
@@ -52,12 +52,12 @@ export function DailyQuote() {
           </p>
 
           {/* Author */}
-          <p className="text-blue-200 text-sm font-medium">— {quote.author}</p>
+          <p className="text-white text-opacity-80 text-sm font-medium">— {quote.author}</p>
 
           {/* CTA */}
           <button
             onClick={handleDismiss}
-            className="mt-8 w-full bg-white text-blue-700 font-bold py-3 px-6 rounded-xl hover:bg-blue-50 transition-colors text-sm"
+            className="mt-8 w-full bg-white text-[var(--teal-dark)] font-bold py-3 px-6 rounded-xl hover:bg-[var(--sage-light)] transition-colors text-sm"
           >
             Let&apos;s Go! Start Studying 🚀
           </button>

@@ -57,7 +57,7 @@ export function MindMapViewer({ code }: Props) {
     <div className="bg-white rounded-xl border border-gray-200 p-4 min-h-[200px] relative">
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-xl z-10">
-          <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-[var(--primary)]" />
         </div>
       )}
       {error && (

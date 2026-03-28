@@ -19,7 +19,7 @@ const PAPERS = [
 ];
 
 const PAPER_COLORS: Record<string, string> = {
-  blue:   "border-l-blue-500 hover:border-blue-400",
+  blue:   "border-l-[var(--primary)] hover:border-[var(--sage)]",
   purple: "border-l-purple-500 hover:border-purple-400",
   green:  "border-l-green-500 hover:border-green-400",
   orange: "border-l-orange-500 hover:border-orange-400",
@@ -90,7 +90,7 @@ export default async function PracticePage() {
   }).sort((a: any, b: any) => (progressMap[a.id]?.accuracy_rate ?? 0) - (progressMap[b.id]?.accuracy_rate ?? 0));
 
   const SESSION_TYPES = [
-    { type: "topic",    label: "Topic Practice",     icon: <BookOpen className="h-5 w-5 text-blue-500" />,   desc: "Drill down on a specific topic" },
+    { type: "topic",    label: "Topic Practice",     icon: <BookOpen className="h-5 w-5 text-[var(--primary)]" />,   desc: "Drill down on a specific topic" },
     { type: "mixed",    label: "Mixed Practice",      icon: <Zap className="h-5 w-5 text-yellow-500" />,     desc: "Questions across all topics" },
     { type: "weak_area",label: "Weak Area Focus",     icon: <Target className="h-5 w-5 text-red-500" />,     desc: "AI-selected from your weakest topics" },
     { type: "revision", label: "Revision Mode",       icon: <RefreshCw className="h-5 w-5 text-green-500" />,desc: `${revisionTopics.length} topics due for revision` },
@@ -125,7 +125,7 @@ export default async function PracticePage() {
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5">{st.icon}</div>
                     <div>
-                      <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">{st.label}</div>
+                      <div className="font-semibold text-gray-900 group-hover:text-[var(--primary)] transition-colors">{st.label}</div>
                       <div className="text-sm text-gray-500 mt-0.5">{st.desc}</div>
                     </div>
                   </div>
@@ -184,7 +184,7 @@ export default async function PracticePage() {
                         </span>
                       ))}
                       {paperChapters.length > 4 && (
-                        <span className="inline-block px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700">
+                        <span className="inline-block px-2 py-1 rounded-md text-xs font-medium bg-[var(--sage-light)] text-[var(--teal-dark)]">
                           +{paperChapters.length - 4} more →
                         </span>
                       )}
@@ -199,16 +199,16 @@ export default async function PracticePage() {
 
       {/* Previous Year Papers */}
       <Link href="/practice/previous-years">
-        <Card className="hover:shadow-md transition-all cursor-pointer border-indigo-200 bg-indigo-50/50">
+        <Card className="hover:shadow-md transition-all cursor-pointer border-[var(--border)] bg-[var(--background)]/50">
           <CardContent className="p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
-              <FileText className="h-6 w-6 text-indigo-600" />
+            <div className="w-12 h-12 rounded-full bg-[var(--sage-light)] flex items-center justify-center">
+              <FileText className="h-6 w-6 text-[var(--primary)]" />
             </div>
             <div className="flex-1">
               <div className="font-semibold text-gray-900">Previous Year Papers</div>
               <div className="text-sm text-gray-500">Practice with actual ICAI exam questions organized by year</div>
             </div>
-            <span className="text-indigo-600 font-medium text-sm">Browse →</span>
+            <span className="text-[var(--primary)] font-medium text-sm">Browse →</span>
           </CardContent>
         </Card>
       </Link>

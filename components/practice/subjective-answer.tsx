@@ -31,7 +31,7 @@ interface Props {
 
 const GRADE_COLORS: Record<string, string> = {
   "Excellent": "bg-green-100 text-green-800 border-green-300",
-  "Good": "bg-blue-100 text-blue-800 border-blue-300",
+  "Good": "bg-[var(--sage-light)] text-[var(--teal-dark)] border-[var(--border)]00",
   "Satisfactory": "bg-yellow-100 text-yellow-800 border-yellow-300",
   "Needs Improvement": "bg-orange-100 text-orange-800 border-orange-300",
   "Poor": "bg-red-100 text-red-800 border-red-300",
@@ -67,7 +67,7 @@ export function SubjectiveAnswer({ questionId, maxMarks, modelAnswer, onSubmit, 
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           placeholder="Type your answer here... Write as you would in the actual CA Foundation exam. Include all relevant points, sections, and explanations."
-          className="w-full min-h-[200px] p-4 rounded-xl border-2 border-gray-200 bg-white text-sm text-gray-900 leading-relaxed focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none resize-y placeholder:text-gray-400"
+          className="w-full min-h-[200px] p-4 rounded-xl border-2 border-gray-200 bg-white text-sm text-gray-900 leading-relaxed focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] outline-none resize-y placeholder:text-gray-400"
         />
         <div className="flex items-center justify-between">
           <p className="text-xs text-gray-500">
@@ -167,7 +167,7 @@ export function SubjectiveAnswer({ questionId, maxMarks, modelAnswer, onSubmit, 
       <Card>
         <CardContent className="p-4">
           <h4 className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-blue-500" />
+            <CheckCircle2 className="h-4 w-4 text-[var(--primary)]" />
             AI Feedback
           </h4>
           <p className="text-sm text-gray-700 leading-relaxed">{feedback}</p>
@@ -199,14 +199,14 @@ export function SubjectiveAnswer({ questionId, maxMarks, modelAnswer, onSubmit, 
         <div>
           <button
             onClick={() => setShowModelAnswer(!showModelAnswer)}
-            className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+            className="flex items-center gap-2 text-sm font-medium text-[var(--primary)] hover:text-[var(--teal-dark)] transition-colors"
           >
             <BookOpen className="h-4 w-4" />
             {showModelAnswer ? "Hide" : "View"} Model Answer
             {showModelAnswer ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
           {showModelAnswer && (
-            <Card className="mt-2 border-blue-200">
+            <Card className="mt-2 border-[var(--border)]">
               <CardContent className="p-4">
                 <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{modelAnswer}</p>
               </CardContent>

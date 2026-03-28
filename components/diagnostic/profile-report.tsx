@@ -48,7 +48,7 @@ export function ProfileReport({ userId }: Props) {
   if (loading) {
     return (
       <div className="text-center py-20">
-        <div className="inline-block w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
+        <div className="inline-block w-10 h-10 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mb-4" />
         <h2 className="text-xl font-bold text-gray-900 mb-2">Analysing your performance...</h2>
         <p className="text-gray-500">Building your personalised profile</p>
       </div>
@@ -91,12 +91,12 @@ export function ProfileReport({ userId }: Props) {
       </div>
 
       {/* Overall Readiness */}
-      <Card className="border-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+      <Card className="border-0 bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] text-white">
         <CardContent className="p-6 text-center">
-          <p className="text-blue-100 text-sm font-medium mb-2">Overall Exam Readiness</p>
+          <p className="text-white text-opacity-90 text-sm font-medium mb-2">Overall Exam Readiness</p>
           <div className="text-7xl font-bold mb-2">{overallScore}</div>
-          <div className="text-blue-100 text-lg">/100</div>
-          <p className="text-blue-200 text-sm mt-3">
+          <div className="text-white text-opacity-90 text-lg">/100</div>
+          <p className="text-white text-opacity-80 text-sm mt-3">
             {overallScore >= 70 ? "You are in great shape! Focus on consolidating your strong areas."
              : overallScore >= 50 ? "Good foundation. Target your weak topics systematically."
              : overallScore >= 30 ? "Significant preparation needed — but you have identified the gaps!"

@@ -7,7 +7,7 @@ const tabs = [
   {
     id: "dashboard",
     label: "Dashboard",
-    gradient: "from-blue-600 via-blue-500 to-indigo-600",
+    gradient: "from-[var(--primary)] via-[var(--primary)] to-[var(--primary)]",
     heading: "Your personalised command centre",
     features: [
       "Real-time progress tracking across all 4 papers",
@@ -25,7 +25,7 @@ const tabs = [
   {
     id: "practice",
     label: "Practice Engine",
-    gradient: "from-indigo-600 via-blue-500 to-cyan-500",
+    gradient: "from-[var(--primary)] via-[var(--primary)] to-cyan-500",
     heading: "Drill down to the exact topic you need",
     features: [
       "2,500+ questions sorted by topic & difficulty",
@@ -43,7 +43,7 @@ const tabs = [
   {
     id: "mocks",
     label: "Mock Tests",
-    gradient: "from-violet-600 via-indigo-500 to-blue-500",
+    gradient: "from-violet-600 via-[var(--accent)] to-[var(--primary)]",
     heading: "Full-length ICAI-pattern simulations",
     features: [
       "40 mock tests — 10 per paper, timed & proctored",
@@ -61,7 +61,7 @@ const tabs = [
   {
     id: "analytics",
     label: "Analytics",
-    gradient: "from-blue-700 via-indigo-600 to-purple-600",
+    gradient: "from-[var(--teal-dark)] via-[var(--primary)] to-purple-600",
     heading: "Deep insights that guide your preparation",
     features: [
       "Accuracy, speed & consistency trends over time",
@@ -101,7 +101,7 @@ export function ProductPreview() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                   activeTab === tab.id
-                    ? "bg-white text-blue-600 shadow-sm"
+                    ? "bg-white text-[var(--primary)] shadow-sm"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
@@ -168,7 +168,7 @@ export function ProductPreview() {
             <ul className="space-y-4 mb-8">
               {current.features.map((f) => (
                 <li key={f} className="flex items-start gap-3">
-                  <span className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
+                  <span className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-[var(--sage-light)] text-[var(--primary)] flex items-center justify-center text-xs font-bold">
                     ✓
                   </span>
                   <span className="text-gray-700">{f}</span>
@@ -177,7 +177,7 @@ export function ProductPreview() {
             </ul>
             <Link
               href="/register"
-              className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+              className="inline-flex items-center text-[var(--primary)] font-semibold hover:text-[var(--teal-dark)] transition-colors"
             >
               Try it free →
             </Link>

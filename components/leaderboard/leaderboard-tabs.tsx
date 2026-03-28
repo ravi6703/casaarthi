@@ -19,7 +19,7 @@ type LeaderboardData = {
 };
 
 const TABS = [
-  { key: "overallScore", label: "Overall Score", icon: Trophy, color: "text-blue-600", bg: "bg-blue-50", activeBg: "bg-blue-600", unit: "pts" },
+  { key: "overallScore", label: "Overall Score", icon: Trophy, color: "text-[var(--primary)]", bg: "bg-[var(--sage-light)]", activeBg: "bg-[var(--primary)]", unit: "pts" },
   { key: "streakChampions", label: "Streak Champions", icon: Flame, color: "text-orange-600", bg: "bg-orange-50", activeBg: "bg-orange-600", unit: "days" },
   { key: "practiceWarriors", label: "Practice Warriors", icon: Target, color: "text-green-600", bg: "bg-green-50", activeBg: "bg-green-600", unit: "Qs" },
 ] as const;
@@ -38,8 +38,8 @@ function getInitial(name: string) {
 }
 
 const AVATAR_COLORS = [
-  "bg-blue-500", "bg-purple-500", "bg-green-500", "bg-orange-500",
-  "bg-pink-500", "bg-teal-500", "bg-indigo-500", "bg-red-500",
+  "bg-[var(--primary)]", "bg-purple-500", "bg-green-500", "bg-orange-500",
+  "bg-pink-500", "bg-teal-500", "bg-[var(--background)]0", "bg-red-500",
 ];
 
 function getAvatarColor(name: string) {
@@ -98,7 +98,7 @@ export default function LeaderboardTabs({
                 key={entry.user_id}
                 className={`text-center transition-shadow hover:shadow-md ${
                   rank === 1 ? "ring-2 ring-yellow-400 shadow-md" : ""
-                } ${isCurrentUser ? "bg-blue-50 border-blue-200" : ""}`}
+                } ${isCurrentUser ? "bg-[var(--sage-light)] border-[var(--border)]" : ""}`}
               >
                 <CardContent className={`p-4 ${rank === 1 ? "pt-6 pb-6" : "pt-4 pb-4"}`}>
                   <div className="flex justify-center mb-2">
@@ -113,7 +113,7 @@ export default function LeaderboardTabs({
                   </div>
                   <p className={`mt-2 font-semibold text-gray-900 truncate ${rank === 1 ? "text-base" : "text-sm"}`}>
                     {entry.name}
-                    {isCurrentUser && <span className="text-xs text-blue-600 ml-1">(You)</span>}
+                    {isCurrentUser && <span className="text-xs text-[var(--primary)] ml-1">(You)</span>}
                   </p>
                   <p className={`font-bold mt-1 ${currentTab.color} ${rank === 1 ? "text-2xl" : "text-lg"}`}>
                     {entry.value}
@@ -137,7 +137,7 @@ export default function LeaderboardTabs({
                   key={entry.user_id}
                   className={`flex items-center gap-4 px-4 py-3 transition-colors ${
                     isCurrentUser
-                      ? "bg-blue-50 border-l-4 border-l-blue-500"
+                      ? "bg-[var(--sage-light)] border-l-4 border-l-[var(--primary)]"
                       : "hover:bg-gray-50"
                   }`}
                 >

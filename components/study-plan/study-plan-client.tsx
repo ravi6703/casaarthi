@@ -64,8 +64,8 @@ const PACE_OPTIONS = [
     mocksPerWeek: 1,
     studyDays: 6,
     color: "blue",
-    bg: "bg-blue-50 border-blue-300",
-    activeBg: "bg-blue-100 border-blue-500 ring-2 ring-blue-500",
+    bg: "bg-[var(--sage-light)] border-[var(--border)]00",
+    activeBg: "bg-[var(--sage-light)] border-[var(--primary)] ring-2 ring-[var(--primary)]",
   },
   {
     id: "intensive",
@@ -196,16 +196,16 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
   if (showOnboarding) {
     return (
       <div className="space-y-6">
-        <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <Card className="border-2 border-[var(--border)]00 bg-gradient-to-br from-[var(--background)] to-[var(--background)]">
           <CardContent className="p-8">
             <div className="text-center mb-6">
-              <Sparkles className="h-10 w-10 text-blue-600 mx-auto mb-3" />
+              <Sparkles className="h-10 w-10 text-[var(--primary)] mx-auto mb-3" />
               <h2 className="text-2xl font-bold text-gray-900">Let&apos;s Create Your Study Plan</h2>
               <p className="text-gray-600 mt-2 max-w-lg mx-auto">
                 Choose a study pace that fits your schedule. Your entire plan — daily topics, weekly schedule,
                 revision reminders, and email nudges — will be built around this choice.
               </p>
-              <p className="text-sm text-blue-600 mt-2 font-medium">
+              <p className="text-sm text-[var(--primary)] mt-2 font-medium">
                 You have {daysRemaining} days until your exam. We recommend the &quot;{PACE_OPTIONS.find(p => p.id === getDefaultPace())?.label}&quot; pace.
               </p>
             </div>
@@ -224,7 +224,7 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
                   >
                     {isRecommended && (
                       <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-blue-600 text-white text-[10px]">Recommended</Badge>
+                        <Badge className="bg-[var(--primary)] text-white text-[10px]">Recommended</Badge>
                       </div>
                     )}
                     {isSelected && (
@@ -251,7 +251,7 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
                 size="lg"
                 onClick={handleOnboardingConfirm}
                 disabled={saving}
-                className="bg-blue-600 hover:bg-blue-700 px-8"
+                className="bg-[var(--primary)] hover:bg-[var(--teal-dark)] px-8"
               >
                 {saving ? "Creating Plan..." : "Create My Study Plan"}
                 <ArrowRight className="h-4 w-4 ml-2" />
@@ -272,7 +272,7 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-blue-600" />
+            <Zap className="h-5 w-5 text-[var(--primary)]" />
             Your Study Pace — {pace.emoji} {pace.label}
           </CardTitle>
           <p className="text-sm text-gray-500 mt-1">Your plan adjusts automatically. Click a different pace to switch.</p>
@@ -312,7 +312,7 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
               <div className="bg-white rounded-lg p-3 border border-gray-200">
-                <div className="text-xl font-bold text-blue-600">{pace.dailyQuestions}</div>
+                <div className="text-xl font-bold text-[var(--primary)]">{pace.dailyQuestions}</div>
                 <div className="text-xs text-gray-500">Questions/day</div>
               </div>
               <div className="bg-white rounded-lg p-3 border border-gray-200">
@@ -350,9 +350,9 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
       </Card>
 
       {/* Today's Focus */}
-      <Card className="border-blue-200">
+      <Card className="border-[var(--border)]">
         <CardHeader>
-          <CardTitle className="text-blue-800 flex items-center gap-2">
+          <CardTitle className="text-[var(--teal-dark)] flex items-center gap-2">
             <Target className="h-5 w-5" />
             Today&apos;s Focus — {pace.topicsPerDay} Topics, {pace.dailyQuestions} Questions
           </CardTitle>
@@ -362,7 +362,7 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
             <div className="space-y-3">
               {todayTopics.map((topic) => (
                 <Link key={topic.id} href={`/practice/session?type=topic&topicId=${topic.id}`}>
-                  <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer">
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-[var(--border)]00 hover:shadow-sm transition-all cursor-pointer">
                     <div className="flex items-center gap-3">
                       <Badge variant={(PRIORITY_CONFIG as Record<string, any>)[topic.priority]?.badge ?? "secondary"} className="text-xs">
                         {topic.priority === "untested" ? "New" : `${topic.accuracy}%`}
@@ -446,7 +446,7 @@ export function StudyPlanClient({ criticalTopics, highTopics, untestedTopics, me
               <div className="grid sm:grid-cols-2 gap-2">
                 {topics.map((topic) => (
                   <Link key={topic.id} href={`/practice/session?type=topic&topicId=${topic.id}`}>
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-white border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all cursor-pointer">
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-white border border-gray-100 hover:border-[var(--border)] hover:shadow-sm transition-all cursor-pointer">
                       <div>
                         <div className="text-sm font-medium text-gray-900">{topic.name}</div>
                         <div className="text-xs text-gray-500">

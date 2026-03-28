@@ -83,7 +83,7 @@ export function LearnClient({ topics }: { topics: Topic[] }) {
       </div>
 
       {/* Ask a Question */}
-      <Card className="border-purple-200 bg-gradient-to-br from-purple-50/50 to-indigo-50/50">
+      <Card className="border-purple-200 bg-gradient-to-br from-purple-50/50 to-[var(--background)]/50">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-purple-600" />
@@ -127,7 +127,7 @@ export function LearnClient({ topics }: { topics: Topic[] }) {
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm flex items-center gap-2">
-            <BookOpen className="h-4 w-4 text-blue-600" />
+            <BookOpen className="h-4 w-4 text-[var(--primary)]" />
             Or Browse by Topic
           </CardTitle>
         </CardHeader>
@@ -136,7 +136,7 @@ export function LearnClient({ topics }: { topics: Topic[] }) {
           <div className="flex gap-2 mb-3">
             <button
               onClick={() => setSelectedPaper(null)}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${!selectedPaper ? "bg-blue-600 text-white border-blue-600" : "border-gray-200 text-gray-600 hover:border-blue-300"}`}
+              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${!selectedPaper ? "bg-[var(--primary)] text-white border-[var(--primary)]" : "border-gray-200 text-gray-600 hover:border-[var(--border)]00"}`}
             >
               All Papers
             </button>
@@ -144,7 +144,7 @@ export function LearnClient({ topics }: { topics: Topic[] }) {
               <button
                 key={p.id}
                 onClick={() => setSelectedPaper(p.id)}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${selectedPaper === p.id ? "bg-blue-600 text-white border-blue-600" : "border-gray-200 text-gray-600 hover:border-blue-300"}`}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${selectedPaper === p.id ? "bg-[var(--primary)] text-white border-[var(--primary)]" : "border-gray-200 text-gray-600 hover:border-[var(--border)]00"}`}
               >
                 {p.emoji} {p.code}
               </button>
@@ -157,7 +157,7 @@ export function LearnClient({ topics }: { topics: Topic[] }) {
               <button
                 key={t.id}
                 onClick={() => handleTopicClick(t.name)}
-                className="text-xs px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-700 hover:bg-blue-50 hover:border-blue-300 transition-colors flex items-center gap-1"
+                className="text-xs px-2.5 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-700 hover:bg-[var(--sage-light)] hover:border-[var(--border)]00 transition-colors flex items-center gap-1"
               >
                 {t.name}
                 <ChevronRight className="h-3 w-3 text-gray-400" />
@@ -188,9 +188,9 @@ export function LearnClient({ topics }: { topics: Topic[] }) {
           <CardContent>
             <MindMapViewer code={mermaidCode} />
             {explanation && (
-              <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                <div className="text-sm font-semibold text-blue-800 mb-1">Key Takeaway</div>
-                <p className="text-sm text-blue-700">{explanation}</p>
+              <div className="mt-4 p-4 bg-[var(--sage-light)] rounded-lg border border-[var(--sage-light)]">
+                <div className="text-sm font-semibold text-[var(--teal-dark)] mb-1">Key Takeaway</div>
+                <p className="text-sm text-[var(--teal-dark)]">{explanation}</p>
               </div>
             )}
           </CardContent>

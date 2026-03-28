@@ -12,7 +12,7 @@ const TOUR_STEPS = [
     title: "Welcome to CA Saarthi!",
     description: "Your AI-powered CA Foundation exam preparation companion. Let us show you around.",
     color: "blue",
-    bg: "from-blue-500 to-indigo-600",
+    bg: "from-[var(--primary)] to-[var(--primary)]",
   },
   {
     icon: CalendarDays,
@@ -61,7 +61,7 @@ const TOUR_STEPS = [
     title: "Community & AI Doubts",
     description: "Get instant AI answers to any doubt, or post in the community forum for peer discussions. Never get stuck on a concept again.",
     color: "indigo",
-    bg: "from-indigo-500 to-blue-600",
+    bg: "from-[var(--background)]0 to-[var(--primary)]",
   },
   {
     icon: Zap,

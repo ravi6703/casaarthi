@@ -79,7 +79,7 @@ export default async function FlashcardsPage() {
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2">
-                            <Layers className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                            <Layers className="h-4 w-4 text-[var(--primary)] flex-shrink-0" />
                             <span className="text-sm font-medium text-gray-900">{topic.name}</span>
                           </div>
                           <Badge variant="secondary" className="text-xs">{count} cards</Badge>

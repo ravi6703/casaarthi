@@ -213,7 +213,7 @@ export function MockTestReport({ userId, attemptId, questions, answers, mock, to
                       Correct: {q.correct_option?.toUpperCase()} — {correctText}
                     </div>
                   </div>
-                  <p className="text-xs text-gray-600 bg-white p-2 rounded border border-blue-100">{q.explanation}</p>
+                  <p className="text-xs text-gray-600 bg-white p-2 rounded border border-[var(--sage-light)]">{q.explanation}</p>
                 </div>
               );
             })}
@@ -236,7 +236,7 @@ export function MockTestReport({ userId, attemptId, questions, answers, mock, to
               {previousAttempts.map((a, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-1">
                   <div
-                    className="w-full bg-blue-500 rounded-t"
+                    className="w-full bg-[var(--primary)] rounded-t"
                     style={{ height: `${(a.percentage / 100) * 56}px`, minHeight: "4px" }}
                   />
                   <span className="text-xs text-gray-500">{i + 1}</span>

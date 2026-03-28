@@ -27,13 +27,13 @@ export function QuickStartFilter({ papers, topics }: Props) {
     }
   }
 
-  const selectClass = "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none disabled:bg-gray-100 disabled:text-gray-400";
+  const selectClass = "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] outline-none disabled:bg-gray-100 disabled:text-gray-400";
 
   return (
-    <Card className="border-blue-200 bg-blue-50/30">
+    <Card className="border-[var(--border)] bg-[var(--sage-light)]/30">
       <CardContent className="p-5">
         <div className="flex items-center gap-2 mb-4">
-          <Zap className="h-5 w-5 text-blue-600" />
+          <Zap className="h-5 w-5 text-[var(--primary)]" />
           <h2 className="font-bold text-gray-900">Quick Start</h2>
         </div>
         <div className="grid sm:grid-cols-3 gap-3 items-end">

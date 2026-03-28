@@ -32,7 +32,7 @@ export default async function AdminAnalyticsPage() {
   ]);
 
   const stats = [
-    { label: "Total Students", value: totalUsers ?? 0, icon: <Users className="h-5 w-5 text-blue-500" /> },
+    { label: "Total Students", value: totalUsers ?? 0, icon: <Users className="h-5 w-5 text-[var(--primary)]" /> },
     { label: "Approved Questions", value: totalQuestions ?? 0, icon: <BookOpen className="h-5 w-5 text-green-500" /> },
     { label: "Mock Attempts", value: totalMocks ?? 0, icon: <FileText className="h-5 w-5 text-purple-500" /> },
     { label: "Practice Sessions", value: totalSessions ?? 0, icon: <TrendingUp className="h-5 w-5 text-orange-500" /> },

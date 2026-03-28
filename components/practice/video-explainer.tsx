@@ -42,7 +42,7 @@ export function VideoExplainer({ videos }: Props) {
               <div key={video.id}>
                 <button
                   onClick={() => setActiveVideo(isActive ? null : video.id)}
-                  className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-1"
+                  className="text-xs text-gray-600 hover:text-[var(--primary)] flex items-center gap-1"
                 >
                   <Play className="h-3 w-3" />
                   {video.title}

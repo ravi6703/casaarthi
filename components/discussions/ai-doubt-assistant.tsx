@@ -33,7 +33,7 @@ export function AIDoubtAssistant() {
   }
 
   return (
-    <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
+    <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-[var(--background)]">
       <CardHeader className="pb-2 cursor-pointer" onClick={() => setExpanded(!expanded)}>
         <CardTitle className="text-sm flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-purple-600" />

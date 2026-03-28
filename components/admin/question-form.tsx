@@ -117,7 +117,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
               <select
                 value={paperId}
                 onChange={(e) => { setPaperId(Number(e.target.value)); setTopicId(""); }}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 {papers.map((p) => <option key={p.id} value={p.id}>{p.code} — {p.name}</option>)}
               </select>
@@ -127,7 +127,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
               <select
                 value={topicId}
                 onChange={(e) => setTopicId(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 <option value="">— Select topic —</option>
                 {filteredTopics.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -141,7 +141,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -153,7 +153,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               >
                 <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
@@ -167,7 +167,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
                 placeholder="e.g. 2023"
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
               />
             </div>
           </div>
@@ -194,7 +194,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
             onChange={(e) => setQuestionText(e.target.value)}
             rows={4}
             placeholder="Enter the question..."
-            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] resize-y"
           />
         </CardContent>
       </Card>
@@ -223,7 +223,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
                   onChange={(e) => setter(e.target.value)}
                   placeholder={`Option ${opt.toUpperCase()}`}
                   className={`flex-1 text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 ${
-                    correctOption === opt ? "border-green-400 bg-green-50 focus:ring-green-400" : "border-gray-200 focus:ring-blue-500"
+                    correctOption === opt ? "border-green-400 bg-green-50 focus:ring-green-400" : "border-gray-200 focus:ring-[var(--primary)]"
                   }`}
                 />
               </div>
@@ -242,7 +242,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
             onChange={(e) => setExplanation(e.target.value)}
             rows={4}
             placeholder="Explain why the correct answer is correct..."
-            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] resize-y"
           />
         </CardContent>
       </Card>
@@ -256,7 +256,7 @@ export function QuestionForm({ papers, topics, initialData }: Props) {
             value={source}
             onChange={(e) => setSource(e.target.value)}
             placeholder="e.g. ICAI Study Material, Nov 2023 Exam"
-            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           />
         </CardContent>
       </Card>

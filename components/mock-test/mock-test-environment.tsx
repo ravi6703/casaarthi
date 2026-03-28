@@ -258,7 +258,7 @@ export function MockTestEnvironment({ userId, mock, questions: rawQs, existingAt
   function getStatusClass(questionId: string, idx: number): string {
     if (markedReview.has(questionId)) return "bg-orange-200 border-orange-400 text-orange-800";
     if (answers[questionId]) return "bg-green-200 border-green-400 text-green-800";
-    if (idx === current) return "bg-blue-200 border-blue-400 text-blue-800";
+    if (idx === current) return "bg-[var(--sage-light)] border-[var(--sage)] text-[var(--teal-dark)]";
     return "bg-gray-100 border-gray-300 text-gray-600";
   }
 
@@ -276,7 +276,7 @@ export function MockTestEnvironment({ userId, mock, questions: rawQs, existingAt
         </div>
         <div className="flex items-center gap-4">
           {isReading && (
-            <div className="flex items-center gap-1.5 text-sm font-medium text-blue-600">
+            <div className="flex items-center gap-1.5 text-sm font-medium text-[var(--primary)]">
               <Clock className="h-4 w-4" />
               Reading: {formatTime(readingTimeLeft)}
             </div>
@@ -323,14 +323,14 @@ export function MockTestEnvironment({ userId, mock, questions: rawQs, existingAt
                     disabled={isReading}
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all text-sm ${
                       isSelected
-                        ? "border-blue-500 bg-blue-50 text-blue-900"
+                        ? "border-[var(--primary)] bg-[var(--sage-light)] text-[var(--teal-dark)]"
                         : isReading
                         ? "border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed"
-                        : "border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-50/50 cursor-pointer"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-[var(--border)]00 hover:bg-[var(--sage-light)]/50 cursor-pointer"
                     }`}
                   >
                     <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold mr-3 flex-shrink-0 ${
-                      isSelected ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-500"
+                      isSelected ? "bg-[var(--primary)] text-white" : "bg-gray-100 text-gray-500"
                     }`}>
                       {opt.toUpperCase()}
                     </span>
@@ -341,9 +341,9 @@ export function MockTestEnvironment({ userId, mock, questions: rawQs, existingAt
             </div>
 
             {isReading && (
-              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-blue-500 flex-shrink-0" />
-                <p className="text-sm text-blue-700">
+              <div className="mt-6 p-4 bg-[var(--sage-light)] border border-[var(--border)] rounded-xl flex items-center gap-3">
+                <AlertTriangle className="h-5 w-5 text-[var(--primary)] flex-shrink-0" />
+                <p className="text-sm text-[var(--teal-dark)]">
                   <strong>Reading Time:</strong> You can read questions and plan your approach, but answers are locked until reading time ends.
                 </p>
               </div>

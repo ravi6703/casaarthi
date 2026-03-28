@@ -63,7 +63,7 @@ export function AnalyticsCharts({
       {/* ── Top stats row ───────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
-          icon={<BarChart3 className="h-5 w-5 text-blue-500" />}
+          icon={<BarChart3 className="h-5 w-5 text-[var(--primary)]" />}
           label="Total Sessions"
           value={String(totalSessions)}
         />
@@ -97,7 +97,7 @@ export function AnalyticsCharts({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-blue-500" />
+              <BarChart3 className="h-4 w-4 text-[var(--primary)]" />
               Weekly Practice Trend
             </CardTitle>
           </CardHeader>

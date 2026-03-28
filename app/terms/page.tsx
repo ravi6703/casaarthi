@@ -3,7 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Terms of Service",
+  title: "Terms of Service | CA Saarthi",
+  description: "Terms of service for CA Saarthi, India's free CA Foundation exam preparation platform. Read about usage terms, user responsibilities, and content policies.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {
@@ -13,7 +15,7 @@ export default function TermsPage() {
       <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">CA</div>
+            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white font-bold text-sm">CA</div>
             <span className="font-bold text-lg text-gray-900">CA Saarthi</span>
           </Link>
           <Link href="/">
@@ -148,7 +150,7 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-3">12. Contact Us</h2>
             <p>
               If you have any questions about these Terms of Service, please contact us at{" "}
-              <a href="mailto:support@casaarthi.in" className="text-blue-600 hover:underline">
+              <a href="mailto:support@casaarthi.in" className="text-[var(--primary)] hover:underline">
                 support@casaarthi.in
               </a>.
             </p>

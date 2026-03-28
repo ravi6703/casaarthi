@@ -18,11 +18,11 @@ interface Props {
 }
 
 const CARD_TYPE_COLORS: Record<string, string> = {
-  definition: "bg-blue-100 text-blue-700",
+  definition: "bg-[var(--sage-light)] text-[var(--teal-dark)]",
   formula: "bg-green-100 text-green-700",
   section: "bg-purple-100 text-purple-700",
   case_law: "bg-orange-100 text-orange-700",
-  concept: "bg-indigo-100 text-indigo-700",
+  concept: "bg-[var(--sage-light)] text-[var(--teal-dark)]",
 };
 
 export function FlashcardDeck({ cards, onRate }: Props) {
@@ -115,10 +115,10 @@ export function FlashcardDeck({ cards, onRate }: Props) {
 
           {/* Back */}
           <div
-            className="absolute inset-0 rounded-2xl border-2 border-blue-200 bg-blue-50 p-6 flex flex-col items-center justify-center text-center shadow-sm"
+            className="absolute inset-0 rounded-2xl border-2 border-[var(--border)] bg-[var(--sage-light)] p-6 flex flex-col items-center justify-center text-center shadow-sm"
             style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
           >
-            <p className="text-xs text-blue-400 uppercase mb-4 font-medium">Answer / Definition</p>
+            <p className="text-xs text-[var(--sage)] uppercase mb-4 font-medium">Answer / Definition</p>
             <p className="text-base text-gray-800 leading-relaxed whitespace-pre-line">{card.back_text}</p>
           </div>
         </div>
@@ -149,7 +149,7 @@ export function FlashcardDeck({ cards, onRate }: Props) {
           <Button size="sm" variant="outline" className="text-green-600 border-green-200 hover:bg-green-50" onClick={() => handleRate("good")}>
             Good
           </Button>
-          <Button size="sm" variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50" onClick={() => handleRate("easy")}>
+          <Button size="sm" variant="outline" className="text-[var(--primary)] border-[var(--border)] hover:bg-[var(--sage-light)]" onClick={() => handleRate("easy")}>
             Easy
           </Button>
         </div>

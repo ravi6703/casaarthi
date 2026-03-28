@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
+
 "use client";
 import { useState, useEffect } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
@@ -54,7 +60,7 @@ export default function ResetPasswordPage() {
   if (checking) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+        <Loader2 className="h-6 w-6 animate-spin text-[var(--primary)]" />
       </div>
     );
   }
@@ -66,7 +72,7 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">CA</div>
+            <div className="w-10 h-10 rounded-xl bg-[var(--primary)] flex items-center justify-center text-white font-bold">CA</div>
             <span className="font-bold text-xl text-gray-900">CA Saarthi</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Reset your password</h1>
@@ -120,7 +126,7 @@ export default function ResetPasswordPage() {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           Remember your password?{" "}
-          <Link href="/login" className="text-blue-600 font-medium hover:underline">
+          <Link href="/login" className="text-[var(--primary)] font-medium hover:underline">
             Sign in
           </Link>
         </p>

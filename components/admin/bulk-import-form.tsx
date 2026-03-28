@@ -93,7 +93,7 @@ export function BulkImportForm() {
               ["is_diagnostic", "true or false"],
             ].map(([col, desc]) => (
               <div key={col} className="flex items-center gap-2">
-                <span className="text-blue-600">{col}</span>
+                <span className="text-[var(--primary)]">{col}</span>
                 <span className="text-gray-400">— {desc}</span>
               </div>
             ))}
@@ -110,7 +110,7 @@ export function BulkImportForm() {
         <CardContent className="p-6">
           <div
             onClick={() => fileRef.current?.click()}
-            className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-colors"
+            className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-[var(--sage)] hover:bg-[var(--sage-light)]/30 transition-colors"
           >
             <Upload className="h-10 w-10 text-gray-300 mx-auto mb-3" />
             {file ? (
