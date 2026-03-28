@@ -86,7 +86,7 @@ export function NotificationBell() {
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                className="text-xs text-[var(--primary)] hover:text-[var(--teal-dark)] flex items-center gap-1"
               >
                 <Check className="h-3 w-3" />
                 Mark all read
@@ -101,7 +101,7 @@ export function NotificationBell() {
                 <div
                   key={n.id}
                   className={`px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors ${
-                    !n.is_read ? "bg-blue-50/50" : ""
+                    !n.is_read ? "bg-[var(--sage-light)]/50" : ""
                   }`}
                 >
                   <div className="flex items-start gap-2">
@@ -117,7 +117,7 @@ export function NotificationBell() {
                           <Link
                             href={n.action_url}
                             onClick={() => setOpen(false)}
-                            className="text-[10px] text-blue-600 flex items-center gap-0.5"
+                            className="text-[10px] text-[var(--primary)] flex items-center gap-0.5"
                           >
                             View <ExternalLink className="h-2.5 w-2.5" />
                           </Link>

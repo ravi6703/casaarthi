@@ -33,12 +33,12 @@ export default async function PapersIndexPage() {
   const papers = await getAllPapers();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--background)] via-white to-[var(--background)]">
       {/* Nav */}
       <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white font-bold text-sm">
               CA
             </div>
             <span className="font-bold text-lg text-gray-900">CA Saarthi</span>
@@ -59,7 +59,7 @@ export default async function PapersIndexPage() {
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 py-4">
         <nav className="text-sm text-gray-500">
-          <Link href="/" className="hover:text-blue-600 transition-colors">
+          <Link href="/" className="hover:text-[var(--primary)] transition-colors">
             Home
           </Link>
           <span className="mx-2">/</span>
@@ -85,14 +85,14 @@ export default async function PapersIndexPage() {
             <Link
               key={paper.slug}
               href={`/papers/${paper.slug}`}
-              className="group bg-white rounded-xl border border-gray-200 p-8 hover:shadow-lg hover:border-blue-200 transition-all"
+              className="group bg-white rounded-xl border border-gray-200 p-8 hover:shadow-lg hover:border-[var(--border)] transition-all"
             >
               <div className="flex items-start gap-4">
-                <span className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-bold">
+                <span className="flex-shrink-0 w-12 h-12 rounded-xl bg-[var(--sage-light)] text-[var(--teal-dark)] flex items-center justify-center text-lg font-bold">
                   {paper.sort_order}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                  <h2 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-[var(--primary)] transition-colors">
                     Paper {paper.sort_order}: {paper.short_name}
                   </h2>
                   <p className="text-sm text-gray-500 mb-3">{paper.name}</p>
@@ -118,19 +118,19 @@ export default async function PapersIndexPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-blue-600 py-16">
+      <section className="bg-[var(--primary)] py-16">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Ready to start preparing?
           </h2>
-          <p className="text-blue-100 mb-8 text-lg">
+          <p className="text-white text-opacity-90 mb-8 text-lg">
             Access 2,500+ practice questions, 40 mock tests, and AI-powered
             study plans across all 4 papers — completely free.
           </p>
           <Link href="/register">
             <Button
               size="lg"
-              className="px-8 bg-white text-blue-600 hover:bg-blue-50"
+              className="px-8 bg-white text-[var(--primary)] hover:bg-[var(--sage-light)]"
             >
               Get Started Free
             </Button>
@@ -145,7 +145,7 @@ export default async function PapersIndexPage() {
             {/* Brand */}
             <div className="md:col-span-1">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white font-bold text-sm">
                   CA
                 </div>
                 <span className="font-bold text-lg text-white">

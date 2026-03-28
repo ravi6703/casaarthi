@@ -322,7 +322,7 @@ export function DiagnosticTest({ userId, sessionId, diagnosticTier, onComplete }
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto text-center py-20">
-        <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
+        <div className="inline-block w-8 h-8 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mb-4" />
         <p className="text-gray-600">Loading your diagnostic questions...</p>
       </div>
     );
@@ -366,7 +366,7 @@ export function DiagnosticTest({ userId, sessionId, diagnosticTier, onComplete }
 
       {/* Tier info banner — shown for aptitude and foundation tiers */}
       {(diagnosticTier === "aptitude" || diagnosticTier === "foundation") && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-sm text-blue-800">
+        <div className="bg-[var(--sage-light)] border border-[var(--border)] rounded-xl p-4 mb-4 text-sm text-[var(--teal-dark)]">
           <span className="font-semibold">{TIER_LABELS[diagnosticTier]} tier</span>
           {" — "}
           {diagnosticTier === "aptitude"
@@ -377,7 +377,7 @@ export function DiagnosticTest({ userId, sessionId, diagnosticTier, onComplete }
 
       {/* Tier info banner for intermediate and advanced */}
       {(diagnosticTier === "intermediate" || diagnosticTier === "advanced") && (
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-4 text-sm text-indigo-800">
+        <div className="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4 mb-4 text-sm text-[var(--teal-dark)]">
           <span className="font-semibold">{TIER_LABELS[diagnosticTier]} tier</span>
           {" — "}
           {diagnosticTier === "intermediate"
@@ -435,12 +435,12 @@ export function DiagnosticTest({ userId, sessionId, diagnosticTier, onComplete }
                   onClick={() => handleAnswer(q.id, opt)}
                   className={`w-full text-left p-4 rounded-xl border-2 transition-all text-sm ${
                     isSelected
-                      ? "border-blue-500 bg-blue-50 text-blue-900"
+                      ? "border-[var(--primary)] bg-[var(--sage-light)] text-[var(--teal-dark)]"
                       : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
                   <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold mr-3 ${
-                    isSelected ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-500"
+                    isSelected ? "bg-[var(--primary)] text-white" : "bg-gray-100 text-gray-500"
                   }`}>
                     {opt.toUpperCase()}
                   </span>

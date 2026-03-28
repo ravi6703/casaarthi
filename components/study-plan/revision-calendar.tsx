@@ -120,7 +120,7 @@ export function RevisionCalendar() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-blue-600" />
+            <Calendar className="h-5 w-5 text-[var(--primary)]" />
             Weekly Progress
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -141,9 +141,9 @@ export function RevisionCalendar() {
           <>
             {/* Stats Row */}
             <div className="grid grid-cols-4 gap-3 mb-5">
-              <div className="text-center p-2 bg-blue-50 rounded-lg">
-                <div className="text-lg font-bold text-blue-700">{stats.totalSessions}</div>
-                <div className="text-[10px] text-blue-600">Sessions</div>
+              <div className="text-center p-2 bg-[var(--sage-light)] rounded-lg">
+                <div className="text-lg font-bold text-[var(--teal-dark)]">{stats.totalSessions}</div>
+                <div className="text-[10px] text-[var(--primary)]">Sessions</div>
               </div>
               <div className="text-center p-2 bg-green-50 rounded-lg">
                 <div className="text-lg font-bold text-green-700">{stats.avgDaily}</div>
@@ -166,10 +166,10 @@ export function RevisionCalendar() {
                 const barWidth = day.practiced > 0 ? Math.max((day.practiced / maxSessions) * 100, 8) : 0;
 
                 return (
-                  <div key={day.date} className={`flex items-center gap-3 p-2 rounded-lg ${day.isToday ? "bg-blue-50 border border-blue-200" : ""}`}>
+                  <div key={day.date} className={`flex items-center gap-3 p-2 rounded-lg ${day.isToday ? "bg-[var(--sage-light)] border border-[var(--border)]" : ""}`}>
                     <div className="w-10 text-center flex-shrink-0">
-                      <div className={`text-xs font-medium ${day.isToday ? "text-blue-700" : "text-gray-500"}`}>{day.dayName}</div>
-                      <div className={`text-sm font-bold ${day.isToday ? "text-blue-800" : "text-gray-700"}`}>{day.dayNum}</div>
+                      <div className={`text-xs font-medium ${day.isToday ? "text-[var(--teal-dark)]" : "text-gray-500"}`}>{day.dayName}</div>
+                      <div className={`text-sm font-bold ${day.isToday ? "text-[var(--teal-dark)]" : "text-gray-700"}`}>{day.dayNum}</div>
                     </div>
 
                     <div className="flex-1 flex items-center gap-2">
@@ -178,7 +178,7 @@ export function RevisionCalendar() {
                         {barWidth > 0 && (
                           <div
                             className={`h-full rounded-full transition-all duration-500 flex items-center px-2 ${
-                              day.isToday ? "bg-blue-500" : "bg-green-500"
+                              day.isToday ? "bg-[var(--primary)]" : "bg-green-500"
                             }`}
                             style={{ width: `${barWidth}%` }}
                           >
@@ -199,7 +199,7 @@ export function RevisionCalendar() {
                         )}
                         {barWidth === 0 && day.isToday && day.practiced === 0 && (
                           <div className="absolute inset-0 flex items-center px-3">
-                            <span className="text-[10px] text-blue-400">Start today&apos;s session!</span>
+                            <span className="text-[10px] text-[var(--sage)]">Start today&apos;s session!</span>
                           </div>
                         )}
                       </div>
@@ -225,7 +225,7 @@ export function RevisionCalendar() {
                 <div className="w-3 h-3 rounded-sm bg-green-500" /> Completed
               </div>
               <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
-                <div className="w-3 h-3 rounded-sm bg-blue-500" /> Today
+                <div className="w-3 h-3 rounded-sm bg-[var(--primary)]" /> Today
               </div>
               <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
                 <div className="w-3 h-3 rounded-sm bg-orange-100 border border-orange-300" /> Topics Due

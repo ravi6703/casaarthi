@@ -160,7 +160,7 @@ export function SessionSummary({ questions, answers, skipped, totalTime, session
                       <span className="text-green-700">Correct: {q.correct_option?.toUpperCase()} — {correctText}</span>
                     </div>
                   </div>
-                  <div className="bg-white rounded-lg border border-blue-100 p-3">
+                  <div className="bg-white rounded-lg border border-[var(--sage-light)] p-3">
                     <p className="text-xs text-gray-700 leading-relaxed">{q.explanation}</p>
                   </div>
                 </div>

@@ -107,7 +107,7 @@ export function DailyChallenge() {
           <ReactConfetti recycle={false} numberOfPieces={150} style={{ position: "fixed", top: 0, left: 0, zIndex: 100 }} />
         </Suspense>
       )}
-      <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50 overflow-hidden">
+      <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-[var(--background)] overflow-hidden">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">

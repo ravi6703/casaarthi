@@ -59,7 +59,7 @@ export function SocialShare({ score, total, accuracy, label, type }: Props) {
       {/* Share Your Score Button */}
       <button
         onClick={() => setShowCard(!showCard)}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-200 bg-blue-50 text-blue-700 text-sm font-medium hover:bg-blue-100 transition-colors w-full justify-center"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--sage-light)] text-[var(--teal-dark)] text-sm font-medium hover:bg-[var(--sage-light)] transition-colors w-full justify-center"
       >
         <Share2 className="h-4 w-4" />
         Share Your Score
@@ -68,14 +68,14 @@ export function SocialShare({ score, total, accuracy, label, type }: Props) {
       {showCard && (
         <div className="animate-slide-up">
           {/* Visual Score Card (for screenshot) */}
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl p-6 text-white text-center mb-4">
-            <div className="text-sm text-blue-200 mb-1">{type === "mock" ? "Mock Test Result" : "Practice Session"}</div>
+          <div className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] rounded-xl p-6 text-white text-center mb-4">
+            <div className="text-sm text-white text-opacity-80 mb-1">{type === "mock" ? "Mock Test Result" : "Practice Session"}</div>
             <div className="text-lg font-medium mb-4">{label}</div>
             <div className="text-5xl font-bold mb-2">{accuracy}%</div>
-            <div className="text-blue-200 text-sm">{score}/{total} correct</div>
+            <div className="text-white text-opacity-80 text-sm">{score}/{total} correct</div>
             <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-center gap-2">
               <div className="w-5 h-5 rounded bg-white/20 flex items-center justify-center text-[10px] font-bold">CA</div>
-              <span className="text-xs text-blue-200">casaarthi.in</span>
+              <span className="text-xs text-white text-opacity-80">casaarthi.in</span>
             </div>
           </div>
 
@@ -97,7 +97,7 @@ export function SocialShare({ score, total, accuracy, label, type }: Props) {
             </button>
             <button
               onClick={handleFacebook}
-              className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-[var(--primary)] text-white text-sm font-medium hover:bg-[var(--teal-dark)] transition-colors"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
               Facebook

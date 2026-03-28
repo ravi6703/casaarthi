@@ -29,7 +29,7 @@ interface Props {
 }
 
 const PAPER_COLORS: Record<number, { bg: string; border: string; text: string; line: string }> = {
-  1: { bg: "bg-blue-100", border: "border-blue-300", text: "text-blue-800", line: "#3b82f6" },
+  1: { bg: "bg-[var(--sage-light)]", border: "border-[var(--sage)]", text: "text-[var(--teal-dark)]", line: "#3b82f6" },
   2: { bg: "bg-purple-100", border: "border-purple-300", text: "text-purple-800", line: "#8b5cf6" },
   3: { bg: "bg-green-100", border: "border-green-300", text: "text-green-800", line: "#22c55e" },
   4: { bg: "bg-orange-100", border: "border-orange-300", text: "text-orange-800", line: "#f97316" },
@@ -51,7 +51,7 @@ export function ConceptMap({ papers }: Props) {
     <div className="space-y-6">
       {/* Central node */}
       <div className="text-center">
-        <div className="inline-block px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold shadow-lg">
+        <div className="inline-block px-6 py-3 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] text-white font-bold shadow-lg">
           CA Foundation
         </div>
       </div>

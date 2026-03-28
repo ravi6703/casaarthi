@@ -56,8 +56,8 @@ export default async function PreviousYearsPage() {
             <Card key={year}>
               <CardContent className="p-5">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <Calendar className="h-5 w-5 text-indigo-600" />
+                  <div className="w-10 h-10 rounded-full bg-[var(--sage-light)] flex items-center justify-center">
+                    <Calendar className="h-5 w-5 text-[var(--primary)]" />
                   </div>
                   <div>
                     <h2 className="font-bold text-gray-900">{year} Exam</h2>
@@ -75,7 +75,7 @@ export default async function PreviousYearsPage() {
                         key={paper.id}
                         href={`/practice/session?type=topic&sourceType=icai_past&sourceYear=${year}&paperId=${paper.id}`}
                       >
-                        <div className="p-3 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all text-center cursor-pointer">
+                        <div className="p-3 rounded-xl border border-gray-200 hover:border-[var(--border)]00 hover:bg-[var(--sage-light)] transition-all text-center cursor-pointer">
                           <span className="text-2xl">{paper.emoji}</span>
                           <div className="text-xs font-bold text-gray-900 mt-1">{paper.code}</div>
                           <div className="text-[10px] text-gray-500">{count} questions</div>

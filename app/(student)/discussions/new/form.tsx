@@ -58,7 +58,7 @@ export function NewDiscussionForm({ topics }: Props) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Summarize your doubt in one line..."
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] outline-none"
               required
               maxLength={200}
             />
@@ -70,7 +70,7 @@ export function NewDiscussionForm({ topics }: Props) {
               <select
                 value={paperId ?? ""}
                 onChange={(e) => { setPaperId(e.target.value ? parseInt(e.target.value) : null); setTopicId(""); }}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[var(--primary)] outline-none"
               >
                 <option value="">All Papers</option>
                 <option value="1">P1 - Accounts</option>
@@ -84,7 +84,7 @@ export function NewDiscussionForm({ topics }: Props) {
               <select
                 value={topicId}
                 onChange={(e) => setTopicId(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[var(--primary)] outline-none"
               >
                 <option value="">Select topic</option>
                 {filteredTopics.map((t) => (
@@ -100,7 +100,7 @@ export function NewDiscussionForm({ topics }: Props) {
               value={body}
               onChange={(e) => setBody(e.target.value)}
               placeholder="Describe your doubt in detail. Include any specific section, formula, or concept you're struggling with..."
-              className="w-full min-h-[150px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none resize-y"
+              className="w-full min-h-[150px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] outline-none resize-y"
               required
             />
           </div>

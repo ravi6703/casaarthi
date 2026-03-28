@@ -21,6 +21,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${post.title} | CA Saarthi Blog`,
     description: post.meta_description,
     keywords: post.keywords,
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.meta_description,
@@ -58,6 +61,16 @@ export default async function BlogPostPage({ params }: Props) {
     datePublished: post.published_at,
     url: `https://www.casaarthi.in/blog/${post.slug}`,
     keywords: (post.keywords ?? []).join(", "),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.casaarthi.in" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.casaarthi.in/blog" },
+      { "@type": "ListItem", "position": 3, "name": post.title, "item": `https://www.casaarthi.in/blog/${post.slug}` }
+    ]
   };
 
   // Simple markdown-like rendering
@@ -158,6 +171,10 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       {/* Nav */}
       <nav className="border-b border-gray-200 bg-white sticky top-0 z-10">
@@ -207,7 +224,7 @@ export default async function BlogPostPage({ params }: Props) {
         {/* CTA */}
         <div className="mt-16 bg-gradient-to-br from-[var(--primary)] to-[var(--teal-dark)] rounded-2xl p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-3">Ready to Start Your CA Foundation Journey?</h2>
-          <p className="text-blue-100 mb-6">Free diagnostic test, 2,500+ practice questions, and personalised study plans.</p>
+          <p className="text-white text-opacity-90 mb-6">Free diagnostic test, 2,500+ practice questions, and personalised study plans.</p>
           <Link href="/register">
             <button className="bg-white text-[var(--teal-dark)] font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors">
               Get Started Free →

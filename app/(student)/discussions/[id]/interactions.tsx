@@ -75,7 +75,7 @@ export function DiscussionInteractions({ discussionId, replies, userId, isAuthor
                 {new Date(reply.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
               </span>
               {reply.user_id === userId && (
-                <span className="text-[10px] text-blue-500">You</span>
+                <span className="text-[10px] text-[var(--primary)]">You</span>
               )}
             </div>
           </CardContent>
@@ -97,7 +97,7 @@ export function DiscussionInteractions({ discussionId, replies, userId, isAuthor
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               placeholder="Write your reply..."
-              className="w-full min-h-[100px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none resize-y"
+              className="w-full min-h-[100px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] outline-none resize-y"
               required
             />
             <div className="flex justify-end">

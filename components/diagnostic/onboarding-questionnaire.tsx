@@ -28,7 +28,7 @@ function OptionButtons({ options, value, onChange }: { options: OptionBtn[]; val
           onClick={() => onChange(o.value)}
           className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
             value === o.value
-              ? "border-blue-500 bg-blue-50 text-blue-700"
+              ? "border-[var(--primary)] bg-[var(--sage-light)] text-[var(--teal-dark)]"
               : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
           }`}
         >
@@ -210,7 +210,7 @@ export function OnboardingQuestionnaire({ userId, onComplete }: Props) {
               onClick={() => setForm({ ...form, learning_style: style.value })}
               className={`p-4 rounded-xl border text-left transition-all ${
                 form.learning_style === style.value
-                  ? "border-blue-500 bg-blue-50"
+                  ? "border-[var(--primary)] bg-[var(--sage-light)]"
                   : "border-gray-200 bg-white hover:border-gray-300"
               }`}
             >
@@ -287,7 +287,7 @@ export function OnboardingQuestionnaire({ userId, onComplete }: Props) {
     <div className="max-w-2xl mx-auto">
       {/* Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1.5 text-sm text-blue-700 mb-4">
+        <div className="inline-flex items-center gap-2 bg-[var(--sage-light)] border border-[var(--border)] rounded-full px-4 py-1.5 text-sm text-[var(--teal-dark)] mb-4">
           Step {step + 1} of {steps.length}
         </div>
         <h1 className="text-2xl font-bold text-gray-900">{current.title}</h1>

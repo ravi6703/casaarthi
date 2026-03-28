@@ -81,7 +81,7 @@ export function AIChatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all hover:scale-105 active:scale-95"
+          className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 bg-[var(--primary)] hover:bg-[var(--teal-dark)] text-white rounded-full p-4 shadow-lg transition-all hover:scale-105 active:scale-95"
           aria-label="Open AI Chatbot"
         >
           <MessageCircle className="w-6 h-6" />
@@ -92,7 +92,7 @@ export function AIChatbot() {
       {isOpen && (
         <div className="fixed z-50 inset-x-0 bottom-0 md:inset-auto md:bottom-6 md:right-6 md:w-96 flex flex-col bg-white md:rounded-2xl shadow-2xl border border-gray-200 max-h-[85vh] md:max-h-[600px]">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white md:rounded-t-2xl">
+          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] text-white md:rounded-t-2xl">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5" />
               <span className="font-semibold text-sm">CA Saarthi AI</span>
@@ -111,8 +111,8 @@ export function AIChatbot() {
             {messages.length === 0 && (
               <div className="text-center space-y-4 pt-4">
                 <div className="flex justify-center">
-                  <div className="bg-blue-50 rounded-full p-3">
-                    <Bot className="w-8 h-8 text-blue-600" />
+                  <div className="bg-[var(--sage-light)] rounded-full p-3">
+                    <Bot className="w-8 h-8 text-[var(--primary)]" />
                   </div>
                 </div>
                 <div>
@@ -131,7 +131,7 @@ export function AIChatbot() {
                     <button
                       key={q}
                       onClick={() => sendMessage(q)}
-                      className="block w-full text-left text-xs bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 px-3 py-2 rounded-lg transition-colors border border-gray-100 hover:border-blue-200"
+                      className="block w-full text-left text-xs bg-gray-50 hover:bg-[var(--sage-light)] text-gray-700 hover:text-[var(--teal-dark)] px-3 py-2 rounded-lg transition-colors border border-gray-100 hover:border-[var(--border)]"
                     >
                       {q}
                     </button>
@@ -148,7 +148,7 @@ export function AIChatbot() {
                 <div
                   className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm whitespace-pre-wrap ${
                     msg.role === "user"
-                      ? "bg-blue-600 text-white rounded-br-md"
+                      ? "bg-[var(--primary)] text-white rounded-br-md"
                       : "bg-gray-100 text-gray-800 rounded-bl-md"
                   }`}
                 >
@@ -183,13 +183,13 @@ export function AIChatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask a CA Foundation doubt..."
-              className="flex-1 text-sm px-3 py-2 rounded-full border border-gray-200 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+              className="flex-1 text-sm px-3 py-2 rounded-full border border-gray-200 focus:outline-none focus:border-[var(--sage)] focus:ring-1 focus:ring-[var(--sage)]"
               disabled={isLoading}
             />
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white p-2 rounded-full transition-colors"
+              className="bg-[var(--primary)] hover:bg-[var(--teal-dark)] disabled:bg-gray-300 text-white p-2 rounded-full transition-colors"
               aria-label="Send message"
             >
               <Send className="w-4 h-4" />

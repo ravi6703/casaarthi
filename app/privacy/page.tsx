@@ -3,7 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Privacy Policy | CA Saarthi",
+  description: "CA Saarthi's privacy policy. Learn how we collect, use, and protect your personal data on our free CA Foundation exam preparation platform.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {
@@ -13,7 +15,7 @@ export default function PrivacyPage() {
       <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">CA</div>
+            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white font-bold text-sm">CA</div>
             <span className="font-bold text-lg text-gray-900">CA Saarthi</span>
           </Link>
           <Link href="/">
@@ -149,7 +151,7 @@ export default function PrivacyPage() {
             </ul>
             <p className="mt-2">
               To exercise any of these rights, contact us at{" "}
-              <a href="mailto:privacy@casaarthi.in" className="text-blue-600 hover:underline">
+              <a href="mailto:privacy@casaarthi.in" className="text-[var(--primary)] hover:underline">
                 privacy@casaarthi.in
               </a>.
             </p>
@@ -182,8 +184,8 @@ export default function PrivacyPage() {
               personal data, please contact us:
             </p>
             <ul className="list-none mt-3 space-y-1">
-              <li>Email: <a href="mailto:privacy@casaarthi.in" className="text-blue-600 hover:underline">privacy@casaarthi.in</a></li>
-              <li>Platform: <a href="https://www.casaarthi.in" className="text-blue-600 hover:underline">www.casaarthi.in</a></li>
+              <li>Email: <a href="mailto:privacy@casaarthi.in" className="text-[var(--primary)] hover:underline">privacy@casaarthi.in</a></li>
+              <li>Platform: <a href="https://www.casaarthi.in" className="text-[var(--primary)] hover:underline">www.casaarthi.in</a></li>
             </ul>
           </section>
         </div>

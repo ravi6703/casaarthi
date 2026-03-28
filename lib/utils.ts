@@ -56,7 +56,7 @@ export function getPaperColor(paperId: number): string {
 
 export function getPaperBadgeClass(paperId: number): string {
   const classes: Record<number, string> = {
-    1: "bg-blue-100 text-blue-800",
+    1: "bg-[var(--sage-light)] text-[var(--teal-dark)]",
     2: "bg-purple-100 text-purple-800",
     3: "bg-green-100 text-green-800",
     4: "bg-orange-100 text-orange-800",

@@ -72,10 +72,10 @@ export function GuestSignupPrompt({ isAnonymous }: Props) {
         )}
 
         {/* Header */}
-        <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-6 text-white text-center">
+        <div className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] p-6 text-white text-center">
           <div className="text-4xl mb-3">🔒</div>
           <h2 className="text-xl font-bold">Create Your Free Account</h2>
-          <p className="text-blue-200 text-sm mt-2">
+          <p className="text-white text-opacity-80 text-sm mt-2">
             Sign up to save your progress, track your scores, and get personalised study plans.
           </p>
         </div>

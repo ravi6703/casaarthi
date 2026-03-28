@@ -74,7 +74,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#2563eb",
+  themeColor: "#4A90A4",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -97,6 +97,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         </ThemeProvider>
+        {/* Organization Schema */}
+        <Script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "CA Saarthi",
+              "url": "https://www.casaarthi.in",
+              "logo": "https://www.casaarthi.in/icon-512.png",
+              "description": "India's free CA Foundation exam preparation platform",
+              "email": "support@casaarthi.in",
+              "sameAs": ["https://t.me/casaarthiindia"]
+            }),
+          }}
+        />
         {/* Google Analytics */}
         {GA_ID && (
           <>

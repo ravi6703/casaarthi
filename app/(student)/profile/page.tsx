@@ -97,10 +97,10 @@ export default async function ProfilePage() {
 
       {/* Overview cards */}
       <div className="grid sm:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-0">
+        <Card className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] text-white border-0">
           <CardContent className="p-4 text-center">
             <div className="text-4xl font-bold">{overallScore}</div>
-            <div className="text-blue-100 text-sm">Readiness Score</div>
+            <div className="text-white text-opacity-90 text-sm">Readiness Score</div>
           </CardContent>
         </Card>
         <Card>

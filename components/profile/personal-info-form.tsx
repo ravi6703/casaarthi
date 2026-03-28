@@ -45,13 +45,13 @@ export function PersonalInfoForm({ userEmail, userMetadata }: Props) {
     }
   }
 
-  const inputClass = "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none disabled:bg-gray-50 disabled:text-gray-500";
+  const inputClass = "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] outline-none disabled:bg-gray-50 disabled:text-gray-500";
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <User className="h-5 w-5 text-blue-600" />
+          <User className="h-5 w-5 text-[var(--primary)]" />
           Personal Information
         </CardTitle>
       </CardHeader>

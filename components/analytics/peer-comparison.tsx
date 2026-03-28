@@ -20,20 +20,20 @@ export function PeerComparison({ percentile, totalStudents, userScore }: Props) 
   };
 
   return (
-    <Card className="border-indigo-200 bg-gradient-to-r from-indigo-50 to-blue-50">
+    <Card className="border-[var(--border)] bg-gradient-to-r from-[var(--background)] to-[var(--background)]">
       <CardContent className="p-5">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-            <TrendingUp className="h-5 w-5 text-indigo-600" />
+          <div className="w-10 h-10 rounded-full bg-[var(--sage-light)] flex items-center justify-center">
+            <TrendingUp className="h-5 w-5 text-[var(--primary)]" />
           </div>
           <div>
-            <p className="text-sm font-bold text-indigo-900">Peer Comparison</p>
-            <p className="text-xs text-indigo-600">Based on {totalStudents} students</p>
+            <p className="text-sm font-bold text-[var(--teal-dark)]">Peer Comparison</p>
+            <p className="text-xs text-[var(--primary)]">Based on {totalStudents} students</p>
           </div>
         </div>
 
         <div className="text-center py-3">
-          <div className="text-4xl font-bold text-indigo-700">{percentile}%</div>
+          <div className="text-4xl font-bold text-[var(--teal-dark)]">{percentile}%</div>
           <p className="text-sm text-gray-600 mt-1">
             You scored better than <strong>{percentile}%</strong> of students
           </p>
@@ -42,11 +42,11 @@ export function PeerComparison({ percentile, totalStudents, userScore }: Props) 
         {/* Visual bar */}
         <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden mt-3">
           <div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full transition-all duration-1000"
+            className="absolute left-0 top-0 h-full bg-gradient-to-r from-[var(--sage)] to-[var(--primary)] rounded-full transition-all duration-1000"
             style={{ width: `${percentile}%` }}
           />
           <div
-            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-indigo-600 rounded-full shadow-sm"
+            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[var(--primary)] rounded-full shadow-sm"
             style={{ left: `calc(${percentile}% - 8px)` }}
           />
         </div>

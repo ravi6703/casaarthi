@@ -119,21 +119,21 @@ export default async function StudyPlanPage() {
       <RevisionDue />
 
       {/* Exam Countdown */}
-      <Card className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-0">
+      <Card className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] text-white border-0">
         <CardContent className="p-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <div className="text-blue-200 text-sm mb-1">Target Exam</div>
+              <div className="text-white text-opacity-80 text-sm mb-1">Target Exam</div>
               <div className="text-2xl font-bold">
                 {cycle.charAt(0).toUpperCase() + cycle.slice(1)} {year}
               </div>
-              <div className="text-blue-200 text-sm mt-1">
+              <div className="text-white text-opacity-80 text-sm mt-1">
                 {examDate.toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
               </div>
             </div>
             <div className="text-center">
               <div className="text-5xl font-bold">{daysRemaining}</div>
-              <div className="text-blue-200 text-sm">days remaining</div>
+              <div className="text-white text-opacity-80 text-sm">days remaining</div>
             </div>
           </div>
         </CardContent>
