@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | CA Saarthi",
   },
   description:
-    "India's free CA Foundation preparation platform. 2,500+ practice questions, AI doubt solver, diagnostic profiling & personalised study plans. Covers Accounting, Laws, Maths & Economics.",
+    "India's free CA Foundation exam prep. 2,500+ practice questions, AI doubt solver, diagnostic profiling & personalised study plans.",
   keywords: [
     "CA Foundation", "CA Foundation preparation", "CA Foundation mock test",
     "CA Foundation practice questions", "ICAI exam prep", "CA Saarthi",
